@@ -2,9 +2,16 @@ package com.openclassrooms.realestatemanager.di;
 
 import android.app.Application;
 
+import dagger.hilt.android.HiltAndroidApp;
+
 /**
-*Created by Anne Linger on 12/09/2022.
+*di.MainApplication for Hilt
 */
 
+@HiltAndroidApp
 public class MainApplication extends Application {
+    @Override
+    public void onCreate() {
+        super.onCreate();
+    }
 }

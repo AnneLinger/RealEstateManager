@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/modify_icon"
+        android:contentDescription="@string/modify_icon"
+        android:icon="@drawable/ic_baseline_edit_24"
+        android:title="@string/modify"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="always|collapseActionView" />
+    <item
+        android:id="@+id/add_icon"
+        android:contentDescription="@string/add_icon"
+        android:icon="@drawable/ic_baseline_add_24"
+        android:title="@string/add"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="always|collapseActionView" />
+</menu>
