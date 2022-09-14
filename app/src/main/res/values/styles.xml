@@ -1,17 +1,12 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.Material3.Dark.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorWhite</item>
-        <item name="colorPrimaryDark">@color/colorBlack</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
-
-    <style name="bottomNav" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
-        <item name="android:background">@color/colorWhite</item>
-        <item name="colorOnPrimary">@color/colorAccent</item>
-        <item name="colorOnSecondary">@color/colorBlack</item>
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorPrimaryDark">@color/color_black</item>
+        <item name="colorAccent">@color/color_secondary</item>
+        <item name="colorPrimaryVariant">@color/color_primary_variant</item>
     </style>
 
 </resources>
