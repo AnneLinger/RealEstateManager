@@ -2,10 +2,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/modify_icon"
-        android:contentDescription="@string/modify_icon"
+        android:id="@+id/edit_icon"
+        android:contentDescription="@string/edit_icon"
         android:icon="@drawable/ic_baseline_edit_24"
-        android:title="@string/modify"
+        android:title="@string/edit"
         app:showAsAction="always|collapseActionView" />
     <item
         android:id="@+id/add_icon"

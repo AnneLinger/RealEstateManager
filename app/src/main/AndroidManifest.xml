@@ -21,7 +21,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.openclassrooms.realestatemanager.ui.activities.PropertyCreation"
+            android:name="com.openclassrooms.realestatemanager.ui.activities.AddActivity"
+            android:exported="true"
+            android:parentActivityName="ui.activities.MainActivity" />
+        <activity
+            android:name="com.openclassrooms.realestatemanager.ui.activities.SearchActivity"
+            android:exported="true"
+            android:parentActivityName="ui.activities.MainActivity" />
+        <activity
+            android:name="com.openclassrooms.realestatemanager.ui.activities.SimulatorActivity"
+            android:exported="true"
+            android:parentActivityName="ui.activities.MainActivity" />
+        <activity
+            android:name="com.openclassrooms.realestatemanager.ui.activities.EditActivity"
             android:exported="true"
             android:parentActivityName="ui.activities.MainActivity" />
         <meta-data

@@ -8,6 +8,10 @@
     <string name="add_icon">Add icon</string>
     <string name="search">search</string>
     <string name="add">add</string>
-    <string name="modify_icon">modify</string>
-    <string name="modify">modify</string>
+    <string name="edit_icon">edit</string>
+    <string name="edit">edit</string>
+    <string name="search_title">Search a property</string>
+    <string name="add_property_title">Add a property</string>
+    <string name="simulator_title">Simulate a home loan</string>
+    <string name="edit_title">Edit a property</string>
 </resources>
