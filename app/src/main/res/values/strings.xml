@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Real Estate Manager</string>
     <string name="toolbar_title">Real Estate Manager</string>
-    <string name="bottom_nav_menu_map_view">List</string>
-    <string name="bottom_nav_menu_list_view">Map</string>
+    <string name="bottom_nav_menu_map_view">Map</string>
+    <string name="bottom_nav_menu_list_view">List</string>
     <string name="settings">Simulator</string>
     <string name="your_lunch">Search</string>
     <string name="add_icon">Add icon</string>

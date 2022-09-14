@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.ui.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityMainBinding;
+import com.openclassrooms.realestatemanager.ui.fragments.ListViewFragment;
+import com.openclassrooms.realestatemanager.ui.fragments.MapViewFragment;
 import com.openclassrooms.realestatemanager.utils.Utils;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -26,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
     //For ui
     private ActivityMainBinding mBinding;
+    private ListViewFragment mListViewFragment;
+    private MapViewFragment mMapViewFragment;
 
     private TextView textViewMain;
     private TextView textViewQuantity;
@@ -35,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         initUi();
         configureDrawer();
+        configureBottomNav();
     }
 
     @Override
@@ -44,11 +50,12 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-
     private void initUi() {
         mBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(mBinding.getRoot());
         setSupportActionBar(mBinding.toolbar);
+        getSupportFragmentManager().beginTransaction().add(R.id.activity_places_frame_layout, new ListViewFragment()).commit();
+        this.mListViewFragment = ListViewFragment.newInstance();
     }
 
     private void configureDrawer() {
@@ -89,6 +96,33 @@ public class MainActivity extends AppCompatActivity {
         //TODO fragment detail show method
     }
 
+    private void configureBottomNav() {
+        mBinding.bottomNav.setOnItemSelectedListener(this::selectBottomNavItem);
+    }
+
+    public boolean selectBottomNavItem(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.item_list_view:
+                if (mListViewFragment == null) {
+                    this.mListViewFragment = ListViewFragment.newInstance();
+                }
+                if (!mListViewFragment.isVisible()) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.activity_places_frame_layout, mListViewFragment).commit();
+                }
+                return true;
+            case R.id.item_map_view:
+                if (mMapViewFragment == null) {
+                    this.mMapViewFragment = MapViewFragment.newInstance();
+                }
+                if (!mMapViewFragment.isVisible()) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.activity_places_frame_layout, mMapViewFragment).commit();
+                }
+                return true;
+        }
+        return false;
+    }
+
+    //TODO a generic method to navigate with parameter !!
     private void navigateToSearchActivity() {
         Intent intent = new Intent(MainActivity.this, SearchActivity.class);
         startActivity(intent);
