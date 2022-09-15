@@ -1,6 +1,5 @@
 package com.openclassrooms.realestatemanager.ui.adapter;
 
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.domain.models.Property;
+
+import java.util.List;
 
 /**
 *Created by Anne Linger on 14/09/2022.
@@ -17,7 +19,10 @@ import com.openclassrooms.realestatemanager.R;
 
 public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHolder> {
 
-    public ListViewAdapter() {
+    private List<Property> mProperties;
+
+    public ListViewAdapter(List<Property> properties) {
+        mProperties = properties;
     }
 
     @NonNull
@@ -29,13 +34,12 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ListViewAdapter.ViewHolder holder, int position) {
-        holder.displayPlace();
+        holder.displayProperty(mProperties.get(position));
     }
 
     @Override
     public int getItemCount() {
-        //return mPlaceList.size();
-        return 0;
+        return mProperties.size();
     }
 
 
@@ -49,7 +53,8 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
             name = itemView.findViewById(R.id.tv_place_name);
         }
 
-        private void displayPlace() {
+        private void displayProperty(Property property) {
+            name.setText(property.getType());
         }
 
         private void navigateToPropertyDetails() {

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.openclassrooms.realestatemanager.databinding.FragmentListViewBinding;
 import com.openclassrooms.realestatemanager.domain.models.Property;
 import com.openclassrooms.realestatemanager.ui.adapter.ListViewAdapter;
+import com.openclassrooms.realestatemanager.viewmodels.ListViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,7 @@ public class ListViewFragment extends Fragment {
     private RecyclerView mRecyclerView;
 
     //For data
+    private ListViewModel mListViewModel;
     private List<Property> mProperties = new ArrayList<>();
 
     public static ListViewFragment newInstance() {
@@ -45,7 +48,16 @@ public class ListViewFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initRecyclerView(mProperties);
+        configureViewModel();
+        getProperties();
+    }
+
+    private void configureViewModel() {
+        mListViewModel = new ViewModelProvider(requireActivity()).get(ListViewModel.class);
+    }
+
+    private void getProperties(){
+        mListViewModel.getProperties().observe(requireActivity(), this::initRecyclerView);
     }
 
     private void initRecyclerView(List<Property> properties) {
@@ -53,10 +65,6 @@ public class ListViewFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireActivity());
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.VERTICAL));
-        mRecyclerView.setAdapter(new ListViewAdapter());
-    }
-
-    private void getProperties(){
-
+        mRecyclerView.setAdapter(new ListViewAdapter(properties));
     }
 }

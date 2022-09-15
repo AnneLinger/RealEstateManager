@@ -1,6 +1,5 @@
 package com.openclassrooms.realestatemanager.ui.activities;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,12 +9,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityMainBinding;
 import com.openclassrooms.realestatemanager.ui.fragments.ListViewFragment;
 import com.openclassrooms.realestatemanager.ui.fragments.MapViewFragment;
 import com.openclassrooms.realestatemanager.utils.Utils;
+import com.openclassrooms.realestatemanager.viewmodels.ListViewModel;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -31,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding mBinding;
     private ListViewFragment mListViewFragment;
     private MapViewFragment mMapViewFragment;
+
+    //For data
 
     private TextView textViewMain;
     private TextView textViewQuantity;
