@@ -14,4 +14,5 @@
     <string name="add_property_title">Add a property</string>
     <string name="simulator_title">Simulate a home loan</string>
     <string name="edit_title">Edit a property</string>
+    <string name="save_property">save_property</string>
 </resources>

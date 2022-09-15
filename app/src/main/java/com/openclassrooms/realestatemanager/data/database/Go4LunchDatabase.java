@@ -10,6 +10,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
+import com.openclassrooms.realestatemanager.data.dao.PropertyDao;
 import com.openclassrooms.realestatemanager.domain.models.Property;
 
 /**
@@ -23,7 +24,7 @@ public abstract class Go4LunchDatabase extends RoomDatabase {
     private static Go4LunchDatabase INSTANCE;
 
     //Dao
-    public abstract Property mPropertyDao();
+    public abstract PropertyDao mPropertyDao();
 
     //Instance
     public static Go4LunchDatabase getInstance(Context context) {

@@ -16,7 +16,7 @@ public class Property {
     //TODO Add a photo class and add a foreign key for it ?
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "property_id")
-    private final int id;
+    private int id;
 
     @ColumnInfo(name = "type")
     private String type;
@@ -41,16 +41,16 @@ public class Property {
     private boolean onSale;
 
     @ColumnInfo(name = "entry_date")
-    private int entryDate;
+    private String entryDate;
 
+    @Nullable
     @ColumnInfo(name = "sold_date")
-    private int soldDate;
+    private String soldDate;
 
     @ColumnInfo(name = "agent")
     private String agent;
 
-    public Property(int id, String type, int price, int surface, int roomNumber, @Nullable String description, String address, boolean onSale, int entryDate, int soldDate, String agent) {
-        this.id = id;
+    public Property(String type, int price, int surface, int roomNumber, @Nullable String description, String address, boolean onSale, String entryDate, @Nullable String soldDate, String agent) {
         this.type = type;
         this.price = price;
         this.surface = surface;
@@ -65,6 +65,10 @@ public class Property {
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getType() {
@@ -124,19 +128,20 @@ public class Property {
         this.onSale = onSale;
     }
 
-    public int getEntryDate() {
+    public String getEntryDate() {
         return entryDate;
     }
 
-    public void setEntryDate(int entryDate) {
+    public void setEntryDate(String entryDate) {
         this.entryDate = entryDate;
     }
 
-    public int getSoldDate() {
+    @Nullable
+    public String getSoldDate() {
         return soldDate;
     }
 
-    public void setSoldDate(int soldDate) {
+    public void setSoldDate(@Nullable String soldDate) {
         this.soldDate = soldDate;
     }
 

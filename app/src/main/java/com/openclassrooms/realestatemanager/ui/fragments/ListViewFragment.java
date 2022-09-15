@@ -13,8 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassrooms.realestatemanager.databinding.FragmentListViewBinding;
+import com.openclassrooms.realestatemanager.domain.models.Property;
 import com.openclassrooms.realestatemanager.ui.adapter.ListViewAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,6 +28,9 @@ public class ListViewFragment extends Fragment {
     //For UI
     private FragmentListViewBinding mBinding;
     private RecyclerView mRecyclerView;
+
+    //For data
+    private List<Property> mProperties = new ArrayList<>();
 
     public static ListViewFragment newInstance() {
         return new ListViewFragment();
@@ -40,10 +45,10 @@ public class ListViewFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initRecyclerView();
+        initRecyclerView(mProperties);
     }
 
-    private void initRecyclerView() {
+    private void initRecyclerView(List<Property> properties) {
         mRecyclerView = mBinding.rvListView;
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireActivity());
         mRecyclerView.setLayoutManager(layoutManager);
@@ -51,4 +56,7 @@ public class ListViewFragment extends Fragment {
         mRecyclerView.setAdapter(new ListViewAdapter());
     }
 
+    private void getProperties(){
+
+    }
 }

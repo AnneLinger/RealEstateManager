@@ -18,16 +18,16 @@ import java.util.List;
 public interface PropertyDao {
 
     //Recover all the properties
-    @Query("SELECT * FROM Property")
+    @Query("SELECT * FROM property_table")
     LiveData<List<Property>> getProperties();
 
     //Recover a property from the db with its id
-    @Query("SELECT * FROM Property WHERE property_id = :propertyId")
+    @Query("SELECT * FROM property_table WHERE property_id = :propertyId")
     LiveData<Property> getProperty(int propertyId);
 
     //Add a new property to the db
     @Insert
-    int addProperty(Property property);
+    void addProperty(Property property);
 
     //Update a property in the db
     @Update
