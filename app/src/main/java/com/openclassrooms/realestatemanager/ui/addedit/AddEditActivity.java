@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.ui.activities;
+package com.openclassrooms.realestatemanager.ui.addedit;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,7 +7,8 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.openclassrooms.realestatemanager.databinding.ActivityAddBinding;
+import com.openclassrooms.realestatemanager.databinding.ActivityAddEditBinding;
+import com.openclassrooms.realestatemanager.ui.main.MainActivity;
 import com.openclassrooms.realestatemanager.viewmodels.AddViewModel;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -17,13 +18,15 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 
 @AndroidEntryPoint
-public class AddActivity extends AppCompatActivity {
+public class AddEditActivity extends AppCompatActivity {
 
     //For ui
-    private ActivityAddBinding mBinding;
+    private ActivityAddEditBinding mBinding;
 
     //For data
     private AddViewModel mAddViewModel;
+
+    //TODO Manage display of data and of title depends on data or not
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,11 +37,12 @@ public class AddActivity extends AppCompatActivity {
     }
 
     private void initUi() {
-        mBinding = ActivityAddBinding.inflate(getLayoutInflater());
+        mBinding = ActivityAddEditBinding.inflate(getLayoutInflater());
         setContentView(mBinding.getRoot());
         configureActionBar();
     }
 
+    //TODO : create an alert dialog to confirm cancel add property
     private void configureActionBar() {
         mBinding.addToolbar.setNavigationOnClickListener(view -> navigateToMainActivity());
     }
@@ -58,7 +62,7 @@ public class AddActivity extends AppCompatActivity {
     }
 
     private void navigateToMainActivity() {
-        Intent intent = new Intent(AddActivity.this, MainActivity.class);
+        Intent intent = new Intent(AddEditActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
     }

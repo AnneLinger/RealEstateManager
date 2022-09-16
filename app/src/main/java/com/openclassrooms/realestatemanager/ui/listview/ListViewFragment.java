@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.ui.fragments;
+package com.openclassrooms.realestatemanager.ui.listview;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassrooms.realestatemanager.databinding.FragmentListViewBinding;
 import com.openclassrooms.realestatemanager.domain.models.Property;
-import com.openclassrooms.realestatemanager.ui.adapter.ListViewAdapter;
 import com.openclassrooms.realestatemanager.viewmodels.ListViewModel;
 
 import java.util.ArrayList;

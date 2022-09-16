@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.ui.adapter;
+package com.openclassrooms.realestatemanager.ui.listview;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,9 +58,7 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
         }
 
         private void navigateToPropertyDetails() {
-            //Intent intent = new Intent(itemView.getContext(), PlaceDetailsActivity.class);
-            //intent.putExtra("place id", place.getPlaceId());
-            //itemView.getContext().startActivity(intent);
+            navigateToPropertyDetails();
         }
     }
 }

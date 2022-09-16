@@ -1,22 +1,26 @@
-package com.openclassrooms.realestatemanager.ui.activities;
+package com.openclassrooms.realestatemanager.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityMainBinding;
-import com.openclassrooms.realestatemanager.ui.fragments.ListViewFragment;
-import com.openclassrooms.realestatemanager.ui.fragments.MapViewFragment;
+import com.openclassrooms.realestatemanager.ui.addedit.AddEditActivity;
+import com.openclassrooms.realestatemanager.ui.details.DetailsFragment;
+import com.openclassrooms.realestatemanager.ui.listview.ListViewFragment;
+import com.openclassrooms.realestatemanager.ui.mapview.MapViewFragment;
+import com.openclassrooms.realestatemanager.ui.search.SearchFragment;
+import com.openclassrooms.realestatemanager.ui.simulator.SimulatorFragment;
 import com.openclassrooms.realestatemanager.utils.Utils;
-import com.openclassrooms.realestatemanager.viewmodels.ListViewModel;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -32,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding mBinding;
     private ListViewFragment mListViewFragment;
     private MapViewFragment mMapViewFragment;
+    private DetailsFragment mDetailsFragment = DetailsFragment.newInstance();
+    private SearchFragment mSearchFragment = SearchFragment.newInstance();
+    private SimulatorFragment mSimulatorFragment = SimulatorFragment.newInstance();
 
     //For data
 
@@ -44,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         initUi();
         configureDrawer();
         configureBottomNav();
+        navigateToPropertyDetails();
     }
 
     @Override
@@ -69,10 +77,10 @@ public class MainActivity extends AppCompatActivity {
         mBinding.navigationView.setNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.search:
-                    navigateToSearchActivity();
+                    navigateToSearchFragment();
                     return true;
                 case R.id.simulator:
-                    navigateToSimulatorActivity();
+                    navigateToSimulatorFragment();
                     return true;
             }
             mBinding.mainActivityLayout.close();
@@ -82,21 +90,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.edit_icon:
-                //TODO if fragment detail is show method
-                navigateToEditActivity();
-                return true;
-            case R.id.add_icon:
-                navigateToAddActivity();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void manageEditIcon() {
-        //TODO fragment detail show method
+        navigateToAddActivity();
+        return true;
     }
 
     private void configureBottomNav() {
@@ -126,26 +121,45 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //TODO a generic method to navigate with parameter !!
-    private void navigateToSearchActivity() {
-        Intent intent = new Intent(MainActivity.this, SearchActivity.class);
-        startActivity(intent);
-        finish();
+    private void navigateToSearchFragment() {
+        if (!mSearchFragment.isVisible()) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.activity_places_frame_layout, mSearchFragment).commit();
+        }
+        mBinding.bottomNav.setVisibility(View.GONE);
+        mBinding.mainActivityLayout.closeDrawers();
+        mBinding.toolbar.setTitle(this.getString(R.string.search_title));
+        mBinding.toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
     }
 
-    private void navigateToSimulatorActivity() {
-        Intent intent = new Intent(MainActivity.this, SimulatorActivity.class);
-        startActivity(intent);
-        finish();
+    //TODO change call to this method from adapter
+    public void navigateToPropertyDetails() {
+        //TODO remove button and manage this from adapter
+        mBinding.fabSaveProperty.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!mDetailsFragment.isVisible()) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.activity_places_frame_layout, mDetailsFragment).commit();
+                }
+                mBinding.bottomNav.setVisibility(View.GONE);
+                mBinding.mainActivityLayout.closeDrawers();
+                mBinding.toolbar.setTitle(getResources().getString(R.string.property_details_title));
+                mBinding.toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
+            }
+        });
+    }
+
+    private void navigateToSimulatorFragment() {
+        if (!mSimulatorFragment.isVisible()) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.activity_places_frame_layout, mSimulatorFragment).commit();
+        }
+        mBinding.bottomNav.setVisibility(View.GONE);
+        mBinding.mainActivityLayout.closeDrawers();
+        mBinding.toolbar.setTitle(this.getString(R.string.simulator_title));
+        mBinding.toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
     }
 
     private void navigateToAddActivity() {
-        Intent intent = new Intent(MainActivity.this, AddActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
-    private void navigateToEditActivity() {
-        Intent intent = new Intent(MainActivity.this, EditActivity.class);
+        Intent intent = new Intent(MainActivity.this, AddEditActivity.class);
         startActivity(intent);
         finish();
     }

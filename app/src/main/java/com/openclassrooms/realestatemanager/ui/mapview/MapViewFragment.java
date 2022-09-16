@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.ui.fragments;
+package com.openclassrooms.realestatemanager.ui.mapview;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

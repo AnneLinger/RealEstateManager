@@ -7,7 +7,7 @@ xmlns:tools="http://schemas.android.com/tools"
 android:id="@+id/main_activity_layout"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-tools:context="com.openclassrooms.realestatemanager.ui.activities.MainActivity">
+tools:context="com.openclassrooms.realestatemanager.ui.main.MainActivity">
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
@@ -39,6 +39,18 @@ tools:context="com.openclassrooms.realestatemanager.ui.activities.MainActivity">
         http:layout_constraintEnd_toEndOf="parent"
         http:layout_constraintStart_toStartOf="parent"
         http:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_save_property"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/save_property"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:maxImageSize="32dp"
+        app:tint="@null" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"
