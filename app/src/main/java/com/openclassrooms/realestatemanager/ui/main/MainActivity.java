@@ -2,7 +2,6 @@ package com.openclassrooms.realestatemanager.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityMainBinding;
-import com.openclassrooms.realestatemanager.ui.addedit.AddEditActivity;
+import com.openclassrooms.realestatemanager.ui.addedit.AddEditGeneralFragment;
 import com.openclassrooms.realestatemanager.ui.details.DetailsFragment;
 import com.openclassrooms.realestatemanager.ui.listview.ListViewFragment;
 import com.openclassrooms.realestatemanager.ui.mapview.MapViewFragment;
@@ -39,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private DetailsFragment mDetailsFragment = DetailsFragment.newInstance();
     private SearchFragment mSearchFragment = SearchFragment.newInstance();
     private SimulatorFragment mSimulatorFragment = SimulatorFragment.newInstance();
+    private AddEditGeneralFragment mAddEditGeneralFragment = AddEditGeneralFragment.newInstance();
 
     //For data
 
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        navigateToAddActivity();
+        navigateToAddEditFragment();
         return true;
     }
 
@@ -158,10 +158,14 @@ public class MainActivity extends AppCompatActivity {
         mBinding.toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
     }
 
-    private void navigateToAddActivity() {
-        Intent intent = new Intent(MainActivity.this, AddEditActivity.class);
-        startActivity(intent);
-        finish();
+    private void navigateToAddEditFragment() {
+        if (!mAddEditGeneralFragment.isVisible()) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.activity_places_frame_layout, mAddEditGeneralFragment).commit();
+        }
+        mBinding.bottomNav.setVisibility(View.GONE);
+        mBinding.mainActivityLayout.closeDrawers();
+        mBinding.toolbar.setTitle(this.getString(R.string.add_edit_general_title));
+        mBinding.toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
     }
 
     private void configureTextViewMain(){

@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager.ui.details;
+package com.openclassrooms.realestatemanager.ui.addedit;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,27 +13,25 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.databinding.FragmentDetailsBinding;
-import com.openclassrooms.realestatemanager.databinding.FragmentSearchBinding;
+import com.openclassrooms.realestatemanager.databinding.FragmentDetailedDataBinding;
 import com.openclassrooms.realestatemanager.ui.main.MainActivity;
-import com.openclassrooms.realestatemanager.ui.search.SearchFragment;
 
 /**
-*Fragment to display a property details
+*Fragment to add or edit detailed information about property
 */
 
-public class DetailsFragment extends Fragment {
+public class AddEditDetailedFragment extends Fragment {
 
     //For ui
-    private FragmentDetailsBinding mBinding;
+    private FragmentDetailedDataBinding mBinding;
 
-    public static DetailsFragment newInstance() {
-        return new DetailsFragment();
+    public static AddEditDetailedFragment newInstance() {
+        return new AddEditDetailedFragment();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mBinding = FragmentDetailsBinding.inflate(inflater, container, false);
+        mBinding = FragmentDetailedDataBinding.inflate(inflater, container, false);
         setHasOptionsMenu(true);
         return mBinding.getRoot();
     }
@@ -44,12 +42,12 @@ public class DetailsFragment extends Fragment {
         configureToolbar();
     }
 
-    //TODO create a navigate vers fragment addEditGeneral mais redonner pour ça la main à la MainActivity
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
-        menu.getItem(0).setIcon(R.drawable.ic_baseline_edit_24);
+        menu.getItem(0).setVisible(false);
     }
 
+    //TODO create a alert dialog to confirm cancel add/edit
     private void configureToolbar() {
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(view -> navigateToMainActivity());

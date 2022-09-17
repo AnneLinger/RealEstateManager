@@ -20,10 +20,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.openclassrooms.realestatemanager.ui.addedit.AddEditActivity"
-            android:exported="true"
-            android:parentActivityName=".ui.main.MainActivity" />
 
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"

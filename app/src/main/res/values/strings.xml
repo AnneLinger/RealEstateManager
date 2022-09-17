@@ -13,6 +13,8 @@
     <string name="search_title">Search a property</string>
     <string name="add_property_title">Add a property</string>
     <string name="simulator_title">Simulate a home loan</string>
+    <string name="add_edit_general_title">General information of the property</string>
+    <string name="add_edit_detailed_title">Detailed information of the property</string>
     <string name="edit_title">Edit a property</string>
     <string name="save_property">save_property</string>
     <string name="property_details_title">Property in details</string>
