@@ -24,4 +24,14 @@
     <string name="cancel_button_text">Cancel</string>
     <string name="continue_button">No, continue</string>
     <string name="continue_button_text">No, continue</string>
+    <string name="next">Next</string>
+    <string name="next_button">Next</string>
+    <string name="property_type">Property type</string>
+    <string name="price">Price</string>
+    <string name="surface">Surface</string>
+    <string name="address">Address</string>
+    <string name="add_a_photo">Add a photo...</string>
+    <string name="dollars">Dollars</string>
+    <string name="square_meters">Square meters</string>
+    <string name="city">City</string>
 </resources>

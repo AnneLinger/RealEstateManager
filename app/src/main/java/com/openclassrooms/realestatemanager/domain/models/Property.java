@@ -37,6 +37,9 @@ public class Property {
     @ColumnInfo(name = "address")
     private String address;
 
+    @ColumnInfo(name = "city")
+    private String city;
+
     @ColumnInfo(name = "on_sale")
     private boolean onSale;
 
@@ -50,13 +53,14 @@ public class Property {
     @ColumnInfo(name = "agent")
     private String agent;
 
-    public Property(String type, int price, int surface, int roomNumber, @Nullable String description, String address, boolean onSale, String entryDate, @Nullable String soldDate, String agent) {
+    public Property(String type, int price, int surface, int roomNumber, @Nullable String description, String address, String city, boolean onSale, String entryDate, @Nullable String soldDate, String agent) {
         this.type = type;
         this.price = price;
         this.surface = surface;
         this.roomNumber = roomNumber;
         this.description = description;
         this.address = address;
+        this.city = city;
         this.onSale = onSale;
         this.entryDate = entryDate;
         this.soldDate = soldDate;
@@ -118,6 +122,14 @@ public class Property {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public boolean isOnSale() {

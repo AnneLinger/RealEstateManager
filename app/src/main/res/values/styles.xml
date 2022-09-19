@@ -15,11 +15,11 @@
     </style>
 
     <style name="NegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/color_secondary</item>
+        <item name="android:textColor">@color/color_white</item>
     </style>
 
     <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/color_secondary</item>
+        <item name="android:textColor">@color/color_white</item>
     </style>
 
 </resources>

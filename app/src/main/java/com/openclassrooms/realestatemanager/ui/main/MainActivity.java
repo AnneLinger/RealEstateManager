@@ -1,11 +1,16 @@
 package com.openclassrooms.realestatemanager.ui.main;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -51,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         initUi();
         configureDrawer();
         configureBottomNav();
-        navigateToPropertyDetails();
+        //navigateToPropertyDetails();
     }
 
     @Override
@@ -94,6 +99,24 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    //Clear focus when user touches anywhere
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if (v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if (!outRect.contains((int) event.getRawX(), (int) event.getRawY())) {
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+        return super.dispatchTouchEvent(event);
+    }
+
     private void configureBottomNav() {
         mBinding.bottomNav.setOnItemSelectedListener(this::selectBottomNavItem);
     }
@@ -134,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
     //TODO change call to this method from adapter
     public void navigateToPropertyDetails() {
         //TODO remove button and manage this from adapter
-        mBinding.fabSaveProperty.setOnClickListener(new View.OnClickListener() {
+        /**mBinding.fabSaveProperty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!mDetailsFragment.isVisible()) {
@@ -145,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
                 mBinding.toolbar.setTitle(getResources().getString(R.string.property_details_title));
                 mBinding.toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
             }
-        });
+        });*/
     }
 
     private void navigateToSimulatorFragment() {
