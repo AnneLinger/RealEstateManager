@@ -1,7 +1,10 @@
 package com.openclassrooms.realestatemanager.ui.addedit;
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -13,10 +16,13 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentGeneralDataBinding;
 import com.openclassrooms.realestatemanager.ui.main.MainActivity;
 import com.openclassrooms.realestatemanager.viewmodels.AddViewModel;
+
+import java.util.Objects;
 
 /**
 *Fragment to add or edit general information about property
@@ -47,6 +53,7 @@ public class AddEditGeneralFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         configureToolbar();
         configureViewModel();
+        saveProperty();
     }
 
     @Override
@@ -57,7 +64,7 @@ public class AddEditGeneralFragment extends Fragment {
     //TODO create a alert dialog to confirm cancel add/edit
     private void configureToolbar() {
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
-        toolbar.setNavigationOnClickListener(view -> navigateToMainActivity());
+        toolbar.setNavigationOnClickListener(view -> showDialogToConfirmCancel());
     }
 
     //TODO attacher le VM au fragment
@@ -65,6 +72,21 @@ public class AddEditGeneralFragment extends Fragment {
         mAddViewModel = new ViewModelProvider(requireActivity()).get(AddViewModel.class);
     }
 
+    //Dialog to alert about the add/edit annulment
+    public void showDialogToConfirmCancel() {
+        MaterialAlertDialogBuilder alertDialogBuilder = new MaterialAlertDialogBuilder((this.requireContext()), R.style.AlertDialogTheme);
+        alertDialogBuilder.setTitle(R.string.cancel_add_edit_title)
+                .setMessage(R.string.confirm_cancel_message)
+                .setCancelable(false)
+                .setPositiveButton(R.string.cancel_button, (dialog, which) -> {
+                    navigateToMainActivity();
+                })
+                .setNegativeButton(R.string.continue_button, (dialog, which) -> dialog.dismiss())
+                .create()
+                .show();
+    }
+
+    //TO delete only for test during dev
     private void saveProperty() {
         mBinding.fabSaveProperty.setOnClickListener(new View.OnClickListener() {
             @Override
