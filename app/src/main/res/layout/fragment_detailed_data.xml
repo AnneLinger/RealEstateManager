@@ -5,12 +5,136 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/test"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tf_room_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/room_number"
+        app:suffixText="@string/rooms"
+        android:layout_marginHorizontal="@dimen/basic_margin"
+        app:endIconDrawable="@drawable/ic_baseline_cancel_24"
+        app:endIconMode="clear_text"
+        app:endIconCheckable="true"
+        app:endIconTint="@color/color_white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tf_description">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:imeOptions="actionNext"
+            android:singleLine="true"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tf_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/description"
+        app:endIconDrawable="@drawable/ic_baseline_cancel_24"
+        app:endIconMode="clear_text"
+        app:endIconCheckable="true"
+        app:endIconTint="@color/color_white"
+        android:layout_marginHorizontal="@dimen/basic_margin"
+        app:layout_constraintTop_toBottomOf="@id/tf_room_number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tf_entry_date">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionNext"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tf_entry_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/entry_date"
+        app:endIconDrawable="@drawable/ic_baseline_cancel_24"
+        app:endIconMode="clear_text"
+        app:endIconCheckable="true"
+        app:endIconTint="@color/color_white"
+        android:layout_marginHorizontal="@dimen/basic_margin"
+        app:layout_constraintTop_toBottomOf="@id/tf_description"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tf_agent"
+        app:startIconDrawable="@drawable/ic_baseline_calendar_month_24"
+        app:startIconTint="@color/color_white">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:imeOptions="actionNext"
+            android:singleLine="true"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tf_agent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/agent"
+        android:layout_marginHorizontal="@dimen/basic_margin"
+        app:endIconDrawable="@drawable/ic_baseline_cancel_24"
+        app:endIconMode="clear_text"
+        app:endIconCheckable="true"
+        app:endIconTint="@color/color_white"
+        app:layout_constraintTop_toBottomOf="@id/tf_entry_date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/switch_sold">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionNext"
+            android:singleLine="true"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switch_sold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello detailed date fragment !!!"
-        tools:ignore="MissingConstraints" />
+        android:checked="false"
+        android:layout_marginStart="@dimen/basic_margin"
+        android:text="@string/sold_property"
+        app:layout_constraintBottom_toTopOf="@id/bt_save"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tf_agent"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tf_sold_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="188dp"
+        android:hint="@string/sold_date"
+        android:layout_marginEnd="@dimen/basic_margin"
+        app:endIconDrawable="@drawable/ic_baseline_cancel_24"
+        app:endIconMode="clear_text"
+        app:endIconCheckable="true"
+        app:startIconDrawable="@drawable/ic_baseline_calendar_month_24"
+        app:startIconTint="@color/color_white"
+        app:endIconTint="@color/color_white"
+        app:layout_constraintTop_toBottomOf="@id/tf_agent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bt_save">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:singleLine="true"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/bt_save"
@@ -19,6 +143,7 @@
         android:text="@string/save"
         android:contentDescription="@string/save"
         android:textColor="@color/color_white"
+        app:layout_constraintTop_toBottomOf="@id/switch_sold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>

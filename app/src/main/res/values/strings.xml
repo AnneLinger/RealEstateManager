@@ -36,4 +36,11 @@
     <string name="city">City</string>
     <string name="add_a_property">Add a property</string>
     <string name="save">Save</string>
+    <string name="room_number">Room number</string>
+    <string name="description">Description</string>
+    <string name="rooms">Rooms</string>
+    <string name="entry_date">Entry date</string>
+    <string name="agent">Agent</string>
+    <string name="sold_property">Sold property</string>
+    <string name="sold_date">Sold date</string>
 </resources>
