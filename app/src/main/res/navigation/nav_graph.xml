@@ -51,5 +51,16 @@
         <action
             android:id="@+id/action_addEditGeneralFragment_to_listViewFragment"
             app:destination="@id/listViewFragment" />
+        <action
+            android:id="@+id/action_addEditGeneralFragment_to_addEditDetailedFragment"
+            app:destination="@id/addEditDetailedFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addEditDetailedFragment"
+        android:name="com.openclassrooms.realestatemanager.ui.addedit.AddEditDetailedFragment"
+        android:label="AddEditDetailedFragment" >
+        <action
+            android:id="@+id/action_addEditDetailedFragment_to_listViewFragment"
+            app:destination="@id/listViewFragment" />
     </fragment>
 </navigation>
