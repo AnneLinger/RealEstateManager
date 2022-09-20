@@ -1,10 +1,8 @@
 package com.openclassrooms.realestatemanager.ui.addedit;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +19,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentGeneralDataBinding;
-import com.openclassrooms.realestatemanager.ui.main.MainActivity;
 import com.openclassrooms.realestatemanager.viewmodels.AddViewModel;
 
 import java.util.Objects;
@@ -100,7 +97,7 @@ public class AddEditGeneralFragment extends Fragment {
             }
             @Override
             public void afterTextChanged(Editable editable) {
-                enableButtonSave();
+                enableButtonNext();
             }
         });
     }
@@ -115,7 +112,7 @@ public class AddEditGeneralFragment extends Fragment {
             }
             @Override
             public void afterTextChanged(Editable editable) {
-                enableButtonSave();
+                enableButtonNext();
             }
         });
     }
@@ -130,7 +127,7 @@ public class AddEditGeneralFragment extends Fragment {
             }
             @Override
             public void afterTextChanged(Editable editable) {
-                enableButtonSave();
+                enableButtonNext();
             }
         });
     }
@@ -145,7 +142,7 @@ public class AddEditGeneralFragment extends Fragment {
             }
             @Override
             public void afterTextChanged(Editable editable) {
-                enableButtonSave();
+                enableButtonNext();
             }
         });
     }
@@ -160,7 +157,7 @@ public class AddEditGeneralFragment extends Fragment {
             }
             @Override
             public void afterTextChanged(Editable editable) {
-                enableButtonSave();
+                enableButtonNext();
             }
         });
     }
@@ -168,8 +165,8 @@ public class AddEditGeneralFragment extends Fragment {
     private void getPropertyPhotos() {
     }
 
-    //The button save is enabled only when all fields are filled
-    private void enableButtonSave() {
+    //The button next is enabled only when all fields required are filled
+    private void enableButtonNext() {
         if (Objects.requireNonNull(mBinding.etType.getText()).toString().isEmpty() ||
                 Objects.requireNonNull(mBinding.etPrice.getText()).toString().isEmpty() ||
                 Objects.requireNonNull(mBinding.etCity.getText()).toString().isEmpty()) {

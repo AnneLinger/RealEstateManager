@@ -22,6 +22,7 @@
         app:layout_constraintBottom_toTopOf="@id/tf_description">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_room_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
@@ -46,6 +47,7 @@
         app:layout_constraintBottom_toTopOf="@id/tf_entry_date">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="actionNext"
@@ -69,6 +71,7 @@
         app:startIconTint="@color/color_white">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_entry_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
@@ -93,9 +96,9 @@
         app:layout_constraintBottom_toTopOf="@id/switch_sold">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_agent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:imeOptions="actionNext"
             android:singleLine="true"
             />
     </com.google.android.material.textfield.TextInputLayout>
@@ -129,12 +132,24 @@
         app:layout_constraintBottom_toTopOf="@id/bt_save">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_sold_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
             android:singleLine="true"
             />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tv_required"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hint_required"
+        android:contentDescription="@string/hint_required"
+        android:layout_marginLeft="@dimen/basic_margin"
+        app:layout_constraintTop_toBottomOf="@id/switch_sold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bt_save"/>
 
     <Button
         android:id="@+id/bt_save"

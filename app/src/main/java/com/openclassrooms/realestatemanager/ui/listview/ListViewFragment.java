@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -60,6 +62,14 @@ public class ListViewFragment extends Fragment {
         configureViewModel();
         getProperties();
         addAProperty();
+    }
+
+    @Override
+    public void onResume() {
+        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
+        toolbar.setTitle(this.getString(R.string.app_name));
+        toolbar.setNavigationIcon(R.drawable.ic_baseline_menu_24);
+        super.onResume();
     }
 
     private void configureViewModel() {
