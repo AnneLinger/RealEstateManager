@@ -24,6 +24,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentGeneralDataBinding;
@@ -55,7 +56,6 @@ public class AddEditGeneralFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mBinding = FragmentGeneralDataBinding.inflate(inflater, container, false);
-        setHasOptionsMenu(true);
         return mBinding.getRoot();
     }
 
@@ -64,19 +64,21 @@ public class AddEditGeneralFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         this.mNavController = Navigation.findNavController(view);
         configureToolbar();
+        configureBottomNav();
         configureViewModel();
         saveProperty();
     }
 
-    @Override
-    public void onPrepareOptionsMenu(@NonNull Menu menu) {
-        menu.getItem(0).setVisible(false);
-    }
-
-    //TODO create a alert dialog to confirm cancel add/edit
     private void configureToolbar() {
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
+        toolbar.setTitle(this.getString(R.string.add_edit_general_title));
+        toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
         toolbar.setNavigationOnClickListener(view -> showDialogToConfirmCancel());
+    }
+
+    private void configureBottomNav() {
+        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottom_nav);
+        bottomNavigationView.setVisibility(View.GONE);
     }
 
     //TODO attacher le VM au fragment

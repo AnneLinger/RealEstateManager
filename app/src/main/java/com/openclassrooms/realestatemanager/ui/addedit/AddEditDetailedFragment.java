@@ -44,11 +44,6 @@ public class AddEditDetailedFragment extends Fragment {
         configureToolbar();
     }
 
-    @Override
-    public void onPrepareOptionsMenu(@NonNull Menu menu) {
-        menu.getItem(0).setVisible(false);
-    }
-
     //TODO create a alert dialog to confirm cancel add/edit
     private void configureToolbar() {
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);

@@ -42,11 +42,6 @@ public class SimulatorFragment extends Fragment {
         configureToolbar();
     }
 
-    @Override
-    public void onPrepareOptionsMenu(@NonNull Menu menu) {
-        menu.getItem(0).setVisible(false);
-    }
-
     private void configureToolbar() {
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(view -> navigateToMainActivity());

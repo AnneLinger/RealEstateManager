@@ -20,6 +20,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityMainBinding;
 import com.openclassrooms.realestatemanager.ui.addedit.AddEditDetailedFragment;
@@ -65,14 +66,8 @@ public class MainActivity extends AppCompatActivity {
         initUi();
         configureDrawer();
         configureBottomNav();
+        manageFragmentUi();
         //navigateToPropertyDetails();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.toolbar_menu, menu);
-        return true;
     }
 
     private void initUi() {
@@ -84,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         //NavigationUI.setupWithNavController(bottomNavigationView, mNavController);
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         mNavController = navHostFragment.getNavController();
-        getSupportFragmentManager().beginTransaction().add(R.id.nav_host_fragment, new ListViewFragment()).commit();
+        //getSupportFragmentManager().beginTransaction().add(R.id.nav_host_fragment, new ListViewFragment()).commit();
         NavigationUI.setupWithNavController(bottomNavigationView, mNavController);
         this.mListViewFragment = ListViewFragment.newInstance();
     }
@@ -96,23 +91,16 @@ public class MainActivity extends AppCompatActivity {
         //Listener on menu
         mBinding.navigationView.setNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
-                case R.id.search:
+                case R.id.searchFragment:
                     navigateToSearchFragment();
                     return true;
-                case R.id.simulator:
+                case R.id.simulatorFragment:
                     navigateToSimulatorFragment();
                     return true;
             }
             mBinding.mainActivityLayout.close();
             return false;
         });
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        //mNavController.navigate(R.id.action_listViewFragment_to_addEditGeneralFragment2);
-        navigateToAddEditFragment();
-        return true;
     }
 
     //Clear focus when user touches anywhere
@@ -207,6 +195,15 @@ public class MainActivity extends AppCompatActivity {
         mBinding.mainActivityLayout.closeDrawers();
         mBinding.toolbar.setTitle(this.getString(R.string.add_edit_general_title));
         mBinding.toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
+    }
+
+    private void manageFragmentUi() {
+        if(mAddEditGeneralFragment.isVisible()) {
+            mBinding.bottomNav.setVisibility(View.GONE);
+            mBinding.mainActivityLayout.closeDrawers();
+            mBinding.toolbar.setTitle(this.getString(R.string.add_edit_general_title));
+            mBinding.toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
+        }
     }
 
     private void configureTextViewMain(){

@@ -10,6 +10,15 @@
         <action
             android:id="@+id/action_listViewFragment_to_mapViewFragment3"
             app:destination="@id/mapViewFragment3" />
+        <action
+            android:id="@+id/action_listViewFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_listViewFragment_to_simulatorFragment"
+            app:destination="@id/simulatorFragment" />
+        <action
+            android:id="@+id/action_listViewFragment_to_addEditGeneralFragment"
+            app:destination="@id/addEditGeneralFragment" />
     </fragment>
     <fragment
         android:id="@+id/mapViewFragment3"
@@ -17,6 +26,30 @@
         android:label="MapViewFragment" >
         <action
             android:id="@+id/action_mapViewFragment3_to_listViewFragment"
+            app:destination="@id/listViewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.openclassrooms.realestatemanager.ui.search.SearchFragment"
+        android:label="SearchFragment" >
+        <action
+            android:id="@+id/action_searchFragment_to_listViewFragment"
+            app:destination="@id/listViewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/simulatorFragment"
+        android:name="com.openclassrooms.realestatemanager.ui.simulator.SimulatorFragment"
+        android:label="SimulatorFragment" >
+        <action
+            android:id="@+id/action_simulatorFragment_to_listViewFragment"
+            app:destination="@id/listViewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addEditGeneralFragment"
+        android:name="com.openclassrooms.realestatemanager.ui.addedit.AddEditGeneralFragment"
+        android:label="AddEditGeneralFragment" >
+        <action
+            android:id="@+id/action_addEditGeneralFragment_to_listViewFragment"
             app:destination="@id/listViewFragment" />
     </fragment>
 </navigation>

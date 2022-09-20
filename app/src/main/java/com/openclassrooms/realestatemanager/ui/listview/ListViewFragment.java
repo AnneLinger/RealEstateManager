@@ -2,6 +2,9 @@ package com.openclassrooms.realestatemanager.ui.listview;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -15,6 +18,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentListViewBinding;
 import com.openclassrooms.realestatemanager.domain.models.Property;
 import com.openclassrooms.realestatemanager.viewmodels.ListViewModel;
@@ -55,6 +59,7 @@ public class ListViewFragment extends Fragment {
         this.mNavController = Navigation.findNavController(view);
         configureViewModel();
         getProperties();
+        addAProperty();
     }
 
     private void configureViewModel() {
@@ -71,5 +76,14 @@ public class ListViewFragment extends Fragment {
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.VERTICAL));
         mRecyclerView.setAdapter(new ListViewAdapter(properties));
+    }
+
+    private void addAProperty() {
+        mBinding.fabAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mNavController.navigate(R.id.action_listViewFragment_to_addEditGeneralFragment);
+            }
+        });
     }
 }

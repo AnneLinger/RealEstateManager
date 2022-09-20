@@ -34,4 +34,5 @@
     <string name="dollars">Dollars</string>
     <string name="square_meters">Square meters</string>
     <string name="city">City</string>
+    <string name="add_a_property">Add a property</string>
 </resources>

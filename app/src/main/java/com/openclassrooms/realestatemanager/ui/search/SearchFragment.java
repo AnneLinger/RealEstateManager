@@ -43,11 +43,6 @@ public class SearchFragment extends Fragment {
         configureToolbar();
     }
 
-    @Override
-    public void onPrepareOptionsMenu(@NonNull Menu menu) {
-        menu.getItem(0).setVisible(false);
-    }
-
     //TODO create a alert dialog to confirm cancel search
     private void configureToolbar() {
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);

@@ -24,8 +24,8 @@ tools:context="com.openclassrooms.realestatemanager.ui.main.MainActivity">
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:titleTextColor="@color/color_white"
-        http:menu="@menu/toolbar_menu"
         http:navigationIcon="@drawable/ic_baseline_menu_24"
+        http:menu="@menu/toolbar_menu"
         http:title="@string/toolbar_title">
 
     </androidx.appcompat.widget.Toolbar>

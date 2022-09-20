@@ -45,10 +45,6 @@ public class DetailsFragment extends Fragment {
     }
 
     //TODO create a navigate vers fragment addEditGeneral mais redonner pour ça la main à la MainActivity
-    @Override
-    public void onPrepareOptionsMenu(@NonNull Menu menu) {
-        menu.getItem(0).setIcon(R.drawable.ic_baseline_edit_24);
-    }
 
     private void configureToolbar() {
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
