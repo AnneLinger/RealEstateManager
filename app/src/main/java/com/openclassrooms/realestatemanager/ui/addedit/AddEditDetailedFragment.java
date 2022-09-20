@@ -96,13 +96,13 @@ public class AddEditDetailedFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.e("", "onClick");
-                mAddViewModel.createProperty("House", 120000, 80, 5, null, "12 Main Street", "New York", true, "13 octobre 2022", null, "Bob Stuart");
+                mAddViewModel.createProperty("House", 120000, "80", 5, null, "12 Main Street", "New York", true, "13 octobre 2022", null, "Bob Stuart");
                 navigateToMainActivity();
             }
         });
     }
 
     private void navigateToMainActivity() {
-        mNavController.navigate(R.id.action_addEditDetailedFragment_to_listViewFragment);
-    }
+        Intent intent = new Intent(requireActivity(), MainActivity.class);
+        startActivity(intent);    }
 }

@@ -26,14 +26,14 @@
     <string name="continue_button_text">No, continue</string>
     <string name="next">Next</string>
     <string name="next_button">Next</string>
-    <string name="property_type">Property type</string>
-    <string name="price">Price</string>
+    <string name="property_type">Property type\ *</string>
+    <string name="price">Price\ *</string>
     <string name="surface">Surface</string>
     <string name="address">Address</string>
-    <string name="add_a_photo">Add a photo...</string>
+    <string name="add_a_photo">Add a photo…*</string>
     <string name="dollars">Dollars</string>
     <string name="square_meters">Square meters</string>
-    <string name="city">City</string>
+    <string name="city">City\ *</string>
     <string name="add_a_property">Add a property</string>
     <string name="save">Save</string>
     <string name="room_number">Room number</string>
@@ -43,4 +43,6 @@
     <string name="agent">Agent</string>
     <string name="sold_property">Sold property</string>
     <string name="sold_date">Sold date</string>
+    <string name="required">*</string>
+    <string name="hint_required">* Required</string>
 </resources>

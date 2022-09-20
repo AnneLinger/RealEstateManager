@@ -24,8 +24,9 @@ public class Property {
     @ColumnInfo(name = "price")
     private int price;
 
+    @Nullable
     @ColumnInfo(name = "surface")
-    private int surface;
+    private String surface;
 
     @ColumnInfo(name = "room_number")
     private int roomNumber;
@@ -34,6 +35,7 @@ public class Property {
     @ColumnInfo(name = "description")
     private String description;
 
+    @Nullable
     @ColumnInfo(name = "address")
     private String address;
 
@@ -53,7 +55,7 @@ public class Property {
     @ColumnInfo(name = "agent")
     private String agent;
 
-    public Property(String type, int price, int surface, int roomNumber, @Nullable String description, String address, String city, boolean onSale, String entryDate, @Nullable String soldDate, String agent) {
+    public Property(String type, int price, @Nullable String surface, int roomNumber, @Nullable String description, @Nullable String address, String city, boolean onSale, String entryDate, @Nullable String soldDate, String agent) {
         this.type = type;
         this.price = price;
         this.surface = surface;
@@ -91,11 +93,12 @@ public class Property {
         this.price = price;
     }
 
-    public int getSurface() {
+    @Nullable
+    public String getSurface() {
         return surface;
     }
 
-    public void setSurface(int surface) {
+    public void setSurface(@Nullable String surface) {
         this.surface = surface;
     }
 
@@ -116,11 +119,12 @@ public class Property {
         this.description = description;
     }
 
+    @Nullable
     public String getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(@Nullable String address) {
         this.address = address;
     }
 

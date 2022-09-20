@@ -2,6 +2,8 @@ package com.openclassrooms.realestatemanager.ui.addedit;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +23,8 @@ import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentGeneralDataBinding;
 import com.openclassrooms.realestatemanager.ui.main.MainActivity;
 import com.openclassrooms.realestatemanager.viewmodels.AddViewModel;
+
+import java.util.Objects;
 
 /**
 *Fragment to add or edit general information about property
@@ -52,10 +56,21 @@ public class AddEditGeneralFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.mNavController = Navigation.findNavController(view);
+        initUi();
+        configureViewModel();
+        getPropertyType();
+        getPropertyPrice();
+        getPropertySurface();
+        getPropertyAddress();
+        getPropertyCity();
+        getPropertyPhotos();
+        goToNextFragmentAddEdit();
+    }
+
+    private void initUi() {
         configureToolbar();
         configureBottomNav();
-        configureViewModel();
-        goToNextFragmentAddEdit();
+        mBinding.btNextAddEdit.setEnabled(false);
     }
 
     private void configureToolbar() {
@@ -73,6 +88,95 @@ public class AddEditGeneralFragment extends Fragment {
     //TODO attacher le VM au fragment
     private void configureViewModel() {
         mAddViewModel = new ViewModelProvider(requireActivity()).get(AddViewModel.class);
+    }
+
+    private void getPropertyType() {
+        mBinding.etType.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+                enableButtonSave();
+            }
+        });
+    }
+
+    private void getPropertyPrice() {
+        mBinding.etPrice.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+                enableButtonSave();
+            }
+        });
+    }
+
+    private void getPropertySurface() {
+        mBinding.etSurface.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+                enableButtonSave();
+            }
+        });
+    }
+
+    private void getPropertyAddress() {
+        mBinding.etAddress.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+                enableButtonSave();
+            }
+        });
+    }
+
+    private void getPropertyCity() {
+        mBinding.etCity.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+                enableButtonSave();
+            }
+        });
+    }
+
+    private void getPropertyPhotos() {
+    }
+
+    //The button save is enabled only when all fields are filled
+    private void enableButtonSave() {
+        if (Objects.requireNonNull(mBinding.etType.getText()).toString().isEmpty() ||
+                Objects.requireNonNull(mBinding.etPrice.getText()).toString().isEmpty() ||
+                Objects.requireNonNull(mBinding.etCity.getText()).toString().isEmpty()) {
+            mBinding.btNextAddEdit.setEnabled(false);
+        } else {
+            mBinding.btNextAddEdit.setEnabled(true);
+        }
     }
 
     //Dialog to alert about the add/edit annulment
@@ -93,7 +197,6 @@ public class AddEditGeneralFragment extends Fragment {
         mBinding.btNextAddEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("", "onClick");
                 mNavController.navigate(R.id.action_addEditGeneralFragment_to_addEditDetailedFragment);
             }
         });
