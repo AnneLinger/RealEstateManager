@@ -1,7 +1,6 @@
 package com.openclassrooms.realestatemanager.ui.main;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.Menu;
@@ -15,9 +14,15 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityMainBinding;
+import com.openclassrooms.realestatemanager.ui.addedit.AddEditDetailedFragment;
 import com.openclassrooms.realestatemanager.ui.addedit.AddEditGeneralFragment;
 import com.openclassrooms.realestatemanager.ui.details.DetailsFragment;
 import com.openclassrooms.realestatemanager.ui.listview.ListViewFragment;
@@ -44,6 +49,10 @@ public class MainActivity extends AppCompatActivity {
     private SearchFragment mSearchFragment = SearchFragment.newInstance();
     private SimulatorFragment mSimulatorFragment = SimulatorFragment.newInstance();
     private AddEditGeneralFragment mAddEditGeneralFragment = AddEditGeneralFragment.newInstance();
+    private AddEditDetailedFragment mAddEditDetailedFragment = AddEditDetailedFragment.newInstance();
+
+    //For navigation
+    private NavController mNavController;
 
     //For data
 
@@ -70,7 +79,13 @@ public class MainActivity extends AppCompatActivity {
         mBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(mBinding.getRoot());
         setSupportActionBar(mBinding.toolbar);
-        getSupportFragmentManager().beginTransaction().add(R.id.activity_places_frame_layout, new ListViewFragment()).commit();
+        //mNavController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
+        //NavigationUI.setupWithNavController(bottomNavigationView, mNavController);
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        mNavController = navHostFragment.getNavController();
+        getSupportFragmentManager().beginTransaction().add(R.id.nav_host_fragment, new ListViewFragment()).commit();
+        NavigationUI.setupWithNavController(bottomNavigationView, mNavController);
         this.mListViewFragment = ListViewFragment.newInstance();
     }
 
@@ -95,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        //mNavController.navigate(R.id.action_listViewFragment_to_addEditGeneralFragment2);
         navigateToAddEditFragment();
         return true;
     }
@@ -128,7 +144,8 @@ public class MainActivity extends AppCompatActivity {
                     this.mListViewFragment = ListViewFragment.newInstance();
                 }
                 if (!mListViewFragment.isVisible()) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.activity_places_frame_layout, mListViewFragment).commit();
+                    mNavController.navigate(R.id.action_mapViewFragment3_to_listViewFragment);
+                    //getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mListViewFragment).commit();
                 }
                 return true;
             case R.id.item_map_view:
@@ -136,7 +153,8 @@ public class MainActivity extends AppCompatActivity {
                     this.mMapViewFragment = MapViewFragment.newInstance();
                 }
                 if (!mMapViewFragment.isVisible()) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.activity_places_frame_layout, mMapViewFragment).commit();
+                    mNavController.navigate(R.id.action_listViewFragment_to_mapViewFragment3);
+                    //getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mMapViewFragment).commit();
                 }
                 return true;
         }
@@ -146,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
     //TODO a generic method to navigate with parameter !!
     private void navigateToSearchFragment() {
         if (!mSearchFragment.isVisible()) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.activity_places_frame_layout, mSearchFragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mSearchFragment).commit();
         }
         mBinding.bottomNav.setVisibility(View.GONE);
         mBinding.mainActivityLayout.closeDrawers();
@@ -173,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void navigateToSimulatorFragment() {
         if (!mSimulatorFragment.isVisible()) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.activity_places_frame_layout, mSimulatorFragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mSimulatorFragment).commit();
         }
         mBinding.bottomNav.setVisibility(View.GONE);
         mBinding.mainActivityLayout.closeDrawers();
@@ -183,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void navigateToAddEditFragment() {
         if (!mAddEditGeneralFragment.isVisible()) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.activity_places_frame_layout, mAddEditGeneralFragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mAddEditGeneralFragment).commit();
         }
         mBinding.bottomNav.setVisibility(View.GONE);
         mBinding.mainActivityLayout.closeDrawers();

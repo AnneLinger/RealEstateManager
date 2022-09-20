@@ -7,6 +7,7 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -20,6 +21,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.openclassrooms.realestatemanager.R;
@@ -39,6 +42,9 @@ public class AddEditGeneralFragment extends Fragment {
     private FragmentGeneralDataBinding mBinding;
     private AddEditDetailedFragment mAddEditDetailedFragment = AddEditDetailedFragment.newInstance();
 
+    //For navigation
+    private NavController mNavController;
+
     //For data
     private AddViewModel mAddViewModel;
 
@@ -56,6 +62,7 @@ public class AddEditGeneralFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        this.mNavController = Navigation.findNavController(view);
         configureToolbar();
         configureViewModel();
         saveProperty();
@@ -96,8 +103,10 @@ public class AddEditGeneralFragment extends Fragment {
         mBinding.btNextAddEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.e("", "onClick");
                 mAddViewModel.createProperty("House", 120000, 80, 5, null, "12 Main Street", "New York", true, "13 octobre 2022", null, "Bob Stuart");
-                navigateToMainActivity();
+                //mNavController.navigate(R.id.action_addEditGeneralFragment_to_addEditDetailedFragment);
+                //navigateToMainActivity();
             }
         });
     }

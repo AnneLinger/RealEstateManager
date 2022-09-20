@@ -31,14 +31,17 @@ tools:context="com.openclassrooms.realestatemanager.ui.main.MainActivity">
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/activity_places_frame_layout"
+        android:id="@+id/nav_host_fragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:backgroundTint="@color/color_primary_variant"
         http:layout_constraintBottom_toTopOf="@id/bottom_nav"
         http:layout_constraintEnd_toEndOf="parent"
         http:layout_constraintStart_toStartOf="parent"
-        http:layout_constraintTop_toBottomOf="@id/toolbar" />
+        http:layout_constraintTop_toBottomOf="@id/toolbar"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/nav_graph"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"

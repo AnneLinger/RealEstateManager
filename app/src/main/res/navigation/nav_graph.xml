@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/listViewFragment">
+    <fragment
+        android:id="@+id/listViewFragment"
+        android:name="com.openclassrooms.realestatemanager.ui.listview.ListViewFragment"
+        android:label="ListViewFragment" >
+        <action
+            android:id="@+id/action_listViewFragment_to_mapViewFragment3"
+            app:destination="@id/mapViewFragment3" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapViewFragment3"
+        android:name="com.openclassrooms.realestatemanager.ui.mapview.MapViewFragment"
+        android:label="MapViewFragment" >
+        <action
+            android:id="@+id/action_mapViewFragment3_to_listViewFragment"
+            app:destination="@id/listViewFragment" />
+    </fragment>
+</navigation>

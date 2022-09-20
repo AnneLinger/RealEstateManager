@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,6 +32,9 @@ public class ListViewFragment extends Fragment {
     private FragmentListViewBinding mBinding;
     private RecyclerView mRecyclerView;
 
+    //For navigation
+    private NavController mNavController;
+
     //For data
     private ListViewModel mListViewModel;
     private List<Property> mProperties = new ArrayList<>();
@@ -47,6 +52,7 @@ public class ListViewFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        this.mNavController = Navigation.findNavController(view);
         configureViewModel();
         getProperties();
     }

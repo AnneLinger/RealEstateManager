@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.ui.addedit;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -31,6 +32,7 @@ public class AddEditDetailedFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.e("", "onCreateFragmentDetailed");
         mBinding = FragmentDetailedDataBinding.inflate(inflater, container, false);
         setHasOptionsMenu(true);
         return mBinding.getRoot();
