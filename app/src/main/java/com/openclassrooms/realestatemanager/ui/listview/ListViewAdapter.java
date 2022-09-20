@@ -1,8 +1,10 @@
 package com.openclassrooms.realestatemanager.ui.listview;
 
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -45,16 +47,24 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView name;
-
+        private final ImageView photo;
+        private final TextView type;
+        private final TextView city;
+        private final TextView price;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            name = itemView.findViewById(R.id.tv_place_name);
+            photo = itemView.findViewById(R.id.im_photo);
+            type = itemView.findViewById(R.id.tv_type);
+            city = itemView.findViewById(R.id.tv_city);
+            price = itemView.findViewById(R.id.tv_price);
         }
 
         private void displayProperty(Property property) {
-            name.setText(property.getType());
+            //TODO set also photo ! !
+            type.setText(property.getType());
+            city.setText(property.getCity());
+            price.setText(String.format("$%s", property.getPrice()));
         }
 
         private void navigateToPropertyDetails() {

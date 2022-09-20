@@ -22,7 +22,7 @@ public class Property {
     private String type;
 
     @ColumnInfo(name = "price")
-    private int price;
+    private String price;
 
     @Nullable
     @ColumnInfo(name = "surface")
@@ -55,7 +55,7 @@ public class Property {
     @ColumnInfo(name = "agent")
     private String agent;
 
-    public Property(String type, int price, @Nullable String surface, int roomNumber, @Nullable String description, @Nullable String address, String city, boolean onSale, String entryDate, @Nullable String soldDate, String agent) {
+    public Property(String type, String price, @Nullable String surface, int roomNumber, @Nullable String description, @Nullable String address, String city, boolean onSale, String entryDate, @Nullable String soldDate, String agent) {
         this.type = type;
         this.price = price;
         this.surface = surface;
@@ -85,11 +85,11 @@ public class Property {
         this.type = type;
     }
 
-    public int getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 

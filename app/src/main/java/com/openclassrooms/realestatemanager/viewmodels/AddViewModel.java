@@ -36,7 +36,7 @@ public class AddViewModel extends ViewModel {
             mPropertyRepository.addProperty(property);
         });    }
 
-    public void createProperty(String type, int price, String surface, int roomNumber, @Nullable String description, String address, String city, boolean onSale, String entryDate, String soldDate, String agent) {
+    public void createProperty(String type, String price, String surface, int roomNumber, @Nullable String description, String address, String city, boolean onSale, String entryDate, String soldDate, String agent) {
         Property property = new Property(type, price, surface, roomNumber, description, address, city, onSale, entryDate, soldDate, agent);
         addPropertyToRoomDatabase(property);
     }

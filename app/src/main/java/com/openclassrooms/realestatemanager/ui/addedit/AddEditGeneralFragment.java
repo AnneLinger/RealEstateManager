@@ -41,7 +41,7 @@ public class AddEditGeneralFragment extends Fragment {
     private AddViewModel mAddViewModel;
     private String type;
     private final String TYPE = "type";
-    private int price;
+    private String price;
     private final String PRICE = "price";
     private String surface = null;
     private final String SURFACE = "surface";
@@ -124,7 +124,7 @@ public class AddEditGeneralFragment extends Fragment {
             }
             @Override
             public void afterTextChanged(Editable editable) {
-                price = Integer.parseInt(mBinding.etPrice.getText().toString());
+                price = mBinding.etPrice.getText().toString();
                 enableButtonNext();
             }
         });
@@ -212,7 +212,7 @@ public class AddEditGeneralFragment extends Fragment {
             public void onClick(View v) {
                 final Bundle bundle = new Bundle();
                 bundle.putString(TYPE, type);
-                bundle.putInt(PRICE, price);
+                bundle.putString(PRICE, price);
                 bundle.putString(SURFACE, surface);
                 bundle.putString(ADDRESS, address);
                 bundle.putString(CITY, city);

@@ -1,13 +1,11 @@
 package com.openclassrooms.realestatemanager.ui.addedit;
 
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -26,7 +24,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailedDataBinding;
-import com.openclassrooms.realestatemanager.ui.main.MainActivity;
 import com.openclassrooms.realestatemanager.utils.DateUtils;
 import com.openclassrooms.realestatemanager.viewmodels.AddViewModel;
 
@@ -57,7 +54,7 @@ public class AddEditDetailedFragment extends Fragment {
     private Date date;
     private String type;
     private final String TYPE = "type";
-    private int price;
+    private String price;
     private final String PRICE = "price";
     private String surface;
     private final String SURFACE = "surface";
@@ -122,7 +119,7 @@ public class AddEditDetailedFragment extends Fragment {
     private void getDataFromPreviousForm() {
         assert getArguments() != null;
         type = getArguments().getString(TYPE);
-        price = getArguments().getInt(PRICE);
+        price = getArguments().getString(PRICE);
         surface = getArguments().getString(SURFACE);
         address = getArguments().getString(ADDRESS);
         city = getArguments().getString(CITY);

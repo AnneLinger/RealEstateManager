@@ -45,4 +45,5 @@
     <string name="sold_date">Sold date</string>
     <string name="required">*</string>
     <string name="hint_required">* Required</string>
+    <string name="property_photo">Property photo</string>
 </resources>

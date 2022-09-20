@@ -7,15 +7,48 @@
     android:layout_height="wrap_content"
     android:paddingVertical="16dp">
 
+    <ImageView
+        android:id="@+id/im_photo"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:contentDescription="@string/property_photo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/ic_baseline_house_24"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
-        android:id="@+id/tv_place_name"
+        android:id="@+id/tv_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:textSize="14sp"
+        android:textSize="26sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/im_photo"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tv_city"
+        tools:text="@string/app_name" />
+
+    <TextView
+        android:id="@+id/tv_city"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@id/im_photo"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:text="@string/app_name" />
+
+    <TextView
+        android:id="@+id/tv_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textSize="28sp"
+        android:textColor="@color/color_secondary"
+        app:layout_constraintStart_toEndOf="@id/im_photo"
+        app:layout_constraintTop_toBottomOf="@id/tv_city"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:text="@string/app_name" />
 
