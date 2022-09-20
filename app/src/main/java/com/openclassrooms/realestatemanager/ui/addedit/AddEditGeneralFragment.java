@@ -39,15 +39,15 @@ public class AddEditGeneralFragment extends Fragment {
 
     //For data
     private AddViewModel mAddViewModel;
-    private String type= null;
+    private String type;
     private final String TYPE = "type";
-    private int price = 0;
+    private int price;
     private final String PRICE = "price";
     private String surface = null;
     private final String SURFACE = "surface";
     private String address = null;
     private final String ADDRESS = "address";
-    private String city = null;
+    private String city;
     private final String CITY = "city";
 
     public static AddEditGeneralFragment newInstance() {

@@ -50,7 +50,6 @@ public class AddEditDetailedFragment extends Fragment {
 
     //For data
     private AddViewModel mAddViewModel;
-    private boolean isPropertySold = false;
     private static final DateUtils mDateTimeUtils = new DateUtils();
     private int lastSelectedYear;
     private int lastSelectedMonth;
@@ -66,6 +65,12 @@ public class AddEditDetailedFragment extends Fragment {
     private final String ADDRESS = "address";
     private String city;
     private final String CITY = "city";
+    private int roomNumber = 0;
+    private String description = null;
+    private String entryDate;
+    private String agent;
+    private String soldDate = null;
+    private boolean onSale = true;
 
 
     public static AddEditDetailedFragment newInstance() {
@@ -145,6 +150,7 @@ public class AddEditDetailedFragment extends Fragment {
             }
             @Override
             public void afterTextChanged(Editable editable) {
+                roomNumber = Integer.parseInt(mBinding.etRoomNumber.getText().toString());
                 enableButtonSave();
             }
         });
@@ -160,6 +166,7 @@ public class AddEditDetailedFragment extends Fragment {
             }
             @Override
             public void afterTextChanged(Editable editable) {
+                description = mBinding.etDescription.getText().toString();
                 enableButtonSave();
             }
         });
@@ -215,6 +222,7 @@ public class AddEditDetailedFragment extends Fragment {
             }
             @Override
             public void afterTextChanged(Editable editable) {
+                entryDate = mBinding.etEntryDate.getText().toString();
                 enableButtonSave();
             }
         });
@@ -230,6 +238,7 @@ public class AddEditDetailedFragment extends Fragment {
             }
             @Override
             public void afterTextChanged(Editable editable) {
+                agent = mBinding.etAgent.getText().toString();
                 enableButtonSave();
             }
         });
@@ -242,10 +251,12 @@ public class AddEditDetailedFragment extends Fragment {
                 if(isChecked) {
                     mBinding.etSoldDate.setEnabled(true);
                     mBinding.tfSoldDate.setEnabled(true);
-                    isPropertySold = true;
+                    onSale = false;
                 }
                 else {
                     mBinding.etSoldDate.setEnabled(false);
+                    mBinding.tfSoldDate.setEnabled(false);
+                    onSale = true;
                 }
                 enableButtonSave();
             }
@@ -271,6 +282,7 @@ public class AddEditDetailedFragment extends Fragment {
             }
             @Override
             public void afterTextChanged(Editable editable) {
+                soldDate = mBinding.etSoldDate.getText().toString();
                 enableButtonSave();
             }
         });
@@ -283,7 +295,7 @@ public class AddEditDetailedFragment extends Fragment {
                 Objects.requireNonNull(mBinding.etAgent.getText()).toString().isEmpty()) {
             mBinding.btSave.setEnabled(false);
         }
-        if (isPropertySold)
+        if (!onSale)
             mBinding.btSave.setEnabled(!Objects.requireNonNull(mBinding.etSoldDate.getText()).toString().isEmpty());
         else {
             mBinding.btSave.setEnabled(true);
@@ -310,7 +322,7 @@ public class AddEditDetailedFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.e("", "onClick");
-                mAddViewModel.createProperty(type, price, surface, 5, null, address, city, true, "13 octobre 2022", null, "Bob Stuart");
+                mAddViewModel.createProperty(type, price, surface, roomNumber, description, address, city, onSale, entryDate, soldDate, agent);
                 navigateToMainActivity();
             }
         });
