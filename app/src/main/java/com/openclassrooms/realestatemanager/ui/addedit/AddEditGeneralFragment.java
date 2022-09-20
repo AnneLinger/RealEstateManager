@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.ui.addedit;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -38,6 +39,16 @@ public class AddEditGeneralFragment extends Fragment {
 
     //For data
     private AddViewModel mAddViewModel;
+    private String type= null;
+    private final String TYPE = "type";
+    private int price = 0;
+    private final String PRICE = "price";
+    private String surface = null;
+    private final String SURFACE = "surface";
+    private String address = null;
+    private final String ADDRESS = "address";
+    private String city = null;
+    private final String CITY = "city";
 
     public static AddEditGeneralFragment newInstance() {
         return new AddEditGeneralFragment();
@@ -97,6 +108,7 @@ public class AddEditGeneralFragment extends Fragment {
             }
             @Override
             public void afterTextChanged(Editable editable) {
+                type = mBinding.etType.getText().toString();
                 enableButtonNext();
             }
         });
@@ -112,6 +124,7 @@ public class AddEditGeneralFragment extends Fragment {
             }
             @Override
             public void afterTextChanged(Editable editable) {
+                price = Integer.parseInt(mBinding.etPrice.getText().toString());
                 enableButtonNext();
             }
         });
@@ -127,6 +140,7 @@ public class AddEditGeneralFragment extends Fragment {
             }
             @Override
             public void afterTextChanged(Editable editable) {
+                surface = mBinding.etSurface.getText().toString();
                 enableButtonNext();
             }
         });
@@ -142,6 +156,7 @@ public class AddEditGeneralFragment extends Fragment {
             }
             @Override
             public void afterTextChanged(Editable editable) {
+                address = mBinding.etAddress.getText().toString();
                 enableButtonNext();
             }
         });
@@ -157,6 +172,7 @@ public class AddEditGeneralFragment extends Fragment {
             }
             @Override
             public void afterTextChanged(Editable editable) {
+                city = mBinding.etCity.getText().toString();
                 enableButtonNext();
             }
         });
@@ -194,7 +210,13 @@ public class AddEditGeneralFragment extends Fragment {
         mBinding.btNextAddEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mNavController.navigate(R.id.action_addEditGeneralFragment_to_addEditDetailedFragment);
+                final Bundle bundle = new Bundle();
+                bundle.putString(TYPE, type);
+                bundle.putInt(PRICE, price);
+                bundle.putString(SURFACE, surface);
+                bundle.putString(ADDRESS, address);
+                bundle.putString(CITY, city);
+                mNavController.navigate(R.id.action_addEditGeneralFragment_to_addEditDetailedFragment, bundle);
             }
         });
     }

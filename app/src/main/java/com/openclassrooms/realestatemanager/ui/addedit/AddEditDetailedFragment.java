@@ -55,7 +55,18 @@ public class AddEditDetailedFragment extends Fragment {
     private int lastSelectedYear;
     private int lastSelectedMonth;
     private int lastSelectedDay;
-    public Date date;
+    private Date date;
+    private String type;
+    private final String TYPE = "type";
+    private int price;
+    private final String PRICE = "price";
+    private String surface;
+    private final String SURFACE = "surface";
+    private String address;
+    private final String ADDRESS = "address";
+    private String city;
+    private final String CITY = "city";
+
 
     public static AddEditDetailedFragment newInstance() {
         return new AddEditDetailedFragment();
@@ -73,15 +84,8 @@ public class AddEditDetailedFragment extends Fragment {
         this.mNavController = Navigation.findNavController(view);
         initUi();
         configureViewModel();
-        getPropertyRoomNumber();
-        getPropertyDescription();
-        getCurrentDate();
-        selectEntryDateFromDatePicker();
-        getPropertyEntryDate();
-        getPropertyAgent();
-        getPropertySale();
-        selectSoldDateFromDatePicker();
-        getPropertySoldDate();
+        getDataFromPreviousForm();
+        getDataFromForm();
         goToNextFragmentAddEdit();
     }
 
@@ -108,6 +112,27 @@ public class AddEditDetailedFragment extends Fragment {
     //TODO attacher le VM au fragment
     private void configureViewModel() {
         mAddViewModel = new ViewModelProvider(requireActivity()).get(AddViewModel.class);
+    }
+
+    private void getDataFromPreviousForm() {
+        assert getArguments() != null;
+        type = getArguments().getString(TYPE);
+        price = getArguments().getInt(PRICE);
+        surface = getArguments().getString(SURFACE);
+        address = getArguments().getString(ADDRESS);
+        city = getArguments().getString(CITY);
+    }
+
+    private void getDataFromForm() {
+        getPropertyRoomNumber();
+        getPropertyDescription();
+        getCurrentDate();
+        selectEntryDateFromDatePicker();
+        getPropertyEntryDate();
+        getPropertyAgent();
+        getPropertySale();
+        selectSoldDateFromDatePicker();
+        getPropertySoldDate();
     }
 
     private void getPropertyRoomNumber() {
@@ -285,7 +310,7 @@ public class AddEditDetailedFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.e("", "onClick");
-                mAddViewModel.createProperty("House", 120000, "80", 5, null, "12 Main Street", "New York", true, "13 octobre 2022", null, "Bob Stuart");
+                mAddViewModel.createProperty(type, price, surface, 5, null, address, city, true, "13 octobre 2022", null, "Bob Stuart");
                 navigateToMainActivity();
             }
         });
