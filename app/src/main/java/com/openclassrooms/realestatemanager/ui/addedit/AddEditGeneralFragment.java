@@ -60,7 +60,7 @@ public class AddEditGeneralFragment extends Fragment {
     private TextInputEditText addressEditText;
     private TextInputEditText cityEditText;
     private final String ID = "id";
-    private int mPropertyId;
+    private int mPropertyId = 0;
     private Property mProperty;
     private List<Property> mProperties;
 
@@ -241,6 +241,7 @@ public class AddEditGeneralFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 final Bundle bundle = new Bundle();
+                bundle.putInt(ID, mPropertyId);
                 bundle.putString(TYPE, type);
                 bundle.putString(PRICE, price);
                 bundle.putString(SURFACE, surface);
@@ -253,7 +254,6 @@ public class AddEditGeneralFragment extends Fragment {
                 if (!mAddEditDetailedFragment.isVisible()) {
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mAddEditDetailedFragment).commit();
                 }
-                //mNavController.navigate(R.id.action_addEditGeneralFragment_to_addEditDetailedFragment, bundle);
             }
         });
     }

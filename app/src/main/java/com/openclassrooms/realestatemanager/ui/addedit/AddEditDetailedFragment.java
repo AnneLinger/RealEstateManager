@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.ui.addedit;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailedDataBinding;
+import com.openclassrooms.realestatemanager.domain.models.Property;
 import com.openclassrooms.realestatemanager.ui.main.MainActivity;
 import com.openclassrooms.realestatemanager.utils.DateUtils;
 import com.openclassrooms.realestatemanager.viewmodels.AddEditDetailedViewModel;
@@ -33,6 +35,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -75,6 +78,10 @@ public class AddEditDetailedFragment extends Fragment {
     private TextInputEditText entryDateEditText;
     private TextInputEditText agentEditText;
     private TextInputEditText soldDateEditText;
+    private final String ID = "id";
+    private int mPropertyId;
+    private Property mProperty;
+    private List<Property> mProperties;
 
 
     public static AddEditDetailedFragment newInstance() {
@@ -95,9 +102,9 @@ public class AddEditDetailedFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //this.mNavController = Navigation.findNavController(view);
         initUi();
         configureViewModel();
+        checkIfPropertyAlreadyExists();
         getDataFromPreviousForm();
         getDataFromForm();
         saveProperty();
@@ -123,9 +130,60 @@ public class AddEditDetailedFragment extends Fragment {
         mBinding.tfSoldDate.setEnabled(false);
     }
 
-    //TODO attacher le VM au fragment
+    //TODO attach le VM au fragment
     private void configureViewModel() {
         mAddEditDetailedViewModel = new ViewModelProvider(requireActivity()).get(AddEditDetailedViewModel.class);
+    }
+
+    private void checkIfPropertyAlreadyExists() {
+        assert getArguments() != null;
+        if(!(getArguments().getInt(ID) == 0)) {
+            mPropertyId = getArguments().getInt(ID);
+            observeProperties();
+        }
+    }
+
+    private void observeProperties(){
+        Log.e("", "observeProperties");
+        mAddEditDetailedViewModel.getProperties().observe(requireActivity(), this::getProperties);
+    }
+
+    private void getProperties(List<Property> propertiesList) {
+        Log.e("", propertiesList.toString());
+        mProperties = propertiesList;
+        getProperty();
+    }
+
+    private void getProperty() {
+        for(Property property : mProperties) {
+            if(property.getId()==mPropertyId){
+                mProperty = property;
+            }
+        }
+        getPropertyData();
+    }
+
+    private void getPropertyData() {
+        roomNumber = mProperty.getRoomNumber();
+        description = mProperty.getDescription();
+        entryDate = mProperty.getEntryDate();
+        agent = mProperty.getAgent();
+        fillFormWithPropertyData();
+    }
+
+    private void fillFormWithPropertyData() {
+        if(!(roomNumber ==0)){
+            roomNumberEditText.setText(roomNumber);
+        }
+        if(description!=null){
+            descriptionEditText.setText(description);
+        }
+        if(entryDate!=null){
+            entryDateEditText.setText(entryDate);
+        }
+        if(agent!=null){
+            agentEditText.setText(agent);
+        }
     }
 
     private void getDataFromPreviousForm() {
@@ -194,7 +252,7 @@ public class AddEditDetailedFragment extends Fragment {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
                 date = mDateTimeUtils.getDateFromDatePicker(year, monthOfYear, dayOfMonth);
-                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                 String result = formatter.format(date);
                 try {
                     date = formatter.parse(result);
@@ -283,10 +341,28 @@ public class AddEditDetailedFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.e("", "onClick");
-                mAddEditDetailedViewModel.createProperty(type, price, surface, roomNumber, description, address, city, onSale, entryDate, soldDate, agent);
+                if(mPropertyId==0) {
+                    mAddEditDetailedViewModel.createProperty(type, price, surface, roomNumber, description, address, city, onSale, entryDate, soldDate, agent);
+                }
+                else {
+                    editProperty();
+                }
                 navigateToMainActivity();
             }
         });
+    }
+
+    private void editProperty() {
+        mProperty.setType(type);
+        mProperty.setPrice(price);
+        mProperty.setSurface(surface);
+        mProperty.setAddress(address);
+        mProperty.setCity(city);
+        mProperty.setRoomNumber(roomNumber);
+        mProperty.setDescription(description);
+        mProperty.setEntryDate(entryDate);
+        mProperty.setAgent(agent);
+        mAddEditDetailedViewModel.editProperty(mProperty);
     }
 
     private void navigateToMainActivity() {
