@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -64,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
         initUi();
         configureDrawer();
         configureBottomNav();
-        //navigateToPropertyDetails();
     }
 
     private void initUi() {
@@ -86,10 +86,10 @@ public class MainActivity extends AppCompatActivity {
         mBinding.navigationView.setNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.searchFragment:
-                    navigateToSearchFragment();
+                    navigateToFragment(mSearchFragment, R.string.search_title);
                     return true;
                 case R.id.simulatorFragment:
-                    navigateToSimulatorFragment();
+                    navigateToFragment(mSimulatorFragment, R.string.simulator_title);
                     return true;
             }
             mBinding.mainActivityLayout.close();
@@ -141,47 +141,16 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    //TODO a generic method to navigate with parameter !!
-    private void navigateToSearchFragment() {
-        if (mSearchFragment == null) {
-            this.mSearchFragment = SearchFragment.newInstance();
+    private void navigateToFragment(Fragment fragment, int title) {
+        if (fragment == null) {
+            fragment = SearchFragment.newInstance();
         }
-        if (!mSearchFragment.isVisible()) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mSearchFragment).commit();
+        if (!fragment.isVisible()) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, fragment).commit();
         }
         mBinding.bottomNav.setVisibility(View.INVISIBLE);
         mBinding.mainActivityLayout.closeDrawers();
-        mBinding.toolbar.setTitle(this.getString(R.string.search_title));
-        mBinding.toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
-    }
-
-    //TODO change call to this method from adapter
-    public void navigateToPropertyDetails() {
-        //TODO remove button and manage this from adapter
-        /**mBinding.fabSaveProperty.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!mDetailsFragment.isVisible()) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.activity_places_frame_layout, mDetailsFragment).commit();
-                }
-                mBinding.bottomNav.setVisibility(View.GONE);
-                mBinding.mainActivityLayout.closeDrawers();
-                mBinding.toolbar.setTitle(getResources().getString(R.string.property_details_title));
-                mBinding.toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
-            }
-        });*/
-    }
-
-    private void navigateToSimulatorFragment() {
-        if (mSimulatorFragment == null) {
-            this.mSimulatorFragment = SimulatorFragment.newInstance();
-        }
-        if (!mSimulatorFragment.isVisible()) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mSimulatorFragment).commit();
-        }
-        mBinding.bottomNav.setVisibility(View.GONE);
-        mBinding.mainActivityLayout.closeDrawers();
-        mBinding.toolbar.setTitle(this.getString(R.string.simulator_title));
+        mBinding.toolbar.setTitle(getString(title));
         mBinding.toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
     }
 
