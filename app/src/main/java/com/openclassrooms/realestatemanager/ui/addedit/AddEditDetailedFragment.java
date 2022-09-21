@@ -23,6 +23,7 @@ import androidx.navigation.Navigation;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailedDataBinding;
 import com.openclassrooms.realestatemanager.ui.main.MainActivity;
@@ -70,6 +71,11 @@ public class AddEditDetailedFragment extends Fragment {
     private String agent;
     private String soldDate = null;
     private boolean onSale = true;
+    private TextInputEditText roomNumberEditText;
+    private TextInputEditText descriptionEditText;
+    private TextInputEditText entryDateEditText;
+    private TextInputEditText agentEditText;
+    private TextInputEditText soldDateEditText;
 
 
     public static AddEditDetailedFragment newInstance() {
@@ -79,6 +85,11 @@ public class AddEditDetailedFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mBinding = FragmentDetailedDataBinding.inflate(inflater, container, false);
+        roomNumberEditText = mBinding.etRoomNumber;
+        descriptionEditText = mBinding.etDescription;
+        entryDateEditText = mBinding.etEntryDate;
+        agentEditText = mBinding.etAgent;
+        soldDateEditText = mBinding.etSoldDate;
         return mBinding.getRoot();
     }
 
@@ -90,7 +101,7 @@ public class AddEditDetailedFragment extends Fragment {
         configureViewModel();
         getDataFromPreviousForm();
         getDataFromForm();
-        goToNextFragmentAddEdit();
+        saveProperty();
     }
 
     private void configureToolbar() {
@@ -128,44 +139,44 @@ public class AddEditDetailedFragment extends Fragment {
     }
 
     private void getDataFromForm() {
-        getPropertyRoomNumber();
-        getPropertyDescription();
         getCurrentDate();
         selectEntryDateFromDatePicker();
-        getPropertyEntryDate();
-        getPropertyAgent();
         getPropertySale();
         selectSoldDateFromDatePicker();
-        getPropertySoldDate();
+        getDataFromEditText(roomNumberEditText);
+        getDataFromEditText(descriptionEditText);
+        getDataFromEditText(entryDateEditText);
+        getDataFromEditText(agentEditText);
+        getDataFromEditText(soldDateEditText);
     }
 
-    private void getPropertyRoomNumber() {
-        mBinding.etRoomNumber.addTextChangedListener(new TextWatcher() {
+    private void getDataFromEditText(TextInputEditText textInputEditText){
+        textInputEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void afterTextChanged(Editable editable) {
-                roomNumber = Integer.parseInt(mBinding.etRoomNumber.getText().toString());
-                enableButtonSave();
-            }
-        });
-    }
 
-    private void getPropertyDescription() {
-        mBinding.etDescription.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
+
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void afterTextChanged(Editable editable) {
-                description = mBinding.etDescription.getText().toString();
+            public void afterTextChanged(Editable s) {
+                if(s==roomNumberEditText.getEditableText()){
+                    roomNumber = Integer.parseInt(textInputEditText.getText().toString());
+                }
+                else if(s==descriptionEditText.getEditableText()){
+                    description = textInputEditText.getText().toString();
+                }
+                else if(s==entryDateEditText.getEditableText()) {
+                    entryDate = textInputEditText.getText().toString();
+                }
+                else if(s==agentEditText.getEditableText()) {
+                    agent = textInputEditText.getText().toString();
+                }
+                else if(s==soldDateEditText.getEditableText()) {
+                    soldDate = textInputEditText.getText().toString();
+                }
                 enableButtonSave();
             }
         });
@@ -211,38 +222,6 @@ public class AddEditDetailedFragment extends Fragment {
         });
     }
 
-    private void getPropertyEntryDate() {
-        mBinding.etEntryDate.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void afterTextChanged(Editable editable) {
-                entryDate = mBinding.etEntryDate.getText().toString();
-                enableButtonSave();
-            }
-        });
-    }
-
-    private void getPropertyAgent() {
-        mBinding.etAgent.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void afterTextChanged(Editable editable) {
-                agent = mBinding.etAgent.getText().toString();
-                enableButtonSave();
-            }
-        });
-    }
-
     private void getPropertySale() {
         mBinding.switchSold.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -267,22 +246,6 @@ public class AddEditDetailedFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 configureDatePickerDialog(mBinding.etSoldDate);
-            }
-        });
-    }
-
-    private void getPropertySoldDate() {
-        mBinding.etSoldDate.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void afterTextChanged(Editable editable) {
-                soldDate = mBinding.etSoldDate.getText().toString();
-                enableButtonSave();
             }
         });
     }
@@ -316,7 +279,7 @@ public class AddEditDetailedFragment extends Fragment {
                 .show();
     }
 
-    private void goToNextFragmentAddEdit() {
+    private void saveProperty() {
         mBinding.btSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

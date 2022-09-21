@@ -7,13 +7,11 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -23,9 +21,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentGeneralDataBinding;
 import com.openclassrooms.realestatemanager.ui.main.MainActivity;
-import com.openclassrooms.realestatemanager.viewmodels.AddViewModel;
-
-import org.w3c.dom.Text;
 
 import java.util.Objects;
 
@@ -78,9 +73,9 @@ public class AddEditGeneralFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         this.mNavController = Navigation.findNavController(view);
         initUi();
-        getStringDataFromEditText();
+        getDataFromForm();
         getPropertyPhotos();
-        goToNextFragmentAddEdit();
+        navigateToNextFragmentAddEdit();
     }
 
     private void initUi() {
@@ -101,7 +96,7 @@ public class AddEditGeneralFragment extends Fragment {
         bottomNavigationView.setVisibility(View.GONE);
     }
 
-    private void getStringDataFromEditText() {
+    private void getDataFromForm() {
         getDataFromEditText(typeEditText);
         getDataFromEditText(priceEditText);
         getDataFromEditText(surfaceEditText);
@@ -169,7 +164,7 @@ public class AddEditGeneralFragment extends Fragment {
                 .show();
     }
 
-    private void goToNextFragmentAddEdit() {
+    private void navigateToNextFragmentAddEdit() {
         mBinding.btNextAddEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
