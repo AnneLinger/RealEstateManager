@@ -17,7 +17,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 */
 
 @HiltViewModel
-public class AddViewModel extends ViewModel {
+public class AddEditDetailedViewModel extends ViewModel {
 
     //For data
     private final PropertyRepositoryImpl mPropertyRepository;
@@ -26,7 +26,7 @@ public class AddViewModel extends ViewModel {
     private final Executor mExecutor;
 
     @Inject
-    public AddViewModel(PropertyRepositoryImpl propertyRepository, Executor executor) {
+    public AddEditDetailedViewModel(PropertyRepositoryImpl propertyRepository, Executor executor) {
         mPropertyRepository = propertyRepository;
         mExecutor = executor;
     }

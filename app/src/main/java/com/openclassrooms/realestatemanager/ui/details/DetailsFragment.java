@@ -122,8 +122,11 @@ public class DetailsFragment extends Fragment {
         mBinding.fabEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final Bundle bundle = new Bundle();
+                bundle.putInt(ID, mProperty.getId());
                 if (mAddEditGeneralFragment == null) {
                     mAddEditGeneralFragment = AddEditGeneralFragment.newInstance();
+                    mAddEditGeneralFragment.setArguments(bundle);
                 }
                 if (!mAddEditGeneralFragment.isVisible()) {
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mAddEditGeneralFragment).commit();

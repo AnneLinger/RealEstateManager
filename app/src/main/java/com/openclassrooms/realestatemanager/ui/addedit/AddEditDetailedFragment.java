@@ -19,7 +19,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -28,7 +27,7 @@ import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailedDataBinding;
 import com.openclassrooms.realestatemanager.ui.main.MainActivity;
 import com.openclassrooms.realestatemanager.utils.DateUtils;
-import com.openclassrooms.realestatemanager.viewmodels.AddViewModel;
+import com.openclassrooms.realestatemanager.viewmodels.AddEditDetailedViewModel;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -49,7 +48,7 @@ public class AddEditDetailedFragment extends Fragment {
     private NavController mNavController;
 
     //For data
-    private AddViewModel mAddViewModel;
+    private AddEditDetailedViewModel mAddEditDetailedViewModel;
     private static final DateUtils mDateTimeUtils = new DateUtils();
     private int lastSelectedYear;
     private int lastSelectedMonth;
@@ -126,7 +125,7 @@ public class AddEditDetailedFragment extends Fragment {
 
     //TODO attacher le VM au fragment
     private void configureViewModel() {
-        mAddViewModel = new ViewModelProvider(requireActivity()).get(AddViewModel.class);
+        mAddEditDetailedViewModel = new ViewModelProvider(requireActivity()).get(AddEditDetailedViewModel.class);
     }
 
     private void getDataFromPreviousForm() {
@@ -284,7 +283,7 @@ public class AddEditDetailedFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.e("", "onClick");
-                mAddViewModel.createProperty(type, price, surface, roomNumber, description, address, city, onSale, entryDate, soldDate, agent);
+                mAddEditDetailedViewModel.createProperty(type, price, surface, roomNumber, description, address, city, onSale, entryDate, soldDate, agent);
                 navigateToMainActivity();
             }
         });

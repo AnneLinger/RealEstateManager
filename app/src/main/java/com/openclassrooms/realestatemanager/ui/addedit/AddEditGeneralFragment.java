@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,16 +13,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentGeneralDataBinding;
+import com.openclassrooms.realestatemanager.domain.models.Property;
 import com.openclassrooms.realestatemanager.ui.main.MainActivity;
+import com.openclassrooms.realestatemanager.viewmodels.AddEditDetailedViewModel;
+import com.openclassrooms.realestatemanager.viewmodels.AddEditGeneralViewModel;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -38,6 +43,7 @@ public class AddEditGeneralFragment extends Fragment {
 
     //For data
     private AddEditDetailedFragment mAddEditDetailedFragment;
+    private AddEditGeneralViewModel mAddEditGeneralViewModel;
     private String type;
     private final String TYPE = "type";
     private String price;
@@ -53,6 +59,10 @@ public class AddEditGeneralFragment extends Fragment {
     private TextInputEditText surfaceEditText;
     private TextInputEditText addressEditText;
     private TextInputEditText cityEditText;
+    private final String ID = "id";
+    private int mPropertyId;
+    private Property mProperty;
+    private List<Property> mProperties;
 
     public static AddEditGeneralFragment newInstance() {
         return new AddEditGeneralFragment();
@@ -74,6 +84,8 @@ public class AddEditGeneralFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //this.mNavController = Navigation.findNavController(view);
         initUi();
+        configureViewModel();
+        checkIfPropertyAlreadyExists();
         getDataFromForm();
         getPropertyPhotos();
         navigateToNextFragmentAddEdit();
@@ -95,6 +107,65 @@ public class AddEditGeneralFragment extends Fragment {
     private void configureBottomNav() {
         BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottom_nav);
         bottomNavigationView.setVisibility(View.GONE);
+    }
+
+    //TODO attacher le VM au fragment
+    private void configureViewModel() {
+        mAddEditGeneralViewModel = new ViewModelProvider(requireActivity()).get(AddEditGeneralViewModel.class);
+    }
+
+    private void checkIfPropertyAlreadyExists() {
+        if(getArguments()!=null) {
+            mPropertyId = getArguments().getInt(ID);
+            observeProperties();
+        }
+    }
+
+    private void observeProperties(){
+        Log.e("", "observeProperties");
+        mAddEditGeneralViewModel.getProperties().observe(requireActivity(), this::getProperties);
+    }
+
+    private void getProperties(List<Property> propertiesList) {
+        Log.e("", propertiesList.toString());
+        mProperties = propertiesList;
+        getProperty();
+    }
+
+    private void getProperty() {
+        for(Property property : mProperties) {
+            if(property.getId()==mPropertyId){
+                mProperty = property;
+            }
+        }
+        getPropertyData();
+    }
+
+    private void getPropertyData() {
+        type = mProperty.getType();
+        price = mProperty.getPrice();
+        surface = mProperty.getSurface();
+        address = mProperty.getAddress();
+        city = mProperty.getCity();
+        fillFormWithPropertyData();
+    }
+
+    private void fillFormWithPropertyData() {
+        if(type!=null){
+            typeEditText.setText(type);
+        }
+        if(price!=null){
+            priceEditText.setText(price);
+        }
+        if(surface!=null){
+            surfaceEditText.setText(surface);
+        }
+        if(address!=null){
+            addressEditText.setText(address);
+        }
+        if(city!=null){
+            cityEditText.setText(city);
+        }
     }
 
     private void getDataFromForm() {
