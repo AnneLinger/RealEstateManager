@@ -17,6 +17,7 @@ import androidx.navigation.Navigation;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailsBinding;
 import com.openclassrooms.realestatemanager.databinding.FragmentSearchBinding;
+import com.openclassrooms.realestatemanager.domain.models.Property;
 import com.openclassrooms.realestatemanager.ui.main.MainActivity;
 import com.openclassrooms.realestatemanager.ui.search.SearchFragment;
 
@@ -32,14 +33,30 @@ public class DetailsFragment extends Fragment {
     //For navigation
     private NavController mNavController;
 
-    public static DetailsFragment newInstance() {
-        return new DetailsFragment();
+    //For data
+    private int propertyId;
+
+    public static DetailsFragment newInstance(int propertyId) {
+        DetailsFragment detailsFragment = new DetailsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("id", propertyId);
+        detailsFragment.setArguments(bundle);
+        return detailsFragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if(getArguments()!=null) {
+            propertyId = getArguments().getInt("id");
+        }
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mBinding = FragmentDetailsBinding.inflate(inflater, container, false);
         setHasOptionsMenu(true);
+        mBinding.test.setText(String.valueOf(propertyId));
         return mBinding.getRoot();
     }
 

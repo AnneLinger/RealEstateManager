@@ -1,6 +1,9 @@
 package com.openclassrooms.realestatemanager.ui.listview;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,9 +28,11 @@ import java.util.List;
 public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHolder> {
 
     private List<Property> mProperties;
+    private OnItemClickListener mListener;
 
-    public ListViewAdapter(List<Property> properties) {
+    public ListViewAdapter(List<Property> properties, OnItemClickListener listener) {
         mProperties = properties;
+        mListener = listener;
     }
 
     @NonNull
@@ -38,8 +43,14 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ListViewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ListViewAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.displayProperty(mProperties.get(position));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onItemClick(mProperties.get(position));
+            }
+        });
     }
 
     @Override
@@ -68,17 +79,10 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
             type.setText(property.getType());
             city.setText(property.getCity());
             price.setText(String.format("$%s", property.getPrice()));
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    navigateToPropertyDetails(property);
-                }
-            });
         }
+    }
 
-        private void navigateToPropertyDetails(Property property) {
-            //TODO manage with event !
-            //MainActivity.getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, DetailsFragment.newInstance()).commit();
-        }
+    public interface OnItemClickListener {
+        void onItemClick(Property property);
     }
 }
