@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailsBinding;
@@ -27,6 +29,9 @@ public class DetailsFragment extends Fragment {
     //For ui
     private FragmentDetailsBinding mBinding;
 
+    //For navigation
+    private NavController mNavController;
+
     public static DetailsFragment newInstance() {
         return new DetailsFragment();
     }
@@ -41,10 +46,11 @@ public class DetailsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        this.mNavController = Navigation.findNavController(view);
         configureToolbar();
     }
 
-    //TODO create a navigate vers fragment addEditGeneral mais redonner pour ça la main à la MainActivity
+    //TODO create a navigate vers fragment addEditGeneral mais redonner pour ça la main à la MainActivity ++
 
     private void configureToolbar() {
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);

@@ -43,7 +43,6 @@ public class ListViewFragment extends Fragment {
 
     //For data
     private ListViewModel mListViewModel;
-    private List<Property> mProperties = new ArrayList<>();
 
     public static ListViewFragment newInstance() {
         return new ListViewFragment();
@@ -62,14 +61,6 @@ public class ListViewFragment extends Fragment {
         configureViewModel();
         getProperties();
         addAProperty();
-    }
-
-    @Override
-    public void onResume() {
-        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
-        toolbar.setTitle(this.getString(R.string.app_name));
-        toolbar.setNavigationIcon(R.drawable.ic_baseline_menu_24);
-        super.onResume();
     }
 
     private void configureViewModel() {

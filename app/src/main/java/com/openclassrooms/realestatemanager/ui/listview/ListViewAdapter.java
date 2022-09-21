@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.ui.listview;
 
+import android.content.Intent;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.domain.models.Property;
+import com.openclassrooms.realestatemanager.ui.details.DetailsFragment;
+import com.openclassrooms.realestatemanager.ui.main.MainActivity;
 
 import java.util.List;
 
@@ -65,10 +68,17 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
             type.setText(property.getType());
             city.setText(property.getCity());
             price.setText(String.format("$%s", property.getPrice()));
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    navigateToPropertyDetails(property);
+                }
+            });
         }
 
-        private void navigateToPropertyDetails() {
-            navigateToPropertyDetails();
+        private void navigateToPropertyDetails(Property property) {
+            //TODO manage with event !
+            //MainActivity.getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, DetailsFragment.newInstance()).commit();
         }
     }
 }

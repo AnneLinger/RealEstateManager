@@ -3,8 +3,7 @@ package com.openclassrooms.realestatemanager.ui.main;
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,15 +11,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationView;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityMainBinding;
 import com.openclassrooms.realestatemanager.ui.addedit.AddEditDetailedFragment;
@@ -46,11 +44,11 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding mBinding;
     private ListViewFragment mListViewFragment;
     private MapViewFragment mMapViewFragment;
-    private DetailsFragment mDetailsFragment = DetailsFragment.newInstance();
-    private SearchFragment mSearchFragment = SearchFragment.newInstance();
-    private SimulatorFragment mSimulatorFragment = SimulatorFragment.newInstance();
-    private AddEditGeneralFragment mAddEditGeneralFragment = AddEditGeneralFragment.newInstance();
-    private AddEditDetailedFragment mAddEditDetailedFragment = AddEditDetailedFragment.newInstance();
+    private DetailsFragment mDetailsFragment;
+    private SearchFragment mSearchFragment;
+    private SimulatorFragment mSimulatorFragment;
+    private AddEditGeneralFragment mAddEditGeneralFragment;
+    private AddEditDetailedFragment mAddEditDetailedFragment;
 
     //For navigation
     private NavController mNavController;
@@ -66,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
         initUi();
         configureDrawer();
         configureBottomNav();
-        manageFragmentUi();
         //navigateToPropertyDetails();
     }
 
@@ -74,12 +71,9 @@ public class MainActivity extends AppCompatActivity {
         mBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(mBinding.getRoot());
         setSupportActionBar(mBinding.toolbar);
-        //mNavController = Navigation.findNavController(this, R.id.nav_host_fragment);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
-        //NavigationUI.setupWithNavController(bottomNavigationView, mNavController);
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         mNavController = navHostFragment.getNavController();
-        //getSupportFragmentManager().beginTransaction().add(R.id.nav_host_fragment, new ListViewFragment()).commit();
         NavigationUI.setupWithNavController(bottomNavigationView, mNavController);
         this.mListViewFragment = ListViewFragment.newInstance();
     }
@@ -133,7 +127,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (!mListViewFragment.isVisible()) {
                     mNavController.navigate(R.id.action_mapViewFragment3_to_listViewFragment);
-                    //getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mListViewFragment).commit();
                 }
                 return true;
             case R.id.item_map_view:
@@ -142,7 +135,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (!mMapViewFragment.isVisible()) {
                     mNavController.navigate(R.id.action_listViewFragment_to_mapViewFragment3);
-                    //getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mMapViewFragment).commit();
                 }
                 return true;
         }
@@ -151,10 +143,13 @@ public class MainActivity extends AppCompatActivity {
 
     //TODO a generic method to navigate with parameter !!
     private void navigateToSearchFragment() {
+        if (mSearchFragment == null) {
+            this.mSearchFragment = SearchFragment.newInstance();
+        }
         if (!mSearchFragment.isVisible()) {
             getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mSearchFragment).commit();
         }
-        mBinding.bottomNav.setVisibility(View.GONE);
+        mBinding.bottomNav.setVisibility(View.INVISIBLE);
         mBinding.mainActivityLayout.closeDrawers();
         mBinding.toolbar.setTitle(this.getString(R.string.search_title));
         mBinding.toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
@@ -178,6 +173,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void navigateToSimulatorFragment() {
+        if (mSimulatorFragment == null) {
+            this.mSimulatorFragment = SimulatorFragment.newInstance();
+        }
         if (!mSimulatorFragment.isVisible()) {
             getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mSimulatorFragment).commit();
         }
@@ -185,25 +183,6 @@ public class MainActivity extends AppCompatActivity {
         mBinding.mainActivityLayout.closeDrawers();
         mBinding.toolbar.setTitle(this.getString(R.string.simulator_title));
         mBinding.toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
-    }
-
-    private void navigateToAddEditFragment() {
-        if (!mAddEditGeneralFragment.isVisible()) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mAddEditGeneralFragment).commit();
-        }
-        mBinding.bottomNav.setVisibility(View.GONE);
-        mBinding.mainActivityLayout.closeDrawers();
-        mBinding.toolbar.setTitle(this.getString(R.string.add_edit_general_title));
-        mBinding.toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
-    }
-
-    private void manageFragmentUi() {
-        if(mAddEditGeneralFragment.isVisible()) {
-            mBinding.bottomNav.setVisibility(View.GONE);
-            mBinding.mainActivityLayout.closeDrawers();
-            mBinding.toolbar.setTitle(this.getString(R.string.add_edit_general_title));
-            mBinding.toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
-        }
     }
 
     private void configureTextViewMain(){

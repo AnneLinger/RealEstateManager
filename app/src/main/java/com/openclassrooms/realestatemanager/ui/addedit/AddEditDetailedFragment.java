@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.ui.addedit;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -24,6 +25,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailedDataBinding;
+import com.openclassrooms.realestatemanager.ui.main.MainActivity;
 import com.openclassrooms.realestatemanager.utils.DateUtils;
 import com.openclassrooms.realestatemanager.viewmodels.AddViewModel;
 
@@ -326,6 +328,7 @@ public class AddEditDetailedFragment extends Fragment {
     }
 
     private void navigateToMainActivity() {
-        mNavController.navigate(R.id.action_addEditDetailedFragment_to_listViewFragment);
+        Intent intent = new Intent(requireActivity(), MainActivity.class);
+        startActivity(intent);
     }
 }

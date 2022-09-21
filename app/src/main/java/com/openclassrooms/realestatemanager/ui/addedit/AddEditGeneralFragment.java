@@ -20,6 +20,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentGeneralDataBinding;
+import com.openclassrooms.realestatemanager.ui.main.MainActivity;
 import com.openclassrooms.realestatemanager.viewmodels.AddViewModel;
 
 import java.util.Objects;
@@ -32,13 +33,11 @@ public class AddEditGeneralFragment extends Fragment {
 
     //For ui
     private FragmentGeneralDataBinding mBinding;
-    private AddEditDetailedFragment mAddEditDetailedFragment = AddEditDetailedFragment.newInstance();
 
     //For navigation
     private NavController mNavController;
 
     //For data
-    private AddViewModel mAddViewModel;
     private String type;
     private final String TYPE = "type";
     private String price;
@@ -65,7 +64,6 @@ public class AddEditGeneralFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         this.mNavController = Navigation.findNavController(view);
         initUi();
-        configureViewModel();
         getPropertyType();
         getPropertyPrice();
         getPropertySurface();
@@ -91,11 +89,6 @@ public class AddEditGeneralFragment extends Fragment {
     private void configureBottomNav() {
         BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottom_nav);
         bottomNavigationView.setVisibility(View.GONE);
-    }
-
-    //TODO attacher le VM au fragment
-    private void configureViewModel() {
-        mAddViewModel = new ViewModelProvider(requireActivity()).get(AddViewModel.class);
     }
 
     private void getPropertyType() {
@@ -199,7 +192,7 @@ public class AddEditGeneralFragment extends Fragment {
                 .setMessage(R.string.confirm_cancel_message)
                 .setCancelable(false)
                 .setPositiveButton(R.string.cancel_button, (dialog, which) -> {
-                    mNavController.navigate(R.id.action_addEditGeneralFragment_to_listViewFragment);
+                    navigateToMainActivity();
                 })
                 .setNegativeButton(R.string.continue_button, (dialog, which) -> dialog.dismiss())
                 .create()
@@ -219,5 +212,10 @@ public class AddEditGeneralFragment extends Fragment {
                 mNavController.navigate(R.id.action_addEditGeneralFragment_to_addEditDetailedFragment, bundle);
             }
         });
+    }
+
+    private void navigateToMainActivity() {
+        Intent intent = new Intent(requireActivity(), MainActivity.class);
+        startActivity(intent);
     }
 }
