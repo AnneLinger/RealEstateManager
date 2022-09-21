@@ -18,7 +18,9 @@ import androidx.navigation.Navigation;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailsBinding;
 import com.openclassrooms.realestatemanager.domain.models.Property;
+import com.openclassrooms.realestatemanager.ui.addedit.AddEditGeneralFragment;
 import com.openclassrooms.realestatemanager.ui.main.MainActivity;
+import com.openclassrooms.realestatemanager.ui.search.SearchFragment;
 import com.openclassrooms.realestatemanager.viewmodels.DetailsViewModel;
 
 import java.util.List;
@@ -42,6 +44,7 @@ public class DetailsFragment extends Fragment {
     private DetailsViewModel mDetailsViewModel;
     private List<Property> mProperties;
     private String mType;
+    private AddEditGeneralFragment mAddEditGeneralFragment;
 
     public static DetailsFragment newInstance(int propertyId) {
         DetailsFragment detailsFragment = new DetailsFragment();
@@ -69,10 +72,11 @@ public class DetailsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        this.mNavController = Navigation.findNavController(view);
+        //mNavController = Navigation.findNavController(view);
         configureToolbar();
         configureViewModel();
         observeProperties();
+        editProperty();
     }
 
     //TODO create a navigate vers fragment addEditGeneral mais redonner pour ça la main à la MainActivity ++
@@ -112,6 +116,21 @@ public class DetailsFragment extends Fragment {
     private void getPropertyData() {
         mType = mProperty.getType();
         mBinding.test.setText(mType);
+    }
+
+    private void editProperty() {
+        mBinding.fabEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mAddEditGeneralFragment == null) {
+                    mAddEditGeneralFragment = AddEditGeneralFragment.newInstance();
+                }
+                if (!mAddEditGeneralFragment.isVisible()) {
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mAddEditGeneralFragment).commit();
+                }
+                //mNavController.navigate(R.id.action_detailsFragment_to_addEditGeneralFragment);
+            }
+        });
     }
 
     private void navigateToMainActivity() {

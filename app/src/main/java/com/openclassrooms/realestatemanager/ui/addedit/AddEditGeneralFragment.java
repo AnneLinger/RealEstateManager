@@ -37,6 +37,7 @@ public class AddEditGeneralFragment extends Fragment {
     private NavController mNavController;
 
     //For data
+    private AddEditDetailedFragment mAddEditDetailedFragment;
     private String type;
     private final String TYPE = "type";
     private String price;
@@ -71,7 +72,7 @@ public class AddEditGeneralFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        this.mNavController = Navigation.findNavController(view);
+        //this.mNavController = Navigation.findNavController(view);
         initUi();
         getDataFromForm();
         getPropertyPhotos();
@@ -174,7 +175,14 @@ public class AddEditGeneralFragment extends Fragment {
                 bundle.putString(SURFACE, surface);
                 bundle.putString(ADDRESS, address);
                 bundle.putString(CITY, city);
-                mNavController.navigate(R.id.action_addEditGeneralFragment_to_addEditDetailedFragment, bundle);
+                if (mAddEditDetailedFragment == null) {
+                    mAddEditDetailedFragment = AddEditDetailedFragment.newInstance();
+                    mAddEditDetailedFragment.setArguments(bundle);
+                }
+                if (!mAddEditDetailedFragment.isVisible()) {
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mAddEditDetailedFragment).commit();
+                }
+                //mNavController.navigate(R.id.action_addEditGeneralFragment_to_addEditDetailedFragment, bundle);
             }
         });
     }

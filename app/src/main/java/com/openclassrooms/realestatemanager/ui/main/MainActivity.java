@@ -65,17 +65,18 @@ public class MainActivity extends AppCompatActivity {
         initUi();
         configureDrawer();
         configureBottomNav();
+        getSupportFragmentManager().beginTransaction().add(R.id.nav_host_fragment, new ListViewFragment()).commit();
+        this.mListViewFragment = ListViewFragment.newInstance();
     }
 
     private void initUi() {
         mBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(mBinding.getRoot());
         setSupportActionBar(mBinding.toolbar);
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-        mNavController = navHostFragment.getNavController();
-        NavigationUI.setupWithNavController(bottomNavigationView, mNavController);
-        this.mListViewFragment = ListViewFragment.newInstance();
+        //BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
+        //NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        //mNavController = navHostFragment.getNavController();
+        //NavigationUI.setupWithNavController(bottomNavigationView, mNavController);
     }
 
     private void configureDrawer() {
@@ -126,7 +127,8 @@ public class MainActivity extends AppCompatActivity {
                     this.mListViewFragment = ListViewFragment.newInstance();
                 }
                 if (!mListViewFragment.isVisible()) {
-                    mNavController.navigate(R.id.action_mapViewFragment3_to_listViewFragment);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mListViewFragment).commit();
+                    //mNavController.navigate(R.id.action_mapViewFragment3_to_listViewFragment);
                 }
                 return true;
             case R.id.item_map_view:
@@ -134,7 +136,8 @@ public class MainActivity extends AppCompatActivity {
                     this.mMapViewFragment = MapViewFragment.newInstance();
                 }
                 if (!mMapViewFragment.isVisible()) {
-                    mNavController.navigate(R.id.action_listViewFragment_to_mapViewFragment3);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mMapViewFragment).commit();
+                    //mNavController.navigate(R.id.action_listViewFragment_to_mapViewFragment3);
                 }
                 return true;
         }

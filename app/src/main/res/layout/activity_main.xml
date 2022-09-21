@@ -38,10 +38,7 @@ tools:context="com.openclassrooms.realestatemanager.ui.main.MainActivity">
         http:layout_constraintBottom_toTopOf="@id/bottom_nav"
         http:layout_constraintEnd_toEndOf="parent"
         http:layout_constraintStart_toStartOf="parent"
-        http:layout_constraintTop_toBottomOf="@id/toolbar"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        app:defaultNavHost="true"
-        app:navGraph="@navigation/nav_graph"/>
+        http:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"

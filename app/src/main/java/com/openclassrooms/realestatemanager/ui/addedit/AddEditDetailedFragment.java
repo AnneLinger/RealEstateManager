@@ -96,7 +96,7 @@ public class AddEditDetailedFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        this.mNavController = Navigation.findNavController(view);
+        //this.mNavController = Navigation.findNavController(view);
         initUi();
         configureViewModel();
         getDataFromPreviousForm();
