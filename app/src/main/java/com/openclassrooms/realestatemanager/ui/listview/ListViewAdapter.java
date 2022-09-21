@@ -48,7 +48,7 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onItemClick(mProperties.get(position));
+                mListener.onItemClick(mProperties.get(position).getId());
             }
         });
     }
@@ -83,6 +83,6 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
     }
 
     public interface OnItemClickListener {
-        void onItemClick(Property property);
+        void onItemClick(int id);
     }
 }

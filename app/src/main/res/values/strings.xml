@@ -17,7 +17,7 @@
     <string name="add_edit_detailed_title">Detailed information of the property</string>
     <string name="edit_title">Edit a property</string>
     <string name="save_property">save_property</string>
-    <string name="property_details_title">Property in details</string>
+    <string name="property_details_title">The property in details</string>
     <string name="cancel_add_edit_title">Cancel the addition or the change</string>
     <string name="confirm_cancel_message">If you confirm, your changes won\'t be saved</string>
     <string name="cancel_button">Yes,\ cancel</string>

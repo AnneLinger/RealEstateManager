@@ -2,8 +2,8 @@ package com.openclassrooms.realestatemanager.ui.details;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -11,15 +11,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailsBinding;
-import com.openclassrooms.realestatemanager.databinding.FragmentSearchBinding;
 import com.openclassrooms.realestatemanager.domain.models.Property;
 import com.openclassrooms.realestatemanager.ui.main.MainActivity;
-import com.openclassrooms.realestatemanager.ui.search.SearchFragment;
+import com.openclassrooms.realestatemanager.viewmodels.DetailsViewModel;
+
+import java.util.List;
 
 /**
 *Fragment to display a property details
@@ -34,12 +36,17 @@ public class DetailsFragment extends Fragment {
     private NavController mNavController;
 
     //For data
-    private int propertyId;
+    private int mPropertyId;
+    private static final String ID = "id";
+    private Property mProperty;
+    private DetailsViewModel mDetailsViewModel;
+    private List<Property> mProperties;
+    private String mType;
 
     public static DetailsFragment newInstance(int propertyId) {
         DetailsFragment detailsFragment = new DetailsFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt("id", propertyId);
+        bundle.putInt(ID, propertyId);
         detailsFragment.setArguments(bundle);
         return detailsFragment;
     }
@@ -48,7 +55,7 @@ public class DetailsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(getArguments()!=null) {
-            propertyId = getArguments().getInt("id");
+            mPropertyId = getArguments().getInt(ID);
         }
     }
 
@@ -56,7 +63,6 @@ public class DetailsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mBinding = FragmentDetailsBinding.inflate(inflater, container, false);
         setHasOptionsMenu(true);
-        mBinding.test.setText(String.valueOf(propertyId));
         return mBinding.getRoot();
     }
 
@@ -65,13 +71,47 @@ public class DetailsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         this.mNavController = Navigation.findNavController(view);
         configureToolbar();
+        configureViewModel();
+        observeProperties();
     }
 
     //TODO create a navigate vers fragment addEditGeneral mais redonner pour ça la main à la MainActivity ++
 
     private void configureToolbar() {
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
+        toolbar.setTitle(this.getString(R.string.property_details_title));
+        toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
         toolbar.setNavigationOnClickListener(view -> navigateToMainActivity());
+    }
+
+    private void configureViewModel() {
+        mDetailsViewModel = new ViewModelProvider(requireActivity()).get(DetailsViewModel.class);
+    }
+
+    //TODO attach vm to fragment
+    private void observeProperties(){
+        Log.e("", "observeProperties");
+        mDetailsViewModel.getProperties().observe(requireActivity(), this::getProperties);
+    }
+
+    private void getProperties(List<Property> propertiesList) {
+        Log.e("", propertiesList.toString());
+        mProperties = propertiesList;
+        getProperty();
+    }
+
+    private void getProperty() {
+        for(Property property : mProperties) {
+            if(property.getId()==mPropertyId){
+                mProperty = property;
+            }
+        }
+        getPropertyData();
+    }
+
+    private void getPropertyData() {
+        mType = mProperty.getType();
+        mBinding.test.setText(mType);
     }
 
     private void navigateToMainActivity() {

@@ -66,8 +66,8 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.OnItem
     }
 
     @Override
-    public void onItemClick(Property property) {
-        Fragment fragment = DetailsFragment.newInstance(property.getId());
+    public void onItemClick(int id) {
+        Fragment fragment = DetailsFragment.newInstance(id);
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.nav_host_fragment, fragment, "details_fragment");
         transaction.addToBackStack(null);
