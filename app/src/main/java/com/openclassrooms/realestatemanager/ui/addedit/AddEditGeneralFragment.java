@@ -7,6 +7,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,10 +19,13 @@ import androidx.navigation.Navigation;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentGeneralDataBinding;
 import com.openclassrooms.realestatemanager.ui.main.MainActivity;
 import com.openclassrooms.realestatemanager.viewmodels.AddViewModel;
+
+import org.w3c.dom.Text;
 
 import java.util.Objects;
 
@@ -48,6 +52,11 @@ public class AddEditGeneralFragment extends Fragment {
     private final String ADDRESS = "address";
     private String city;
     private final String CITY = "city";
+    private TextInputEditText typeEditText;
+    private TextInputEditText priceEditText;
+    private TextInputEditText surfaceEditText;
+    private TextInputEditText addressEditText;
+    private TextInputEditText cityEditText;
 
     public static AddEditGeneralFragment newInstance() {
         return new AddEditGeneralFragment();
@@ -56,6 +65,11 @@ public class AddEditGeneralFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mBinding = FragmentGeneralDataBinding.inflate(inflater, container, false);
+        typeEditText = mBinding.etType;
+        priceEditText = mBinding.etPrice;
+        surfaceEditText = mBinding.etSurface;
+        addressEditText = mBinding.etAddress;
+        cityEditText = mBinding.etCity;
         return mBinding.getRoot();
     }
 
@@ -64,11 +78,7 @@ public class AddEditGeneralFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         this.mNavController = Navigation.findNavController(view);
         initUi();
-        getPropertyType();
-        getPropertyPrice();
-        getPropertySurface();
-        getPropertyAddress();
-        getPropertyCity();
+        getStringDataFromEditText();
         getPropertyPhotos();
         goToNextFragmentAddEdit();
     }
@@ -91,81 +101,41 @@ public class AddEditGeneralFragment extends Fragment {
         bottomNavigationView.setVisibility(View.GONE);
     }
 
-    private void getPropertyType() {
-        mBinding.etType.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void afterTextChanged(Editable editable) {
-                type = mBinding.etType.getText().toString();
-                enableButtonNext();
-            }
-        });
+    private void getStringDataFromEditText() {
+        getDataFromEditText(typeEditText);
+        getDataFromEditText(priceEditText);
+        getDataFromEditText(surfaceEditText);
+        getDataFromEditText(addressEditText);
+        getDataFromEditText(cityEditText);
     }
 
-    private void getPropertyPrice() {
-        mBinding.etPrice.addTextChangedListener(new TextWatcher() {
+    private void getDataFromEditText(TextInputEditText textInputEditText){
+        textInputEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void afterTextChanged(Editable editable) {
-                price = mBinding.etPrice.getText().toString();
-                enableButtonNext();
-            }
-        });
-    }
 
-    private void getPropertySurface() {
-        mBinding.etSurface.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void afterTextChanged(Editable editable) {
-                surface = mBinding.etSurface.getText().toString();
-                enableButtonNext();
-            }
-        });
-    }
 
-    private void getPropertyAddress() {
-        mBinding.etAddress.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void afterTextChanged(Editable editable) {
-                address = mBinding.etAddress.getText().toString();
-                enableButtonNext();
-            }
-        });
-    }
-
-    private void getPropertyCity() {
-        mBinding.etCity.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void afterTextChanged(Editable editable) {
-                city = mBinding.etCity.getText().toString();
+            public void afterTextChanged(Editable s) {
+                if(s==typeEditText.getEditableText()){
+                    type = textInputEditText.getText().toString();
+                }
+                else if(s==priceEditText.getEditableText()){
+                    price = textInputEditText.getText().toString();
+                }
+                else if(s==surfaceEditText.getEditableText()) {
+                    surface = textInputEditText.getText().toString();
+                }
+                else if(s==addressEditText.getEditableText()) {
+                    address = textInputEditText.getText().toString();
+                }
+                else if(s==cityEditText.getEditableText()) {
+                    city = textInputEditText.getText().toString();
+                }
                 enableButtonNext();
             }
         });
