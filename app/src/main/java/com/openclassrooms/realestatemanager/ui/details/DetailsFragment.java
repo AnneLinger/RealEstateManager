@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.ui.details;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,6 +30,7 @@ import com.openclassrooms.realestatemanager.ui.main.MainActivity;
 import com.openclassrooms.realestatemanager.ui.search.SearchFragment;
 import com.openclassrooms.realestatemanager.viewmodels.DetailsViewModel;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +50,6 @@ public class DetailsFragment extends Fragment {
     private Property mProperty;
     private DetailsViewModel mDetailsViewModel;
     private List<Property> mProperties;
-    private String mType;
     private AddEditGeneralFragment mAddEditGeneralFragment;
     private List<Photo> mPhotos = new ArrayList<>();
 
@@ -85,8 +86,6 @@ public class DetailsFragment extends Fragment {
         observeProperties();
         editProperty();
     }
-
-    //TODO create a navigate vers fragment addEditGeneral mais redonner pour ça la main à la MainActivity ++
 
     private void configureToolbar() {
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
@@ -134,8 +133,23 @@ public class DetailsFragment extends Fragment {
     }
 
     private void getPropertyData() {
-        mType = mProperty.getType();
-        mBinding.tvTypeDetails.setText(mType);
+        mBinding.tvTypeDetails.setText(mProperty.getType());
+        mBinding.tvDescriptionDetail.setText(mProperty.getDescription());
+        mBinding.tvPriceDetails.setText(String.format("$%s", mProperty.getPrice()));
+        mBinding.tvSurfaceDetail.setText(MessageFormat.format("{0}{1}", mProperty.getSurface(), getString(R.string.square_m)));
+        mBinding.tvRoomDetail.setText(String.valueOf(mProperty.getRoomNumber()));
+        mBinding.tvAddressDetail.setText(mProperty.getAddress());
+        mBinding.tvCityDetail.setText(mProperty.getCity());
+        mBinding.tvEntryDateDetail.setText(mProperty.getEntryDate());
+        mBinding.tvAgentDetail.setText(mProperty.getAgent());
+        boolean isOnSale = mProperty.isOnSale();
+        if(!isOnSale) {
+            mBinding.tvSaleDetail.setText(R.string.no);
+            mBinding.tvSoldDateDetail.setText(mProperty.getSoldDate());
+        }
+        else{
+            mBinding.tvSaleDetail.setText(R.string.yes);
+        }
     }
 
     private void editProperty() {
@@ -151,7 +165,6 @@ public class DetailsFragment extends Fragment {
                 if (!mAddEditGeneralFragment.isVisible()) {
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mAddEditGeneralFragment).commit();
                 }
-                //mNavController.navigate(R.id.action_detailsFragment_to_addEditGeneralFragment);
             }
         });
     }

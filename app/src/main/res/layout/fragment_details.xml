@@ -279,13 +279,50 @@
         android:layout_marginLeft="@dimen/basic_margin"
         android:layout_marginTop="@dimen/basic_margin"/>
 
+    <ImageView
+        android:id="@+id/im_agent_icon"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginLeft="@dimen/basic_margin"
+        android:contentDescription="@string/property_photo"
+        http:layout_constraintTop_toBottomOf="@id/im_sale_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:src="@drawable/ic_baseline_person_24"/>
+
+    <TextView
+        android:id="@+id/tv_agent_title_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textStyle="italic"
+        android:textColor="@color/color_primary"
+        http:layout_constraintTop_toBottomOf="@id/im_sale_icon"
+        http:layout_constraintStart_toEndOf="@id/im_agent_icon"
+        android:text="@string/agent_detail"
+        android:layout_marginLeft="@dimen/basic_margin"
+        android:layout_marginTop="@dimen/basic_margin"/>
+
+    <TextView
+        android:id="@+id/tv_agent_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textStyle="italic"
+        android:textColor="@color/color_primary"
+        http:layout_constraintTop_toBottomOf="@id/im_sale_icon"
+        http:layout_constraintStart_toEndOf="@id/tv_agent_title_detail"
+        tools:text="@string/surface"
+        android:layout_marginLeft="@dimen/basic_margin"
+        android:layout_marginTop="@dimen/basic_margin"/>
+
     <View
         android:id="@+id/view_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@android:color/white"
         http:layout_constraintStart_toStartOf="parent"
-        http:layout_constraintTop_toBottomOf="@id/im_sale_icon"
+        http:layout_constraintTop_toBottomOf="@id/im_agent_icon"
         android:layout_marginTop="@dimen/basic_margin"
         android:layout_marginHorizontal="@dimen/basic_margin"
         http:layout_constraintEnd_toEndOf="parent"/>

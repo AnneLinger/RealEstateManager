@@ -43,6 +43,7 @@
     <string name="entry_date">Entry date\ *</string>
     <string name="entry_date_details">Entry date</string>
     <string name="agent">Agent\ *</string>
+    <string name="agent_detail">Agent</string>
     <string name="sold_property">Sold property</string>
     <string name="sold_date">Sold date</string>
     <string name="required">*</string>
@@ -53,4 +54,7 @@
     <string name="on_sale">On sale ?</string>
     <string name="otherwise_sold_date">Otherwise, sold date :</string>
     <string name="points_of_interest">Points of interest :</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="square_m">\ sq m</string>
 </resources>
