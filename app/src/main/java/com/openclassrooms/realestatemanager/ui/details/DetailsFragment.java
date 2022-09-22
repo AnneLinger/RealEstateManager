@@ -121,7 +121,7 @@ public class DetailsFragment extends Fragment {
 
     private void getPropertyData() {
         mType = mProperty.getType();
-        mBinding.test.setText(mType);
+        mBinding.tvTypeDetails.setText(mType);
     }
 
     private void editProperty() {

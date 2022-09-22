@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.data.repositories;
 
 import androidx.lifecycle.LiveData;
 
+import com.openclassrooms.realestatemanager.data.dao.PhotoDao;
 import com.openclassrooms.realestatemanager.data.dao.PropertyDao;
 import com.openclassrooms.realestatemanager.domain.models.Property;
 
@@ -17,10 +18,12 @@ public class PropertyRepositoryImpl {
 
     //For data
     private final PropertyDao mPropertyDao;
+    private final PhotoDao mPhotoDao;
 
     @Inject
-    public PropertyRepositoryImpl(PropertyDao propertyDao) {
+    public PropertyRepositoryImpl(PropertyDao propertyDao, PhotoDao photoDao) {
         mPropertyDao = propertyDao;
+        mPhotoDao = photoDao;
     }
 
     //Get the list of the properties

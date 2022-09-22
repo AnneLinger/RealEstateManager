@@ -10,14 +10,16 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
+import com.openclassrooms.realestatemanager.data.dao.PhotoDao;
 import com.openclassrooms.realestatemanager.data.dao.PropertyDao;
+import com.openclassrooms.realestatemanager.domain.models.Photo;
 import com.openclassrooms.realestatemanager.domain.models.Property;
 
 /**
 * Abstract class to instance the Room db
 */
 
-@Database(entities =  {Property.class}, version = 1, exportSchema = false)
+@Database(entities =  {Property.class, Photo.class}, version = 1, exportSchema = false)
 public abstract class Go4LunchDatabase extends RoomDatabase {
 
     //Singleton
@@ -25,6 +27,7 @@ public abstract class Go4LunchDatabase extends RoomDatabase {
 
     //Dao
     public abstract PropertyDao mPropertyDao();
+    public abstract PhotoDao mPhotoDao();
 
     //Instance
     public static Go4LunchDatabase getInstance(Context context) {

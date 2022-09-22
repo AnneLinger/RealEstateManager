@@ -13,9 +13,9 @@ import javax.annotation.Nullable;
 @Entity(tableName = "property_table")
 public class Property {
 
-    //TODO Add a photo class and add a foreign key for it ?
+    //TODO Add a photo class and add a foreign key for it
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "property_id")
+    @ColumnInfo(name = "id")
     private int id;
 
     @ColumnInfo(name = "type")

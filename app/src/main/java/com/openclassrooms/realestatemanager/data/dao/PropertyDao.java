@@ -22,7 +22,7 @@ public interface PropertyDao {
     LiveData<List<Property>> getProperties();
 
     //Recover a property from the db with its id
-    @Query("SELECT * FROM property_table WHERE property_id = :propertyId")
+    @Query("SELECT * FROM property_table WHERE id = :propertyId")
     LiveData<Property> getProperty(int propertyId);
 
     //Add a new property to the db
