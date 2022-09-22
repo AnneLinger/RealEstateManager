@@ -15,10 +15,23 @@ public class ChipUtils {
         parent.removeView(chip);
     }
 
-    //Remove a chip from a list
     public static void deleteAChipFromAList(Chip chip, List<String> list) {
-        String chipToRemove = chip.getText().toString();
-        list.remove(chipToRemove);
+        for(String string : list) {
+            String uriStringLastCharacters = string.substring(string.length() - 5);
+            if(chip.getText().toString().contains(uriStringLastCharacters)){
+                list.remove(string);
+            }
+        }
+    }
+
+    public static void deleteAChipFromAListDependsOnItemPosition(Chip chip, List<String> list) {
+        int itemPosition = 0;
+        for(String string : list) {
+            if(chip.getText().toString().contains(String.valueOf(itemPosition))){
+                list.remove(string);
+            }
+            itemPosition +=1;
+        }
     }
 
 }

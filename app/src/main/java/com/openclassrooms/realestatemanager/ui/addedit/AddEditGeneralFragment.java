@@ -312,9 +312,8 @@ public class AddEditGeneralFragment extends Fragment {
                         mPhotoNumber+=1;
                         Uri tempUri = getImageUri(requireContext(), selectedImage);
                         mPhotoUriList.add(tempUri.toString());
-                        mBinding.imTest.setImageURI(tempUri);
                         Log.e("photo uri", mPhotoUriList.toString());
-                        addPhotoLabel();
+                        addPhotoLabel(tempUri.toString());
 
                     }
                     break;
@@ -328,12 +327,11 @@ public class AddEditGeneralFragment extends Fragment {
                                 cursor.moveToFirst();
                                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                                 String picturePath = cursor.getString(columnIndex);
-                                mBinding.imTest.setImageURI(selectedImage);
                                 mPhotoUriList.add(selectedImage.toString());
                                 mPhotoNumber+=1;
                                 cursor.close();
                                 Log.e("photo uri", mPhotoUriList.toString());
-                                addPhotoLabel();
+                                addPhotoLabel(selectedImage.toString());
                             }
                         }
                     }
@@ -349,29 +347,31 @@ public class AddEditGeneralFragment extends Fragment {
         return Uri.parse(path);
     }
 
-    private void addPhotoLabel(){
+    private void addPhotoLabel(String uriString){
         MaterialAlertDialogBuilder alertDialogBuilder = new MaterialAlertDialogBuilder((this.requireContext()), R.style.AlertDialogTheme);
         alertDialogBuilder.setTitle("Choose a label for your photo")
                 .setCancelable(false)
                 .setSingleChoiceItems(mCharSequences, 6, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        tempLabel = mCharSequences[which].toString();
+                        String tempsLabel = mCharSequences[which].toString();
+                        mPhotosLabels.add(tempsLabel);
+                        managePhotoChipGroup(uriString, tempsLabel);
+                        Log.e("photo label list", mPhotosLabels.toString());
                         dialog.dismiss();
-                        managePhotoChipGroup(tempLabel);
                     }
                 })
                 .create()
                 .show();
     }
 
-    private void managePhotoChipGroup(String label) {
+    private void managePhotoChipGroup(String uriString, String label) {
         LayoutInflater inflater = LayoutInflater.from(mBinding.chipGroup.getContext());
         Chip chip = (Chip) inflater.inflate(R.layout.chip_entry, mBinding.chipGroup, false);
-        chip.setText(MessageFormat.format("{0}{1}", getString(R.string.photo), String.valueOf(mPhotoUriList.size()) + label));
+        //chip.setText(MessageFormat.format("{0}{1}", getString(R.string.photo), String.valueOf(mPhotoUriList.size()) + " " + label));
+        chip.setText(MessageFormat.format("{0} {1} {2}", getString(R.string.photo), uriString.substring(uriString.length() - 5), label));
         chip.setCloseIconVisible(true);
         mBinding.chipGroup.addView(chip);
-        mPhotosLabels.add(label);
         chip.setOnCloseIconClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -380,6 +380,11 @@ public class AddEditGeneralFragment extends Fragment {
                 ChipUtils.deleteAChipFromAList((Chip) view, mPhotosLabels);
             }
         });
+    }
+
+    private void setPhotoLabelTextView(String label) {
+        mBinding.firstTvPhotoLabel.setText(label);
+        mPhotosLabels.add(label);
     }
 
     private void getPropertyPhotos() {
