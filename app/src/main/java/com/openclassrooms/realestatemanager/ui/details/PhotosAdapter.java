@@ -56,7 +56,8 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         }
 
         public void displayPhoto(Photo photo) {
-            //photoImage.setImageURI(photo.getPath());
+            //TODO convert Uri to String
+            // photoImage.setImageURI(photo.getPath());
             photoDescription.setText(photo.getPhotoDescription());
         }
     }

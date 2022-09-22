@@ -37,13 +37,20 @@
     <string name="add_a_property">Add a property</string>
     <string name="save">Save</string>
     <string name="room_number">Room number\ *</string>
+    <string name="room_number_details">Room number</string>
     <string name="description">Description</string>
     <string name="rooms">Rooms</string>
     <string name="entry_date">Entry date\ *</string>
+    <string name="entry_date_details">Entry date</string>
     <string name="agent">Agent\ *</string>
     <string name="sold_property">Sold property</string>
     <string name="sold_date">Sold date</string>
     <string name="required">*</string>
     <string name="hint_required">* Required</string>
     <string name="property_photo">Property photo</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
+    <string name="location">Location</string>
+    <string name="on_sale">On sale ?</string>
+    <string name="otherwise_sold_date">Otherwise, sold date :</string>
+    <string name="points_of_interest">Points of interest :</string>
 </resources>

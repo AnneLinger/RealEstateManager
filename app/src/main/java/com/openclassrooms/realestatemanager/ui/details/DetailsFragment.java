@@ -14,16 +14,22 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailsBinding;
+import com.openclassrooms.realestatemanager.domain.models.Photo;
 import com.openclassrooms.realestatemanager.domain.models.Property;
 import com.openclassrooms.realestatemanager.ui.addedit.AddEditGeneralFragment;
+import com.openclassrooms.realestatemanager.ui.listview.ListViewAdapter;
 import com.openclassrooms.realestatemanager.ui.main.MainActivity;
 import com.openclassrooms.realestatemanager.ui.search.SearchFragment;
 import com.openclassrooms.realestatemanager.viewmodels.DetailsViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,9 +40,7 @@ public class DetailsFragment extends Fragment {
 
     //For ui
     private FragmentDetailsBinding mBinding;
-
-    //For navigation
-    private NavController mNavController;
+    private RecyclerView mRecyclerView;
 
     //For data
     private int mPropertyId;
@@ -46,6 +50,7 @@ public class DetailsFragment extends Fragment {
     private List<Property> mProperties;
     private String mType;
     private AddEditGeneralFragment mAddEditGeneralFragment;
+    private List<Photo> mPhotos = new ArrayList<>();
 
     public static DetailsFragment newInstance(int propertyId) {
         DetailsFragment detailsFragment = new DetailsFragment();
@@ -75,6 +80,7 @@ public class DetailsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         configureToolbar();
         configureBottomNav();
+        initRecyclerView();
         configureViewModel();
         observeProperties();
         editProperty();
@@ -92,6 +98,14 @@ public class DetailsFragment extends Fragment {
     private void configureBottomNav() {
         BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottom_nav);
         bottomNavigationView.setVisibility(View.GONE);
+    }
+
+    private void initRecyclerView() {
+        mRecyclerView = mBinding.rvPhotos;
+        LinearLayoutManager layoutManager = new LinearLayoutManager(requireActivity());
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.HORIZONTAL));
+        mRecyclerView.setAdapter(new PhotosAdapter(mPhotos));
     }
 
     private void configureViewModel() {

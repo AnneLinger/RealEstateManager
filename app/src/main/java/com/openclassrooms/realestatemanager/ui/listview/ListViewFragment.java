@@ -42,9 +42,6 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.OnItem
     private FragmentListViewBinding mBinding;
     private RecyclerView mRecyclerView;
 
-    //For navigation
-    private NavController mNavController;
-
     //For data
     private ListViewModel mListViewModel;
     private AddEditGeneralFragment mAddEditGeneralFragment;
@@ -64,7 +61,6 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.OnItem
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //this.mNavController = Navigation.findNavController(view);
         configureViewModel();
         getProperties();
         addAProperty();
