@@ -1,7 +1,5 @@
 package com.openclassrooms.realestatemanager.domain.models;
 
-import android.net.Uri;
-
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
@@ -22,16 +20,16 @@ public class Photo {
     @ColumnInfo(name = "property_id")
     private int propertyId;
 
-    @ColumnInfo(name = "path")
-    private String path;
+    @ColumnInfo(name = "photoUri")
+    private String photoUri;
 
     @ColumnInfo(name = "photo_description")
     private String photoDescription;
 
-    public Photo(int photoId, int propertyId, String path, String photoDescription) {
+    public Photo(int photoId, int propertyId, String photoUri, String photoDescription) {
         this.photoId = photoId;
         this.propertyId = propertyId;
-        this.path = path;
+        this.photoUri = photoUri;
         this.photoDescription = photoDescription;
     }
 
@@ -51,12 +49,12 @@ public class Photo {
         this.propertyId = propertyId;
     }
 
-    public String getPath() {
-        return path;
+    public String getPhotoUri() {
+        return photoUri;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setPhotoUri(String photoUri) {
+        this.photoUri = photoUri;
     }
 
     public String getPhotoDescription() {

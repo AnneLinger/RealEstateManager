@@ -3,6 +3,7 @@ package com.openclassrooms.realestatemanager.ui.addedit;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -26,6 +27,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailedDataBinding;
+import com.openclassrooms.realestatemanager.domain.models.Photo;
 import com.openclassrooms.realestatemanager.domain.models.Property;
 import com.openclassrooms.realestatemanager.ui.main.MainActivity;
 import com.openclassrooms.realestatemanager.utils.DateUtils;
@@ -33,6 +35,7 @@ import com.openclassrooms.realestatemanager.viewmodels.AddEditDetailedViewModel;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -67,6 +70,8 @@ public class AddEditDetailedFragment extends Fragment {
     private final String ADDRESS = "address";
     private String city;
     private final String CITY = "city";
+    private int photoNumber;
+    private final String PHOTO_NUMBER = "photo_number";
     private int roomNumber = 0;
     private String description = null;
     private String entryDate;
@@ -82,6 +87,9 @@ public class AddEditDetailedFragment extends Fragment {
     private int mPropertyId;
     private Property mProperty;
     private List<Property> mProperties;
+    private List<Photo> mPhotos = new ArrayList<>();
+    private int photoKeyForBitmap = 1;
+    private List<String> mPhotoUriList = new ArrayList<>();
 
 
     public static AddEditDetailedFragment newInstance() {
@@ -201,6 +209,14 @@ public class AddEditDetailedFragment extends Fragment {
         surface = getArguments().getString(SURFACE);
         address = getArguments().getString(ADDRESS);
         city = getArguments().getString(CITY);
+        photoNumber = getArguments().getInt(PHOTO_NUMBER);
+        Log.e("photo number detailed", String.valueOf(photoNumber));
+        if(photoNumber>0) {
+            for(int i=1; i<=photoNumber; i++){
+                mPhotoUriList.add(getArguments().getString(String.valueOf(i)));
+            }
+            Log.e("photo uri", mPhotoUriList.toString());
+        }
     }
 
     private void getDataFromForm() {
