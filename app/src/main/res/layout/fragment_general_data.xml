@@ -142,6 +142,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/tv_required"/>
 
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chip_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/basic_margin"
+        app:layout_constraintTop_toBottomOf="@id/tf_city"
+        app:layout_constraintStart_toEndOf="@id/bt_photo"
+        app:layout_constraintBottom_toTopOf="@id/tv_required"/>
+
     <ImageView
         android:id="@+id/im_test"
         android:layout_width="wrap_content"

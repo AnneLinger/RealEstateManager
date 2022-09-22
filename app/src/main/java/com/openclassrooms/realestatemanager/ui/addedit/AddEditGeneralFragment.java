@@ -21,8 +21,11 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -36,6 +39,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.openclassrooms.realestatemanager.R;
@@ -43,10 +47,13 @@ import com.openclassrooms.realestatemanager.databinding.FragmentGeneralDataBindi
 import com.openclassrooms.realestatemanager.domain.models.Photo;
 import com.openclassrooms.realestatemanager.domain.models.Property;
 import com.openclassrooms.realestatemanager.ui.main.MainActivity;
+import com.openclassrooms.realestatemanager.utils.ChipUtils;
+import com.openclassrooms.realestatemanager.utils.PopupUtils;
 import com.openclassrooms.realestatemanager.viewmodels.AddEditDetailedViewModel;
 import com.openclassrooms.realestatemanager.viewmodels.AddEditGeneralViewModel;
 
 import java.io.ByteArrayOutputStream;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -90,6 +97,9 @@ public class AddEditGeneralFragment extends Fragment {
     private int mPhotoNumber = 0;
     private final String PHOTO_NUMBER = "photo_number";
     private int photoKeyForBundle = 1;
+    private List<String> mPhotosLabels = new ArrayList<>();
+    private final CharSequence[] mCharSequences = new CharSequence[] {"Exterior", "Kitchen", "Living Room", "Bedroom", "Bathroom", "Garden", "Else"};
+    private String tempLabel;
 
     public static AddEditGeneralFragment newInstance() {
         return new AddEditGeneralFragment();
@@ -128,51 +138,6 @@ public class AddEditGeneralFragment extends Fragment {
         checkPermissionsToAddPhoto();
         getPropertyPhotos();
         navigateToNextFragmentAddEdit();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_CANCELED) {
-            switch (requestCode) {
-                case 0:
-                    if (resultCode == RESULT_OK && data != null) {
-                        Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
-                        mPhotoNumber+=1;
-                        Uri tempUri = getImageUri(requireContext(), selectedImage);
-                        mPhotoUriList.add(tempUri.toString());
-                        mBinding.imTest.setImageURI(tempUri);
-                        Log.e("photo uri", mPhotoUriList.toString());
-                    }
-                    break;
-                case 1:
-                    if (resultCode == RESULT_OK && data != null) {
-                        Uri selectedImage = data.getData();
-                        String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                        if (selectedImage != null) {
-                            Cursor cursor = requireContext().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                            if (cursor != null) {
-                                cursor.moveToFirst();
-                                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                                String picturePath = cursor.getString(columnIndex);
-                                mBinding.imTest.setImageURI(selectedImage);
-                                mPhotoUriList.add(selectedImage.toString());
-                                mPhotoNumber+=1;
-                                cursor.close();
-                                Log.e("photo uri", mPhotoUriList.toString());
-                            }
-                        }
-                    }
-                    break;
-            }
-        }
-    }
-
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
     }
 
     private void initUi() {
@@ -334,6 +299,87 @@ public class AddEditGeneralFragment extends Fragment {
             }
         });
         builder.show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_CANCELED) {
+            switch (requestCode) {
+                case 0:
+                    if (resultCode == RESULT_OK && data != null) {
+                        Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
+                        mPhotoNumber+=1;
+                        Uri tempUri = getImageUri(requireContext(), selectedImage);
+                        mPhotoUriList.add(tempUri.toString());
+                        mBinding.imTest.setImageURI(tempUri);
+                        Log.e("photo uri", mPhotoUriList.toString());
+                        addPhotoLabel();
+
+                    }
+                    break;
+                case 1:
+                    if (resultCode == RESULT_OK && data != null) {
+                        Uri selectedImage = data.getData();
+                        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                        if (selectedImage != null) {
+                            Cursor cursor = requireContext().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                            if (cursor != null) {
+                                cursor.moveToFirst();
+                                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                                String picturePath = cursor.getString(columnIndex);
+                                mBinding.imTest.setImageURI(selectedImage);
+                                mPhotoUriList.add(selectedImage.toString());
+                                mPhotoNumber+=1;
+                                cursor.close();
+                                Log.e("photo uri", mPhotoUriList.toString());
+                                addPhotoLabel();
+                            }
+                        }
+                    }
+                    break;
+            }
+        }
+    }
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, getString(R.string.title), null);
+        return Uri.parse(path);
+    }
+
+    private void addPhotoLabel(){
+        MaterialAlertDialogBuilder alertDialogBuilder = new MaterialAlertDialogBuilder((this.requireContext()), R.style.AlertDialogTheme);
+        alertDialogBuilder.setTitle("Choose a label for your photo")
+                .setCancelable(false)
+                .setSingleChoiceItems(mCharSequences, 6, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        tempLabel = mCharSequences[which].toString();
+                        dialog.dismiss();
+                        managePhotoChipGroup(tempLabel);
+                    }
+                })
+                .create()
+                .show();
+    }
+
+    private void managePhotoChipGroup(String label) {
+        LayoutInflater inflater = LayoutInflater.from(mBinding.chipGroup.getContext());
+        Chip chip = (Chip) inflater.inflate(R.layout.chip_entry, mBinding.chipGroup, false);
+        chip.setText(MessageFormat.format("{0}{1}", getString(R.string.photo), String.valueOf(mPhotoUriList.size()) + label));
+        chip.setCloseIconVisible(true);
+        mBinding.chipGroup.addView(chip);
+        mPhotosLabels.add(label);
+        chip.setOnCloseIconClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ChipUtils.deleteAChipFromAView((Chip) view);
+                ChipUtils.deleteAChipFromAList((Chip) view, mPhotoUriList);
+                ChipUtils.deleteAChipFromAList((Chip) view, mPhotosLabels);
+            }
+        });
     }
 
     private void getPropertyPhotos() {
