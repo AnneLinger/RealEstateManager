@@ -168,12 +168,16 @@ public class AddEditDetailedFragment extends Fragment {
         description = mProperty.getDescription();
         entryDate = mProperty.getEntryDate();
         agent = mProperty.getAgent();
+        onSale = mProperty.isOnSale();
+        if(!onSale) {
+            soldDate = mProperty.getSoldDate();
+        }
         fillFormWithPropertyData();
     }
 
     private void fillFormWithPropertyData() {
         if(!(roomNumber ==0)){
-            roomNumberEditText.setText(roomNumber);
+            roomNumberEditText.setText(String.valueOf(roomNumber));
         }
         if(description!=null){
             descriptionEditText.setText(description);
@@ -183,6 +187,10 @@ public class AddEditDetailedFragment extends Fragment {
         }
         if(agent!=null){
             agentEditText.setText(agent);
+        }
+        if(!onSale){
+            mBinding.switchSold.setChecked(true);
+            soldDateEditText.setText(soldDate);
         }
     }
 
@@ -362,6 +370,10 @@ public class AddEditDetailedFragment extends Fragment {
         mProperty.setDescription(description);
         mProperty.setEntryDate(entryDate);
         mProperty.setAgent(agent);
+        mProperty.setOnSale(onSale);
+        if(!onSale){
+            mProperty.setSoldDate(soldDate);
+        }
         mAddEditDetailedViewModel.editProperty(mProperty);
     }
 

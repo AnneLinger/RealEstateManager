@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailsBinding;
 import com.openclassrooms.realestatemanager.domain.models.Property;
@@ -72,8 +73,8 @@ public class DetailsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //mNavController = Navigation.findNavController(view);
         configureToolbar();
+        configureBottomNav();
         configureViewModel();
         observeProperties();
         editProperty();
@@ -86,6 +87,11 @@ public class DetailsFragment extends Fragment {
         toolbar.setTitle(this.getString(R.string.property_details_title));
         toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
         toolbar.setNavigationOnClickListener(view -> navigateToMainActivity());
+    }
+
+    private void configureBottomNav() {
+        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottom_nav);
+        bottomNavigationView.setVisibility(View.GONE);
     }
 
     private void configureViewModel() {
