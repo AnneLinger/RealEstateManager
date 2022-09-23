@@ -12,7 +12,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext;
 import dagger.hilt.components.SingletonComponent;
 
 /**
-* Hilt module for injections for property
+* Hilt module for injections for executor
 */
 
 @InstallIn(SingletonComponent.class)

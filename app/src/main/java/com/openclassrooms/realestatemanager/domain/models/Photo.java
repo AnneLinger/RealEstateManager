@@ -23,14 +23,14 @@ public class Photo {
     @ColumnInfo(name = "photoUri")
     private String photoUri;
 
-    @ColumnInfo(name = "photo_description")
-    private String photoDescription;
+    @ColumnInfo(name = "photo_label")
+    private String photoLabel;
 
-    public Photo(int photoId, int propertyId, String photoUri, String photoDescription) {
+    public Photo(int photoId, int propertyId, String photoUri, String photoLabel) {
         this.photoId = photoId;
         this.propertyId = propertyId;
         this.photoUri = photoUri;
-        this.photoDescription = photoDescription;
+        this.photoLabel = photoLabel;
     }
 
     public int getPhotoId() {
@@ -57,11 +57,11 @@ public class Photo {
         this.photoUri = photoUri;
     }
 
-    public String getPhotoDescription() {
-        return photoDescription;
+    public String getPhotoLabel() {
+        return photoLabel;
     }
 
-    public void setPhotoDescription(String photoDescription) {
-        this.photoDescription = photoDescription;
+    public void setPhotoLabel(String photoLabel) {
+        this.photoLabel = photoLabel;
     }
 }

@@ -11,19 +11,17 @@ import java.util.List;
 import javax.inject.Inject;
 
 /**
-* Implementation of PropertyRepository interface
+* Repository for properties
 */
 
 public class PropertyRepositoryImpl {
 
     //For data
     private final PropertyDao mPropertyDao;
-    private final PhotoDao mPhotoDao;
 
     @Inject
-    public PropertyRepositoryImpl(PropertyDao propertyDao, PhotoDao photoDao) {
+    public PropertyRepositoryImpl(PropertyDao propertyDao) {
         mPropertyDao = propertyDao;
-        mPhotoDao = photoDao;
     }
 
     //Get the list of the properties

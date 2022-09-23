@@ -3,7 +3,9 @@ package com.openclassrooms.realestatemanager.viewmodels;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.openclassrooms.realestatemanager.data.repositories.PhotoRepositoryImpl;
 import com.openclassrooms.realestatemanager.data.repositories.PropertyRepositoryImpl;
+import com.openclassrooms.realestatemanager.domain.models.Photo;
 import com.openclassrooms.realestatemanager.domain.models.Property;
 
 import java.util.List;
@@ -23,15 +25,19 @@ public class AddEditDetailedViewModel extends ViewModel {
 
     //For data
     private final PropertyRepositoryImpl mPropertyRepository;
+    private final PhotoRepositoryImpl mPhotoRepository;
 
     //For threads
     private final Executor mExecutor;
 
     @Inject
-    public AddEditDetailedViewModel(PropertyRepositoryImpl propertyRepository, Executor executor) {
+    public AddEditDetailedViewModel(PropertyRepositoryImpl propertyRepository, PhotoRepositoryImpl photoRepository, Executor executor) {
         mPropertyRepository = propertyRepository;
+        mPhotoRepository = photoRepository;
         mExecutor = executor;
     }
+
+    //.....................................For properties...........................................
 
     private void addPropertyToRoomDatabase(Property property) {
         mExecutor.execute(() -> {
@@ -50,6 +56,19 @@ public class AddEditDetailedViewModel extends ViewModel {
     public void editProperty(Property property) {
         mExecutor.execute(() -> {
             mPropertyRepository.editProperty(property);
+        });
+    }
+
+    //.....................................For photos...............................................
+
+    private void addPhotoToRoomDatabase(Photo photo) {
+        mExecutor.execute(() -> {
+            mPhotoRepository.addPhoto(photo);
+        });    }
+
+    public void deletePhoto(int photoId) {
+        mExecutor.execute(() -> {
+            mPhotoRepository.deletePhoto(photoId);
         });
     }
 }

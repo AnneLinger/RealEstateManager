@@ -26,5 +26,5 @@ public interface PhotoDao {
 
     //Delete a photo from the db
     @Query("DELETE FROM photo_table WHERE photo_id = :photoId")
-    void deleteTask(int photoId);
+    void deletePhoto(int photoId);
 }
