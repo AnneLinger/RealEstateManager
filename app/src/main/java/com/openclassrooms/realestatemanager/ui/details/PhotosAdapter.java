@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.ui.details;
 
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,8 +57,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         }
 
         public void displayPhoto(Photo photo) {
-            //TODO convert Uri to String
-            // photoImage.setImageURI(photo.getPath());
+            photoImage.setImageURI(Uri.parse(photo.getPhotoUri()));
             photoDescription.setText(photo.getPhotoLabel());
         }
     }

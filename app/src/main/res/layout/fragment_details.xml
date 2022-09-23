@@ -40,9 +40,10 @@
         android:layout_margin="@dimen/basic_margin"
         android:orientation="horizontal"
         app:layoutManager="LinearLayoutManager"
-        http:layout_constraintTop_toBottomOf="@id/tv_type_details"
         http:layout_constraintBottom_toTopOf="@id/tv_description_title"
+        http:layout_constraintTop_toBottomOf="@id/tv_type_details"
         tools:context=".ui.details.DetailsFragment"
+        tools:layout_editor_absoluteX="-119dp"
         tools:listitem="@layout/item_photo" />
 
     <TextView

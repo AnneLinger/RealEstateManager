@@ -76,7 +76,6 @@ public class DetailsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         configureToolbar();
         configureBottomNav();
-        initRecyclerView();
         configureViewModel();
         observeProperties();
         editProperty();
@@ -92,14 +91,6 @@ public class DetailsFragment extends Fragment {
     private void configureBottomNav() {
         BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottom_nav);
         bottomNavigationView.setVisibility(View.GONE);
-    }
-
-    private void initRecyclerView() {
-        mRecyclerView = mBinding.rvPhotos;
-        LinearLayoutManager layoutManager = new LinearLayoutManager(requireActivity());
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.HORIZONTAL));
-        mRecyclerView.setAdapter(new PhotosAdapter(mPhotos));
     }
 
     private void configureViewModel() {
@@ -125,6 +116,7 @@ public class DetailsFragment extends Fragment {
             }
         }
         getPropertyData();
+        observePropertyPhotos();
     }
 
     private void getPropertyData() {
@@ -146,6 +138,27 @@ public class DetailsFragment extends Fragment {
             mBinding.tvSaleDetail.setText(R.string.yes);
         }
     }
+
+    private void observePropertyPhotos() {
+        mDetailsViewModel.getPropertyPhotos((long)mPropertyId).observe(requireActivity(), this::getPropertyPhotos);
+    }
+
+    private void getPropertyPhotos(List<Photo> photos) {
+        Log.e("photos after observe", photos.toString());
+        if (!photos.isEmpty()) {
+            mPhotos.addAll(photos);
+        }
+        initRecyclerView();
+    }
+
+    private void initRecyclerView() {
+        mRecyclerView = mBinding.rvPhotos;
+        LinearLayoutManager layoutManager = new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.HORIZONTAL));
+        mRecyclerView.setAdapter(new PhotosAdapter(mPhotos));
+    }
+
 
     private void editProperty() {
         mBinding.fabEdit.setOnClickListener(new View.OnClickListener() {

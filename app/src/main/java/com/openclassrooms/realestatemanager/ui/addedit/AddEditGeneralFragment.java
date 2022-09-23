@@ -98,7 +98,7 @@ public class AddEditGeneralFragment extends Fragment {
     private TextInputEditText addressEditText;
     private TextInputEditText cityEditText;
     private final String ID = "id";
-    private int mPropertyId = 0;
+    private long mPropertyId = 0;
     private Property mProperty;
     private List<Property> mProperties;
     private List<String> mPhotoUriList = new ArrayList<>();
@@ -113,18 +113,6 @@ public class AddEditGeneralFragment extends Fragment {
     public static AddEditGeneralFragment newInstance() {
         return new AddEditGeneralFragment();
     }
-
-    //For photo permission result
-    private static final String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
-    private final ActivityResultLauncher<String[]> mActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), (Map<String, Boolean> isGranted) -> {
-        boolean granted = true;
-        for (Map.Entry<String, Boolean> x : isGranted.entrySet())
-            if (!x.getValue()) granted = false;
-        if (granted) addPhoto();
-        else {
-            showDialogToDenyAddProperty();
-        }
-    });
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -145,7 +133,6 @@ public class AddEditGeneralFragment extends Fragment {
         observeProperties();
         checkIfPropertyAlreadyExists();
         getDataFromForm();
-        //checkPermissionsToAddPhoto();
         navigateToNextFragmentAddEdit();
     }
 
@@ -174,8 +161,8 @@ public class AddEditGeneralFragment extends Fragment {
 
     private void checkIfPropertyAlreadyExists() {
         if(getArguments()!=null) {
-            mPropertyId = getArguments().getInt(ID);
-            getProperty();
+            mPropertyId = getArguments().getLong(ID);
+            observeProperties();
         }
     }
 
@@ -187,6 +174,7 @@ public class AddEditGeneralFragment extends Fragment {
     private void getProperties(List<Property> propertiesList) {
         Log.e("", propertiesList.toString());
         mProperties = propertiesList;
+        getProperty();
     }
 
     private void getProperty() {
@@ -204,15 +192,10 @@ public class AddEditGeneralFragment extends Fragment {
         surface = mProperty.getSurface();
         address = mProperty.getAddress();
         city = mProperty.getCity();
-        //getPropertyPhotos();
+        fillFormWithPropertyData();
     }
 
-    private void getPropertyPhotos() {
-        mAddEditGeneralViewModel.getPropertyPhotos((long)mPropertyId).observe(requireActivity(), this::fillFormWithPropertyData);
-    }
-
-    private void fillFormWithPropertyData(List<Photo> photos) {
-        Log.e("photos after observe", photos.toString());
+    private void fillFormWithPropertyData() {
         if(type!=null){
             typeEditText.setText(type);
         }
@@ -227,12 +210,6 @@ public class AddEditGeneralFragment extends Fragment {
         }
         if(city!=null){
             cityEditText.setText(city);
-        }
-        if(!photos.isEmpty()){
-            mPhotos.addAll(photos);
-            for(Photo photo : photos){
-                managePhotoChipGroup(photo);
-            }
         }
     }
 
@@ -276,150 +253,10 @@ public class AddEditGeneralFragment extends Fragment {
         });
     }
 
-    private void checkPermissionsToAddPhoto() {
-        mBinding.btPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(requireContext(),
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
-                    ContextCompat.checkSelfPermission(requireContext(),
-                        Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
-                    ContextCompat.checkSelfPermission(requireContext(),
-                        Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                    //Permission ok => get a photo
-                    addPhoto();
-                } else {
-                    //Permission not ok => ask permission to the user for location
-                    mActivityResultLauncher.launch(perms);
-                }
-            }
-        });
-    }
-
-    private void addPhoto() {
-        final CharSequence[] optionsMenu = {"Take Photo", "Choose from Gallery", "Exit" }; // create a menuOption Array
-        // create a dialog for showing the optionsMenu
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        // set the items in builder
-        builder.setItems(optionsMenu, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if(optionsMenu[i].equals("Take Photo")){
-                    // Open the camera and get the photo
-                    Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(takePicture, 0);
-                }
-                else if(optionsMenu[i].equals("Choose from Gallery")){
-                    // choose from  external storage
-                    Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(pickPhoto , 1);
-                }
-                else if (optionsMenu[i].equals("Exit")) {
-                    dialogInterface.dismiss();
-                }
-            }
-        });
-        builder.show();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_CANCELED) {
-            switch (requestCode) {
-                case 0:
-                    if (resultCode == RESULT_OK && data != null) {
-                        Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
-                        Log.e("photo bitmap", selectedImage.toString());
-                        mPhotoNumber+=1;
-                        Uri tempUri = getImageUri(requireContext().getApplicationContext(), selectedImage);
-                        //mPhotoUriList.add(tempUri.toString());
-                        //Log.e("photo uri", mPhotoUriList.toString());
-                        addPhotoLabel(tempUri.toString());
-
-                    }
-                    break;
-                case 1:
-                    if (resultCode == RESULT_OK && data != null) {
-                        Uri selectedImage = data.getData();
-                        String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                        if (selectedImage != null) {
-                            Cursor cursor = requireContext().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                            if (cursor != null) {
-                                cursor.moveToFirst();
-                                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                                String picturePath = cursor.getString(columnIndex);
-                                mPhotoUriList.add(selectedImage.toString());
-                                mPhotoNumber+=1;
-                                cursor.close();
-                                Log.e("photo uri", mPhotoUriList.toString());
-                                addPhotoLabel(selectedImage.toString());
-                            }
-                        }
-                    }
-                    break;
-            }
-        }
-    }
-
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
-        Log.e("getImageUri", inImage.toString());
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-
-        //Get current date to add to path title and description, can't work without it
-        Date date = new Date(System.currentTimeMillis());
-
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title" + date, "New picture" + date);
-        Log.e("path", path);
-        return Uri.parse(path);
-    }
-
-    private void addPhotoLabel(String uriString){
-        MaterialAlertDialogBuilder alertDialogBuilder = new MaterialAlertDialogBuilder((this.requireContext()), R.style.AlertDialogTheme);
-        alertDialogBuilder.setTitle("Choose a label for your photo")
-                .setCancelable(false)
-                .setSingleChoiceItems(mCharSequences, 6, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //String tempsLabel = mCharSequences[which].toString();
-                        //mPhotosLabels.add(tempsLabel);
-                        Photo newPhoto = mAddEditGeneralViewModel.createPhoto((long) mProperties.size()+1, uriString, mCharSequences[which].toString());
-                        mPhotos.add(newPhoto);
-                        managePhotoChipGroup(newPhoto);
-                        //Log.e("photo label list", mPhotosLabels.toString());
-                        dialog.dismiss();
-                    }
-                })
-                .create()
-                .show();
-    }
-
-    private void managePhotoChipGroup(Photo photo) {
-        Log.e("manage photo chip group", photo.getPhotoUri().toString());
-        LayoutInflater inflater = LayoutInflater.from(mBinding.chipGroup.getContext());
-        Chip chip = (Chip) inflater.inflate(R.layout.chip_entry, mBinding.chipGroup, false);
-        //chip.setText(MessageFormat.format("{0}{1}", getString(R.string.photo), String.valueOf(mPhotoUriList.size()) + " " + label));
-        chip.setText(MessageFormat.format("{0} {1} {2}", getString(R.string.photo), photo.getPhotoUri().substring(photo.getPhotoUri().length() - 5), photo.getPhotoLabel()));
-        chip.setCloseIconVisible(true);
-        mBinding.chipGroup.addView(chip);
-        enableButtonNext();
-        chip.setOnCloseIconClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ChipUtils.deleteAChipFromAView((Chip) view);
-                mPhotos.remove(photo);
-                //ChipUtils.deleteAChipFromAList((Chip) view, mPhotoUriList);
-                //ChipUtils.deleteAChipFromAList((Chip) view, mPhotosLabels);
-            }
-        });
-    }
-
     //The button next is enabled only when all fields required are filled
     private void enableButtonNext() {
         if (Objects.requireNonNull(mBinding.etType.getText()).toString().isEmpty() ||
                 Objects.requireNonNull(mBinding.etPrice.getText()).toString().isEmpty() ||
-                //mPhotos.isEmpty() ||
                 Objects.requireNonNull(mBinding.etCity.getText()).toString().isEmpty()) {
             mBinding.btNextAddEdit.setEnabled(false);
         } else {
@@ -444,43 +281,18 @@ public class AddEditGeneralFragment extends Fragment {
                 .show();
     }
 
-    //Dialog to alert about essential permission
-    public void showDialogToDenyAddProperty() {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getContext(), R.style.AlertDialogTheme);
-        alertDialogBuilder.setTitle(R.string.permissions_required)
-                .setMessage(R.string.photo_permission_text)
-                .setCancelable(false)
-                .setPositiveButton(R.string.cancel_add_edit_title, (dialog, which) -> {
-                    navigateToMainActivity();
-                })
-                .setCancelable(false)
-                .create()
-                .show();
-    }
-
     private void navigateToNextFragmentAddEdit() {
         mBinding.btNextAddEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final Bundle bundle = new Bundle();
-                bundle.putInt(ID, mPropertyId);
+                bundle.putLong(ID, mPropertyId);
                 bundle.putString(TYPE, type);
                 bundle.putString(PRICE, price);
                 bundle.putString(SURFACE, surface);
                 bundle.putString(ADDRESS, address);
                 bundle.putString(CITY, city);
-                //bundle.putInt(PHOTO_NUMBER, mPhotos.size());
-                //for(Photo photo : mPhotos){
-                  //  bundle.putParcelable(String.valueOf(photoKeyForBundle), photo);
-                    //photoKeyForBundle+=1;
-                //}
-                //Log.e("photo number", String.valueOf(mPhotoNumber));
-                //Log.e("photo uri before bundle", mPhotoUriList.toString());
-                /**for(String string : mPhotoUriList){
-                    bundle.putString(String.valueOf(photoKeyForBundle), string);
-                    Log.e("photo uri key", String.valueOf(photoKeyForBundle));
-                    photoKeyForBundle+=1;
-                }*/
+
                 if (mAddEditDetailedFragment == null) {
                     mAddEditDetailedFragment = AddEditDetailedFragment.newInstance();
                     mAddEditDetailedFragment.setArguments(bundle);

@@ -119,7 +119,7 @@
         app:layout_constraintTop_toBottomOf="@id/tf_address"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bt_photo">
+        app:layout_constraintBottom_toTopOf="@id/tv_required">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_city"
@@ -129,40 +129,6 @@
             />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-        android:id="@+id/bt_photo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/add_a_photo"
-        android:contentDescription="@string/add_a_photo"
-        android:textColor="@color/color_white"
-        android:backgroundTint="@color/color_primary_variant"
-        android:layout_marginLeft="@dimen/basic_margin"
-        app:layout_constraintTop_toBottomOf="@id/tf_city"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tv_required"/>
-
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chip_group"
-        android:layout_width="196dp"
-        app:chipSpacingVertical="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/basic_margin"
-        app:layout_constraintTop_toBottomOf="@id/tf_city"
-        app:layout_constraintStart_toEndOf="@id/bt_photo"
-        app:layout_constraintEnd_toStartOf="@id/first_tv_photo_label"
-        app:layout_constraintBottom_toTopOf="@id/tv_required"/>
-
-    <TextView
-        android:id="@+id/first_tv_photo_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="@string/address"
-        android:layout_marginTop="@dimen/basic_margin"
-        android:layout_marginRight="@dimen/basic_margin"
-        app:layout_constraintTop_toBottomOf="@id/tf_city"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
     <TextView
         android:id="@+id/tv_required"
         android:layout_width="wrap_content"
@@ -170,7 +136,7 @@
         android:text="@string/hint_required"
         android:contentDescription="@string/hint_required"
         android:layout_marginLeft="@dimen/basic_margin"
-        app:layout_constraintTop_toBottomOf="@id/bt_photo"
+        app:layout_constraintTop_toBottomOf="@id/tf_city"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/bt_next_add_edit"/>
 

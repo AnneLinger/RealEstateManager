@@ -12,7 +12,7 @@
         android:layout_width="128dp"
         android:layout_height="128dp"
         android:contentDescription="@string/property_photo"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tv_photo_description"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:src="@drawable/ic_baseline_house_24"
