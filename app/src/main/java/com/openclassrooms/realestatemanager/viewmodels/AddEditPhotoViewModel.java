@@ -16,11 +16,11 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 /**
-*Created by Anne Linger on 21/09/2022.
+*Created by Anne Linger on 23/09/2022.
 */
 
 @HiltViewModel
-public class AddEditGeneralViewModel extends ViewModel {
+public class AddEditPhotoViewModel extends ViewModel {
 
     //For data
     private final PropertyRepositoryImpl mPropertyRepository;
@@ -30,7 +30,7 @@ public class AddEditGeneralViewModel extends ViewModel {
     private final Executor mExecutor;
 
     @Inject
-    public AddEditGeneralViewModel(PropertyRepositoryImpl propertyRepository, PhotoRepositoryImpl photoRepository, Executor executor) {
+    public AddEditPhotoViewModel(PropertyRepositoryImpl propertyRepository, PhotoRepositoryImpl photoRepository, Executor executor) {
         mPropertyRepository = propertyRepository;
         mPhotoRepository = photoRepository;
         mExecutor = executor;

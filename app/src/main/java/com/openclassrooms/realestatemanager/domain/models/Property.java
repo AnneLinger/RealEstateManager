@@ -13,10 +13,9 @@ import javax.annotation.Nullable;
 @Entity(tableName = "property_table")
 public class Property {
 
-    //TODO Add a photo class and add a foreign key for it
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    private int id;
+    private long id;
 
     @ColumnInfo(name = "type")
     private String type;
@@ -55,7 +54,10 @@ public class Property {
     @ColumnInfo(name = "agent")
     private String agent;
 
-    public Property(String type, String price, @Nullable String surface, int roomNumber, @Nullable String description, @Nullable String address, String city, boolean onSale, String entryDate, @Nullable String soldDate, String agent) {
+    @ColumnInfo(name = "photo_key")
+    private String photoKey;
+
+    public Property(String type, String price, @Nullable String surface, int roomNumber, @Nullable String description, @Nullable String address, String city, boolean onSale, String entryDate, @Nullable String soldDate, String agent, String photoKey) {
         this.type = type;
         this.price = price;
         this.surface = surface;
@@ -67,13 +69,13 @@ public class Property {
         this.entryDate = entryDate;
         this.soldDate = soldDate;
         this.agent = agent;
-    }
+        this.photoKey = photoKey;}
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -167,5 +169,13 @@ public class Property {
 
     public void setAgent(String agent) {
         this.agent = agent;
+    }
+
+    public String getPhotoKey() {
+        return photoKey;
+    }
+
+    public void setPhotoKey(String photoKey) {
+        this.photoKey = photoKey;
     }
 }

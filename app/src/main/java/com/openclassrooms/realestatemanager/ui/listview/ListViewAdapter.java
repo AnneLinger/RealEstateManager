@@ -1,10 +1,6 @@
 package com.openclassrooms.realestatemanager.ui.listview;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.domain.models.Property;
-import com.openclassrooms.realestatemanager.ui.details.DetailsFragment;
-import com.openclassrooms.realestatemanager.ui.main.MainActivity;
 
 import java.util.List;
 
@@ -83,6 +77,6 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
     }
 
     public interface OnItemClickListener {
-        void onItemClick(int id);
+        void onItemClick(long id);
     }
 }

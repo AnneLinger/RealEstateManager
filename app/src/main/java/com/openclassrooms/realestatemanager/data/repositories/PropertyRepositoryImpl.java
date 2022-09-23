@@ -18,6 +18,7 @@ public class PropertyRepositoryImpl {
 
     //For data
     private final PropertyDao mPropertyDao;
+    long lastPropertyId;
 
     @Inject
     public PropertyRepositoryImpl(PropertyDao propertyDao) {
@@ -34,7 +35,6 @@ public class PropertyRepositoryImpl {
         return mPropertyDao.getProperty(propertyId);
     }
 
-    //TODO set property attributes to null when no necessary in addProperty and editProperty
     //Create a property
     public void addProperty(Property property) {
         mPropertyDao.addProperty(property);

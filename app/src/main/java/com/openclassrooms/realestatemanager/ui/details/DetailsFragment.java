@@ -1,6 +1,5 @@
 package com.openclassrooms.realestatemanager.ui.details;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,8 +12,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,9 +22,7 @@ import com.openclassrooms.realestatemanager.databinding.FragmentDetailsBinding;
 import com.openclassrooms.realestatemanager.domain.models.Photo;
 import com.openclassrooms.realestatemanager.domain.models.Property;
 import com.openclassrooms.realestatemanager.ui.addedit.AddEditGeneralFragment;
-import com.openclassrooms.realestatemanager.ui.listview.ListViewAdapter;
 import com.openclassrooms.realestatemanager.ui.main.MainActivity;
-import com.openclassrooms.realestatemanager.ui.search.SearchFragment;
 import com.openclassrooms.realestatemanager.viewmodels.DetailsViewModel;
 
 import java.text.MessageFormat;
@@ -45,7 +40,7 @@ public class DetailsFragment extends Fragment {
     private RecyclerView mRecyclerView;
 
     //For data
-    private int mPropertyId;
+    private long mPropertyId;
     private static final String ID = "id";
     private Property mProperty;
     private DetailsViewModel mDetailsViewModel;
@@ -53,10 +48,10 @@ public class DetailsFragment extends Fragment {
     private AddEditGeneralFragment mAddEditGeneralFragment;
     private List<Photo> mPhotos = new ArrayList<>();
 
-    public static DetailsFragment newInstance(int propertyId) {
+    public static DetailsFragment newInstance(long propertyId) {
         DetailsFragment detailsFragment = new DetailsFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt(ID, propertyId);
+        bundle.putLong(ID, propertyId);
         detailsFragment.setArguments(bundle);
         return detailsFragment;
     }
@@ -65,7 +60,7 @@ public class DetailsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(getArguments()!=null) {
-            mPropertyId = getArguments().getInt(ID);
+            mPropertyId = getArguments().getLong(ID);
         }
     }
 
@@ -157,7 +152,7 @@ public class DetailsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 final Bundle bundle = new Bundle();
-                bundle.putInt(ID, mProperty.getId());
+                bundle.putLong(ID, mProperty.getId());
                 if (mAddEditGeneralFragment == null) {
                     mAddEditGeneralFragment = AddEditGeneralFragment.newInstance();
                     mAddEditGeneralFragment.setArguments(bundle);

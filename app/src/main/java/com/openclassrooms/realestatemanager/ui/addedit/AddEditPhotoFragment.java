@@ -4,8 +4,6 @@ import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,105 +11,63 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.provider.Settings;
-import android.renderscript.Sampler;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.PopupMenu;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.textfield.TextInputEditText;
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.databinding.FragmentGeneralDataBinding;
+import com.openclassrooms.realestatemanager.databinding.FragmentPhotoDataBinding;
 import com.openclassrooms.realestatemanager.domain.models.Photo;
 import com.openclassrooms.realestatemanager.domain.models.Property;
 import com.openclassrooms.realestatemanager.ui.main.MainActivity;
 import com.openclassrooms.realestatemanager.utils.ChipUtils;
-import com.openclassrooms.realestatemanager.utils.PopupUtils;
-import com.openclassrooms.realestatemanager.viewmodels.AddEditDetailedViewModel;
-import com.openclassrooms.realestatemanager.viewmodels.AddEditGeneralViewModel;
+import com.openclassrooms.realestatemanager.viewmodels.AddEditPhotoViewModel;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
 
 /**
-*Fragment to add or edit general information about property
+*Fragment to add or edit property photos
 */
 
-public class AddEditGeneralFragment extends Fragment {
+public class AddEditPhotoFragment extends Fragment {
 
     //For ui
-    private FragmentGeneralDataBinding mBinding;
+    private FragmentPhotoDataBinding mBinding;
 
     //For data
-    private AddEditDetailedFragment mAddEditDetailedFragment;
-    private AddEditGeneralViewModel mAddEditGeneralViewModel;
-    private String type;
-    private final String TYPE = "type";
-    private String price;
-    private final String PRICE = "price";
-    private String surface = null;
-    private final String SURFACE = "surface";
-    private String address = null;
-    private final String ADDRESS = "address";
-    private String city;
-    private final String CITY = "city";
-    private TextInputEditText typeEditText;
-    private TextInputEditText priceEditText;
-    private TextInputEditText surfaceEditText;
-    private TextInputEditText addressEditText;
-    private TextInputEditText cityEditText;
-    private final String ID = "id";
+    private AddEditPhotoViewModel mAddEditPhotoViewModel;
     private int mPropertyId = 0;
     private Property mProperty;
     private List<Property> mProperties;
     private List<String> mPhotoUriList = new ArrayList<>();
-    private int mPhotoNumber = 0;
     private final String PHOTO_NUMBER = "photo_number";
-    private int photoKeyForBundle = 1;
-    private List<String> mPhotosLabels = new ArrayList<>();
     private final CharSequence[] mCharSequences = new CharSequence[] {"Exterior", "Kitchen", "Living Room", "Bedroom", "Bathroom", "Garden", "Else"};
     private List<Photo> mPhotos = new ArrayList<>();
-    private Uri outputFileUri;
+    private final String ID = "id";
 
-    public static AddEditGeneralFragment newInstance() {
-        return new AddEditGeneralFragment();
+    public static AddEditPhotoFragment newInstance() {
+        return new AddEditPhotoFragment();
     }
 
     //For photo permission result
@@ -128,12 +84,7 @@ public class AddEditGeneralFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mBinding = FragmentGeneralDataBinding.inflate(inflater, container, false);
-        typeEditText = mBinding.etType;
-        priceEditText = mBinding.etPrice;
-        surfaceEditText = mBinding.etSurface;
-        addressEditText = mBinding.etAddress;
-        cityEditText = mBinding.etCity;
+        mBinding = FragmentPhotoDataBinding.inflate(inflater, container, false);
         return mBinding.getRoot();
     }
 
@@ -143,16 +94,15 @@ public class AddEditGeneralFragment extends Fragment {
         initUi();
         configureViewModel();
         observeProperties();
-        checkIfPropertyAlreadyExists();
-        getDataFromForm();
-        //checkPermissionsToAddPhoto();
-        navigateToNextFragmentAddEdit();
+        fillFormWithPropertyPhotos();
+        checkPermissionsToAddPhoto();
+        finishAddEdit();
     }
 
     private void initUi() {
         configureToolbar();
         configureBottomNav();
-        mBinding.btNextAddEdit.setEnabled(false);
+        mBinding.btSavePhotos.setEnabled(false);
     }
 
     private void configureToolbar() {
@@ -169,111 +119,46 @@ public class AddEditGeneralFragment extends Fragment {
 
     //TODO attacher le VM au fragment
     private void configureViewModel() {
-        mAddEditGeneralViewModel = new ViewModelProvider(requireActivity()).get(AddEditGeneralViewModel.class);
-    }
-
-    private void checkIfPropertyAlreadyExists() {
-        if(getArguments()!=null) {
-            mPropertyId = getArguments().getInt(ID);
-            getProperty();
-        }
+        mAddEditPhotoViewModel = new ViewModelProvider(requireActivity()).get(AddEditPhotoViewModel.class);
     }
 
     private void observeProperties(){
         Log.e("", "observeProperties");
-        mAddEditGeneralViewModel.getProperties().observe(requireActivity(), this::getProperties);
+        mAddEditPhotoViewModel.getProperties().observe(requireActivity(), this::getProperties);
     }
 
     private void getProperties(List<Property> propertiesList) {
         Log.e("", propertiesList.toString());
         mProperties = propertiesList;
+        getProperty();
     }
 
     private void getProperty() {
+        mPropertyId = getArguments().getInt(ID);
         for(Property property : mProperties) {
             if(property.getId()==mPropertyId){
                 mProperty = property;
             }
         }
-        getPropertyData();
+        Log.e("Address in photos", String.valueOf(mProperty.getId()));
+        observePropertyPhotos();
     }
 
-    private void getPropertyData() {
-        type = mProperty.getType();
-        price = mProperty.getPrice();
-        surface = mProperty.getSurface();
-        address = mProperty.getAddress();
-        city = mProperty.getCity();
-        //getPropertyPhotos();
+    private void observePropertyPhotos() {
+        mAddEditPhotoViewModel.getPropertyPhotos((long)mPropertyId).observe(requireActivity(), this::getPropertyPhotos);
     }
 
-    private void getPropertyPhotos() {
-        mAddEditGeneralViewModel.getPropertyPhotos((long)mPropertyId).observe(requireActivity(), this::fillFormWithPropertyData);
-    }
-
-    private void fillFormWithPropertyData(List<Photo> photos) {
+    private void getPropertyPhotos(List<Photo> photos) {
         Log.e("photos after observe", photos.toString());
-        if(type!=null){
-            typeEditText.setText(type);
-        }
-        if(price!=null){
-            priceEditText.setText(price);
-        }
-        if(surface!=null){
-            surfaceEditText.setText(surface);
-        }
-        if(address!=null){
-            addressEditText.setText(address);
-        }
-        if(city!=null){
-            cityEditText.setText(city);
-        }
-        if(!photos.isEmpty()){
+        if (!photos.isEmpty()) {
             mPhotos.addAll(photos);
-            for(Photo photo : photos){
-                managePhotoChipGroup(photo);
-            }
         }
     }
 
-    private void getDataFromForm() {
-        getDataFromEditText(typeEditText);
-        getDataFromEditText(priceEditText);
-        getDataFromEditText(surfaceEditText);
-        getDataFromEditText(addressEditText);
-        getDataFromEditText(cityEditText);
-    }
-
-    private void getDataFromEditText(TextInputEditText textInputEditText){
-        textInputEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(s==typeEditText.getEditableText()){
-                    type = textInputEditText.getText().toString();
-                }
-                else if(s==priceEditText.getEditableText()){
-                    price = textInputEditText.getText().toString();
-                }
-                else if(s==surfaceEditText.getEditableText()) {
-                    surface = textInputEditText.getText().toString();
-                }
-                else if(s==addressEditText.getEditableText()) {
-                    address = textInputEditText.getText().toString();
-                }
-                else if(s==cityEditText.getEditableText()) {
-                    city = textInputEditText.getText().toString();
-                }
-                enableButtonNext();
-            }
-        });
+    private void fillFormWithPropertyPhotos() {
+        for (Photo photo : mPhotos) {
+            managePhotoChipGroup(photo);
+        }
     }
 
     private void checkPermissionsToAddPhoto() {
@@ -282,10 +167,10 @@ public class AddEditGeneralFragment extends Fragment {
             public void onClick(View v) {
                 if (ContextCompat.checkSelfPermission(requireContext(),
                         Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
-                    ContextCompat.checkSelfPermission(requireContext(),
-                        Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
-                    ContextCompat.checkSelfPermission(requireContext(),
-                        Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                        ContextCompat.checkSelfPermission(requireContext(),
+                                Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+                        ContextCompat.checkSelfPermission(requireContext(),
+                                Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                     //Permission ok => get a photo
                     addPhoto();
                 } else {
@@ -331,7 +216,6 @@ public class AddEditGeneralFragment extends Fragment {
                     if (resultCode == RESULT_OK && data != null) {
                         Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
                         Log.e("photo bitmap", selectedImage.toString());
-                        mPhotoNumber+=1;
                         Uri tempUri = getImageUri(requireContext().getApplicationContext(), selectedImage);
                         //mPhotoUriList.add(tempUri.toString());
                         //Log.e("photo uri", mPhotoUriList.toString());
@@ -350,7 +234,6 @@ public class AddEditGeneralFragment extends Fragment {
                                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                                 String picturePath = cursor.getString(columnIndex);
                                 mPhotoUriList.add(selectedImage.toString());
-                                mPhotoNumber+=1;
                                 cursor.close();
                                 Log.e("photo uri", mPhotoUriList.toString());
                                 addPhotoLabel(selectedImage.toString());
@@ -384,7 +267,7 @@ public class AddEditGeneralFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         //String tempsLabel = mCharSequences[which].toString();
                         //mPhotosLabels.add(tempsLabel);
-                        Photo newPhoto = mAddEditGeneralViewModel.createPhoto((long) mProperties.size()+1, uriString, mCharSequences[which].toString());
+                        Photo newPhoto = mAddEditPhotoViewModel.createPhoto((long) mPropertyId, uriString, mCharSequences[which].toString());
                         mPhotos.add(newPhoto);
                         managePhotoChipGroup(newPhoto);
                         //Log.e("photo label list", mPhotosLabels.toString());
@@ -403,7 +286,7 @@ public class AddEditGeneralFragment extends Fragment {
         chip.setText(MessageFormat.format("{0} {1} {2}", getString(R.string.photo), photo.getPhotoUri().substring(photo.getPhotoUri().length() - 5), photo.getPhotoLabel()));
         chip.setCloseIconVisible(true);
         mBinding.chipGroup.addView(chip);
-        enableButtonNext();
+        enableButtonSave();
         chip.setOnCloseIconClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -416,15 +299,22 @@ public class AddEditGeneralFragment extends Fragment {
     }
 
     //The button next is enabled only when all fields required are filled
-    private void enableButtonNext() {
-        if (Objects.requireNonNull(mBinding.etType.getText()).toString().isEmpty() ||
-                Objects.requireNonNull(mBinding.etPrice.getText()).toString().isEmpty() ||
-                //mPhotos.isEmpty() ||
-                Objects.requireNonNull(mBinding.etCity.getText()).toString().isEmpty()) {
-            mBinding.btNextAddEdit.setEnabled(false);
+    private void enableButtonSave() {
+        if (mPhotos.isEmpty()){
+            mBinding.btSavePhotos.setEnabled(false);
         } else {
-            mBinding.btNextAddEdit.setEnabled(true);
+            mBinding.btSavePhotos.setEnabled(true);
+
         }
+    }
+
+    private void finishAddEdit() {
+        mBinding.btSavePhotos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToMainActivity();
+            }
+        });
     }
 
     //Dialog to alert about the add/edit annulment
@@ -435,7 +325,7 @@ public class AddEditGeneralFragment extends Fragment {
                 .setCancelable(false)
                 .setPositiveButton(R.string.cancel_button, (dialog, which) -> {
                     for(Photo photo : mPhotos){
-                        mAddEditGeneralViewModel.deletePhoto(photo.getPhotoId());
+                        mAddEditPhotoViewModel.deletePhoto(photo.getPhotoId());
                     }
                     navigateToMainActivity();
                 })
@@ -456,40 +346,6 @@ public class AddEditGeneralFragment extends Fragment {
                 .setCancelable(false)
                 .create()
                 .show();
-    }
-
-    private void navigateToNextFragmentAddEdit() {
-        mBinding.btNextAddEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Bundle bundle = new Bundle();
-                bundle.putInt(ID, mPropertyId);
-                bundle.putString(TYPE, type);
-                bundle.putString(PRICE, price);
-                bundle.putString(SURFACE, surface);
-                bundle.putString(ADDRESS, address);
-                bundle.putString(CITY, city);
-                //bundle.putInt(PHOTO_NUMBER, mPhotos.size());
-                //for(Photo photo : mPhotos){
-                  //  bundle.putParcelable(String.valueOf(photoKeyForBundle), photo);
-                    //photoKeyForBundle+=1;
-                //}
-                //Log.e("photo number", String.valueOf(mPhotoNumber));
-                //Log.e("photo uri before bundle", mPhotoUriList.toString());
-                /**for(String string : mPhotoUriList){
-                    bundle.putString(String.valueOf(photoKeyForBundle), string);
-                    Log.e("photo uri key", String.valueOf(photoKeyForBundle));
-                    photoKeyForBundle+=1;
-                }*/
-                if (mAddEditDetailedFragment == null) {
-                    mAddEditDetailedFragment = AddEditDetailedFragment.newInstance();
-                    mAddEditDetailedFragment.setArguments(bundle);
-                }
-                if (!mAddEditDetailedFragment.isVisible()) {
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mAddEditDetailedFragment).commit();
-                }
-            }
-        });
     }
 
     private void navigateToMainActivity() {

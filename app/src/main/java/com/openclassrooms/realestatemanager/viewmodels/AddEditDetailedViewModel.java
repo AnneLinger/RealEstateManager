@@ -11,7 +11,6 @@ import com.openclassrooms.realestatemanager.domain.models.Property;
 import java.util.List;
 import java.util.concurrent.Executor;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
@@ -44,8 +43,7 @@ public class AddEditDetailedViewModel extends ViewModel {
             mPropertyRepository.addProperty(property);
         });    }
 
-    public void createProperty(String type, String price, String surface, int roomNumber, @Nullable String description, String address, String city, boolean onSale, String entryDate, String soldDate, String agent) {
-        Property property = new Property(type, price, surface, roomNumber, description, address, city, onSale, entryDate, soldDate, agent);
+    public void createProperty(Property property) {
         addPropertyToRoomDatabase(property);
     }
 
@@ -61,10 +59,11 @@ public class AddEditDetailedViewModel extends ViewModel {
 
     //.....................................For photos...............................................
 
-    private void addPhotoToRoomDatabase(Photo photo) {
+    public void editPhoto(Photo photo) {
         mExecutor.execute(() -> {
-            mPhotoRepository.addPhoto(photo);
-        });    }
+            mPhotoRepository.editPhoto(photo);
+        });
+    }
 
     public void deletePhoto(int photoId) {
         mExecutor.execute(() -> {

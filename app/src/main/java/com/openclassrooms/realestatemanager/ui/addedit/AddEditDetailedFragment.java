@@ -3,7 +3,6 @@ package com.openclassrooms.realestatemanager.ui.addedit;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -55,6 +54,7 @@ public class AddEditDetailedFragment extends Fragment {
 
     //For data
     private AddEditDetailedViewModel mAddEditDetailedViewModel;
+    private AddEditPhotoFragment mAddEditPhotoFragment;
     private static final DateUtils mDateTimeUtils = new DateUtils();
     private int lastSelectedYear;
     private int lastSelectedMonth;
@@ -78,6 +78,7 @@ public class AddEditDetailedFragment extends Fragment {
     private String agent;
     private String soldDate = null;
     private boolean onSale = true;
+    private String photoKey;
     private TextInputEditText roomNumberEditText;
     private TextInputEditText descriptionEditText;
     private TextInputEditText entryDateEditText;
@@ -86,7 +87,7 @@ public class AddEditDetailedFragment extends Fragment {
     private final String ID = "id";
     private int mPropertyId;
     private Property mProperty;
-    private List<Property> mProperties;
+    private List<Property> mProperties = new ArrayList<>();
     private List<Photo> mPhotos = new ArrayList<>();
     private int photoKeyForBitmap = 1;
     private List<String> mPhotoUriList = new ArrayList<>();
@@ -112,6 +113,7 @@ public class AddEditDetailedFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         initUi();
         configureViewModel();
+        observeProperties();
         checkIfPropertyAlreadyExists();
         getDataFromPreviousForm();
         getDataFromForm();
@@ -147,7 +149,7 @@ public class AddEditDetailedFragment extends Fragment {
         assert getArguments() != null;
         if(!(getArguments().getInt(ID) == 0)) {
             mPropertyId = getArguments().getInt(ID);
-            observeProperties();
+            getProperty();
         }
     }
 
@@ -159,7 +161,7 @@ public class AddEditDetailedFragment extends Fragment {
     private void getProperties(List<Property> propertiesList) {
         Log.e("", propertiesList.toString());
         mProperties = propertiesList;
-        getProperty();
+        photoKey = String.valueOf(mProperties.size()+1);
     }
 
     private void getProperty() {
@@ -213,9 +215,9 @@ public class AddEditDetailedFragment extends Fragment {
         Log.e("photo number detailed", String.valueOf(photoNumber));
         if(photoNumber>0) {
             for(int i=1; i<=photoNumber; i++){
-                mPhotoUriList.add(getArguments().getString(String.valueOf(i)));
+                mPhotos.add(getArguments().getParcelable(String.valueOf(i)));
             }
-            Log.e("photo uri", mPhotoUriList.toString());
+            Log.e("photo uri", mPhotos.toString());
         }
     }
 
@@ -353,6 +355,9 @@ public class AddEditDetailedFragment extends Fragment {
                 .setMessage(R.string.confirm_cancel_message)
                 .setCancelable(false)
                 .setPositiveButton(R.string.cancel_button, (dialog, which) -> {
+                    for(Photo photo : mPhotos){
+                        mAddEditDetailedViewModel.deletePhoto(photo.getPhotoId());
+                    }
                     navigateToMainActivity();
                 })
                 .setNegativeButton(R.string.continue_button, (dialog, which) -> dialog.dismiss())
@@ -364,14 +369,19 @@ public class AddEditDetailedFragment extends Fragment {
         mBinding.btSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("", "onClick");
+                if(!mProperties.isEmpty()){
+                    Log.e("Properties before add", String.valueOf(mProperties.size()));
+                }
                 if(mPropertyId==0) {
-                    mAddEditDetailedViewModel.createProperty(type, price, surface, roomNumber, description, address, city, onSale, entryDate, soldDate, agent);
+                    Property newProperty = new Property(type, price, surface, roomNumber, description, address, city, onSale, entryDate, soldDate, agent, photoKey);
+                    mAddEditDetailedViewModel.createProperty(newProperty);
+                    mPropertyId = mProperties.size()+1;
+                    Log.e("Properties after add", String.valueOf(mProperties.size()));
                 }
                 else {
                     editProperty();
                 }
-                navigateToMainActivity();
+                navigateToPhotosFragment();
             }
         });
     }
@@ -393,6 +403,17 @@ public class AddEditDetailedFragment extends Fragment {
         mAddEditDetailedViewModel.editProperty(mProperty);
     }
 
+    private void navigateToPhotosFragment() {
+        final Bundle bundle = new Bundle();
+        bundle.putInt(ID, mPropertyId);
+        if (mAddEditPhotoFragment == null) {
+            mAddEditPhotoFragment = AddEditPhotoFragment.newInstance();
+            mAddEditPhotoFragment.setArguments(bundle);
+        }
+        if (!mAddEditPhotoFragment.isVisible()) {
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mAddEditPhotoFragment).commit();
+        }
+    }
     private void navigateToMainActivity() {
         Intent intent = new Intent(requireActivity(), MainActivity.class);
         startActivity(intent);
