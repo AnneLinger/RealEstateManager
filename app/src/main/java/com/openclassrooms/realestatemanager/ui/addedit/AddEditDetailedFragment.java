@@ -49,9 +49,6 @@ public class AddEditDetailedFragment extends Fragment {
     //For ui
     private FragmentDetailedDataBinding mBinding;
 
-    //For navigation
-    private NavController mNavController;
-
     //For data
     private AddEditDetailedViewModel mAddEditDetailedViewModel;
     private AddEditPhotoFragment mAddEditPhotoFragment;
@@ -70,8 +67,6 @@ public class AddEditDetailedFragment extends Fragment {
     private final String ADDRESS = "address";
     private String city;
     private final String CITY = "city";
-    private int photoNumber;
-    private final String PHOTO_NUMBER = "photo_number";
     private int roomNumber = 0;
     private String description = null;
     private String entryDate;
@@ -85,13 +80,9 @@ public class AddEditDetailedFragment extends Fragment {
     private TextInputEditText agentEditText;
     private TextInputEditText soldDateEditText;
     private final String ID = "id";
-    private int mPropertyId;
+    private long mPropertyId;
     private Property mProperty;
     private List<Property> mProperties = new ArrayList<>();
-    private List<Photo> mPhotos = new ArrayList<>();
-    private int photoKeyForBitmap = 1;
-    private List<String> mPhotoUriList = new ArrayList<>();
-
 
     public static AddEditDetailedFragment newInstance() {
         return new AddEditDetailedFragment();
@@ -147,30 +138,30 @@ public class AddEditDetailedFragment extends Fragment {
 
     private void checkIfPropertyAlreadyExists() {
         assert getArguments() != null;
-        if(!(getArguments().getInt(ID) == 0)) {
-            mPropertyId = getArguments().getInt(ID);
-            getProperty();
+        if(!(getArguments().getLong(ID) == 0)) {
+            mPropertyId = getArguments().getLong(ID);
+            observeProperties();
         }
     }
 
     private void observeProperties(){
-        Log.e("", "observeProperties");
         mAddEditDetailedViewModel.getProperties().observe(requireActivity(), this::getProperties);
     }
 
     private void getProperties(List<Property> propertiesList) {
-        Log.e("", propertiesList.toString());
         mProperties = propertiesList;
-        photoKey = String.valueOf(mProperties.size()+1);
+        if(mProperties.size()>0){
+            getProperty();
+        }
     }
 
     private void getProperty() {
         for(Property property : mProperties) {
             if(property.getId()==mPropertyId){
                 mProperty = property;
+                getPropertyData();
             }
         }
-        getPropertyData();
     }
 
     private void getPropertyData() {
@@ -211,14 +202,6 @@ public class AddEditDetailedFragment extends Fragment {
         surface = getArguments().getString(SURFACE);
         address = getArguments().getString(ADDRESS);
         city = getArguments().getString(CITY);
-        photoNumber = getArguments().getInt(PHOTO_NUMBER);
-        Log.e("photo number detailed", String.valueOf(photoNumber));
-        if(photoNumber>0) {
-            for(int i=1; i<=photoNumber; i++){
-                mPhotos.add(getArguments().getParcelable(String.valueOf(i)));
-            }
-            Log.e("photo uri", mPhotos.toString());
-        }
     }
 
     private void getDataFromForm() {
@@ -355,9 +338,6 @@ public class AddEditDetailedFragment extends Fragment {
                 .setMessage(R.string.confirm_cancel_message)
                 .setCancelable(false)
                 .setPositiveButton(R.string.cancel_button, (dialog, which) -> {
-                    for(Photo photo : mPhotos){
-                        mAddEditDetailedViewModel.deletePhoto(photo.getPhotoId());
-                    }
                     navigateToMainActivity();
                 })
                 .setNegativeButton(R.string.continue_button, (dialog, which) -> dialog.dismiss())
@@ -405,7 +385,7 @@ public class AddEditDetailedFragment extends Fragment {
 
     private void navigateToPhotosFragment() {
         final Bundle bundle = new Bundle();
-        bundle.putInt(ID, mPropertyId);
+        bundle.putLong(ID, mPropertyId);
         if (mAddEditPhotoFragment == null) {
             mAddEditPhotoFragment = AddEditPhotoFragment.newInstance();
             mAddEditPhotoFragment.setArguments(bundle);

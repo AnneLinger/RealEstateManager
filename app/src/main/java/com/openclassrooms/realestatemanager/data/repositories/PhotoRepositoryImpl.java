@@ -24,6 +24,11 @@ public class PhotoRepositoryImpl {
         mPhotoDao = photoDao;
     }
 
+    //Get the list of the photos
+    public LiveData<List<Photo>> getAllPhotos() {
+        return mPhotoDao.getAllPhotos();
+    }
+
     //Get property photos
     public LiveData<List<Photo>> getPropertyPhotos(Long propertyId) {
         return mPhotoDao.getPhotos(propertyId);

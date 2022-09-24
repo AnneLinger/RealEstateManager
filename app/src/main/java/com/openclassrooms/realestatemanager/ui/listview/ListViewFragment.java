@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.ui.listview;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentListViewBinding;
+import com.openclassrooms.realestatemanager.domain.models.Photo;
 import com.openclassrooms.realestatemanager.domain.models.Property;
 import com.openclassrooms.realestatemanager.ui.addedit.AddEditGeneralFragment;
 import com.openclassrooms.realestatemanager.ui.details.DetailsFragment;
@@ -38,6 +40,8 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.OnItem
     private ListViewModel mListViewModel;
     private AddEditGeneralFragment mAddEditGeneralFragment;
     private Context mContext;
+    private List<Property> mProperties;
+    private List<Photo> mPhotos;
 
     public static ListViewFragment newInstance() {
         return new ListViewFragment();
@@ -54,7 +58,7 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.OnItem
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         configureViewModel();
-        getProperties();
+        observeProperties();
         addAProperty();
     }
 
@@ -77,16 +81,30 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.OnItem
         mListViewModel = new ViewModelProvider(requireActivity()).get(ListViewModel.class);
     }
 
-    private void getProperties(){
-        mListViewModel.getProperties().observe(requireActivity(), this::initRecyclerView);
+    private void observeProperties(){
+        mListViewModel.getProperties().observe(requireActivity(), this::getProperties);
     }
 
-    private void initRecyclerView(List<Property> properties) {
+    private void getProperties(List<Property> propertiesList) {
+        mProperties = propertiesList;
+        observePhotos();
+    }
+
+    private void observePhotos() {
+        mListViewModel.getAllPhotos().observe(requireActivity(), this::getPhotos);
+    }
+
+    private void getPhotos(List<Photo> photos) {
+        mPhotos = photos;
+        initRecyclerView(mProperties, mPhotos);
+    }
+
+    private void initRecyclerView(List<Property> properties, List<Photo> photos) {
         mRecyclerView = mBinding.rvListView;
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.VERTICAL));
-        mRecyclerView.setAdapter(new ListViewAdapter(properties, this));
+        mRecyclerView.setAdapter(new ListViewAdapter(properties, photos, this));
     }
 
     private void addAProperty() {

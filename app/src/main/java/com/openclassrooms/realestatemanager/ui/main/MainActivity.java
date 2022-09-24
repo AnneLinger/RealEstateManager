@@ -87,9 +87,15 @@ public class MainActivity extends AppCompatActivity {
         mBinding.navigationView.setNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.searchFragment:
+                    if (mSearchFragment == null) {
+                        mSearchFragment = SearchFragment.newInstance();
+                    }
                     navigateToFragment(mSearchFragment, R.string.search_title);
                     return true;
                 case R.id.simulatorFragment:
+                    if (mSimulatorFragment == null) {
+                        mSimulatorFragment = SimulatorFragment.newInstance();
+                    }
                     navigateToFragment(mSimulatorFragment, R.string.simulator_title);
                     return true;
             }
@@ -128,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (!mListViewFragment.isVisible()) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mListViewFragment).commit();
-                    //mNavController.navigate(R.id.action_mapViewFragment3_to_listViewFragment);
                 }
                 return true;
             case R.id.item_map_view:
@@ -137,7 +142,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (!mMapViewFragment.isVisible()) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mMapViewFragment).commit();
-                    //mNavController.navigate(R.id.action_listViewFragment_to_mapViewFragment3);
                 }
                 return true;
         }
@@ -145,9 +149,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void navigateToFragment(Fragment fragment, int title) {
-        if (fragment == null) {
-            fragment = SearchFragment.newInstance();
-        }
         if (!fragment.isVisible()) {
             getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, fragment).commit();
         }

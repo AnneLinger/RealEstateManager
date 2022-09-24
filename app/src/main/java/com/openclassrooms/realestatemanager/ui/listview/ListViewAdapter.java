@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.ui.listview;
 
 import android.annotation.SuppressLint;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +12,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.domain.models.Photo;
 import com.openclassrooms.realestatemanager.domain.models.Property;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,10 +25,12 @@ import java.util.List;
 public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHolder> {
 
     private List<Property> mProperties;
+    private List<Photo> mPhotos;
     private OnItemClickListener mListener;
 
-    public ListViewAdapter(List<Property> properties, OnItemClickListener listener) {
+    public ListViewAdapter(List<Property> properties, List<Photo> photos, OnItemClickListener listener) {
         mProperties = properties;
+        mPhotos = photos;
         mListener = listener;
     }
 
@@ -38,7 +43,7 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ListViewAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        holder.displayProperty(mProperties.get(position));
+        holder.displayProperty(mProperties.get(position), mPhotos);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,8 +73,16 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
             price = itemView.findViewById(R.id.tv_price);
         }
 
-        private void displayProperty(Property property) {
-            //TODO set also photo ! !
+        private void displayProperty(Property property, List<Photo> photos) {
+            List<Photo> propertyPhotos = new ArrayList<>();
+            for(Photo photo : photos) {
+                if(photo.getPropertyId()==property.getId()) {
+                    propertyPhotos.add(photo);
+                }
+            }
+            if(propertyPhotos.size()>0) {
+                photo.setImageURI(Uri.parse(propertyPhotos.get(0).getPhotoUri()));
+            }
             type.setText(property.getType());
             city.setText(property.getCity());
             price.setText(String.format("$%s", property.getPrice()));

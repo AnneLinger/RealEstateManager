@@ -18,6 +18,10 @@ import java.util.List;
 @Dao
 public interface PhotoDao {
 
+    //Recover all the photos
+    @Query("SELECT * FROM photo_table")
+    LiveData<List<Photo>> getAllPhotos();
+
     //Recover all the photos from the db for a property
     @Query("SELECT * FROM photo_table WHERE property_id = :propertyId")
     LiveData<List<Photo>> getPhotos(Long propertyId);

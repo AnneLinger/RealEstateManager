@@ -130,7 +130,6 @@ public class AddEditGeneralFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         initUi();
         configureViewModel();
-        observeProperties();
         checkIfPropertyAlreadyExists();
         getDataFromForm();
         navigateToNextFragmentAddEdit();
@@ -167,12 +166,10 @@ public class AddEditGeneralFragment extends Fragment {
     }
 
     private void observeProperties(){
-        Log.e("", "observeProperties");
         mAddEditGeneralViewModel.getProperties().observe(requireActivity(), this::getProperties);
     }
 
     private void getProperties(List<Property> propertiesList) {
-        Log.e("", propertiesList.toString());
         mProperties = propertiesList;
         getProperty();
     }

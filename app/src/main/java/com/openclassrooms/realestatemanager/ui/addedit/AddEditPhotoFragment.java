@@ -57,7 +57,7 @@ public class AddEditPhotoFragment extends Fragment {
 
     //For data
     private AddEditPhotoViewModel mAddEditPhotoViewModel;
-    private int mPropertyId = 0;
+    private long mPropertyId = 0;
     private Property mProperty;
     private List<Property> mProperties;
     private List<String> mPhotoUriList = new ArrayList<>();
@@ -94,7 +94,6 @@ public class AddEditPhotoFragment extends Fragment {
         initUi();
         configureViewModel();
         observeProperties();
-        fillFormWithPropertyPhotos();
         checkPermissionsToAddPhoto();
         finishAddEdit();
     }
@@ -123,24 +122,24 @@ public class AddEditPhotoFragment extends Fragment {
     }
 
     private void observeProperties(){
-        Log.e("", "observeProperties");
         mAddEditPhotoViewModel.getProperties().observe(requireActivity(), this::getProperties);
     }
 
     private void getProperties(List<Property> propertiesList) {
-        Log.e("", propertiesList.toString());
         mProperties = propertiesList;
-        getProperty();
+        if(mProperties.size()>0) {
+            getProperty();
+        }
     }
 
     private void getProperty() {
-        mPropertyId = getArguments().getInt(ID);
+        assert getArguments() != null;
+        mPropertyId = getArguments().getLong(ID);
         for(Property property : mProperties) {
             if(property.getId()==mPropertyId){
                 mProperty = property;
             }
         }
-        Log.e("Address in photos", String.valueOf(mProperty.getId()));
         observePropertyPhotos();
     }
 
@@ -149,10 +148,10 @@ public class AddEditPhotoFragment extends Fragment {
     }
 
     private void getPropertyPhotos(List<Photo> photos) {
-        Log.e("photos after observe", photos.toString());
         if (!photos.isEmpty()) {
             mPhotos.addAll(photos);
         }
+        fillFormWithPropertyPhotos();
     }
 
     private void fillFormWithPropertyPhotos() {
@@ -215,10 +214,7 @@ public class AddEditPhotoFragment extends Fragment {
                 case 0:
                     if (resultCode == RESULT_OK && data != null) {
                         Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
-                        Log.e("photo bitmap", selectedImage.toString());
                         Uri tempUri = getImageUri(requireContext().getApplicationContext(), selectedImage);
-                        //mPhotoUriList.add(tempUri.toString());
-                        //Log.e("photo uri", mPhotoUriList.toString());
                         addPhotoLabel(tempUri.toString());
 
                     }
@@ -235,7 +231,6 @@ public class AddEditPhotoFragment extends Fragment {
                                 String picturePath = cursor.getString(columnIndex);
                                 mPhotoUriList.add(selectedImage.toString());
                                 cursor.close();
-                                Log.e("photo uri", mPhotoUriList.toString());
                                 addPhotoLabel(selectedImage.toString());
                             }
                         }
@@ -265,12 +260,9 @@ public class AddEditPhotoFragment extends Fragment {
                 .setSingleChoiceItems(mCharSequences, 6, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //String tempsLabel = mCharSequences[which].toString();
-                        //mPhotosLabels.add(tempsLabel);
                         Photo newPhoto = mAddEditPhotoViewModel.createPhoto((long) mPropertyId, uriString, mCharSequences[which].toString());
                         mPhotos.add(newPhoto);
                         managePhotoChipGroup(newPhoto);
-                        //Log.e("photo label list", mPhotosLabels.toString());
                         dialog.dismiss();
                     }
                 })
@@ -279,10 +271,8 @@ public class AddEditPhotoFragment extends Fragment {
     }
 
     private void managePhotoChipGroup(Photo photo) {
-        Log.e("manage photo chip group", photo.getPhotoUri().toString());
         LayoutInflater inflater = LayoutInflater.from(mBinding.chipGroup.getContext());
         Chip chip = (Chip) inflater.inflate(R.layout.chip_entry, mBinding.chipGroup, false);
-        //chip.setText(MessageFormat.format("{0}{1}", getString(R.string.photo), String.valueOf(mPhotoUriList.size()) + " " + label));
         chip.setText(MessageFormat.format("{0} {1} {2}", getString(R.string.photo), photo.getPhotoUri().substring(photo.getPhotoUri().length() - 5), photo.getPhotoLabel()));
         chip.setCloseIconVisible(true);
         mBinding.chipGroup.addView(chip);
@@ -292,8 +282,6 @@ public class AddEditPhotoFragment extends Fragment {
             public void onClick(View view) {
                 ChipUtils.deleteAChipFromAView((Chip) view);
                 mPhotos.remove(photo);
-                //ChipUtils.deleteAChipFromAList((Chip) view, mPhotoUriList);
-                //ChipUtils.deleteAChipFromAList((Chip) view, mPhotosLabels);
             }
         });
     }
