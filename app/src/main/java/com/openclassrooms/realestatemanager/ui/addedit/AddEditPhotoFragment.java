@@ -5,6 +5,7 @@ import static android.app.Activity.RESULT_OK;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,7 +15,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +26,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -57,11 +58,10 @@ public class AddEditPhotoFragment extends Fragment {
 
     //For data
     private AddEditPhotoViewModel mAddEditPhotoViewModel;
-    private long mPropertyId = 0;
+    private long mPropertyId;
     private Property mProperty;
     private List<Property> mProperties;
     private List<String> mPhotoUriList = new ArrayList<>();
-    private final String PHOTO_NUMBER = "photo_number";
     private final CharSequence[] mCharSequences = new CharSequence[] {"Exterior", "Kitchen", "Living Room", "Bedroom", "Bathroom", "Garden", "Else"};
     private List<Photo> mPhotos = new ArrayList<>();
     private final String ID = "id";
@@ -93,7 +93,8 @@ public class AddEditPhotoFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         initUi();
         configureViewModel();
-        observeProperties();
+        //observeProperties();
+        observePropertyPhotos();
         checkPermissionsToAddPhoto();
         finishAddEdit();
     }
@@ -140,15 +141,39 @@ public class AddEditPhotoFragment extends Fragment {
                 mProperty = property;
             }
         }
-        observePropertyPhotos();
+        //observePropertyPhotos();
     }
 
     private void observePropertyPhotos() {
-        mAddEditPhotoViewModel.getPropertyPhotos((long)mPropertyId).observe(requireActivity(), this::getPropertyPhotos);
+        assert getArguments() != null;
+        mPropertyId = getArguments().getLong(ID);
+        //mAddEditPhotoViewModel.getPropertyPhotos(mPropertyId).observe((getViewLifecycleOwner()), observer);
+        mAddEditPhotoViewModel.getPropertyPhotos(mPropertyId).observe(getViewLifecycleOwner(), this::getPropertyPhotos);
     }
+
+    Observer<List<Photo>> observer = new Observer<List<Photo>>() {
+        @Override
+        public void onChanged(@Nullable List<Photo> photos) {
+            /**if (!photos.isEmpty() && mPhotos.isEmpty()) {
+                mPhotos.addAll(photos);
+                fillFormWithPropertyPhotos();
+            }
+            if(!mPhotos.isEmpty()){
+                mPhotos.removeAll(photos);
+                mAddEditPhotoViewModel.getPropertyPhotos(mPropertyId).removeObservers(getViewLifecycleOwner());
+            }*/
+            mPhotos.clear();
+            assert photos != null;
+            mPhotos.addAll(photos);
+            mAddEditPhotoViewModel.getPropertyPhotos(mPropertyId).removeObservers(getViewLifecycleOwner());
+            fillFormWithPropertyPhotos();
+        }
+    };
 
     private void getPropertyPhotos(List<Photo> photos) {
         if (!photos.isEmpty()) {
+            mPhotos.clear();
+            mBinding.chipGroup.removeAllViews();
             mPhotos.addAll(photos);
         }
         fillFormWithPropertyPhotos();
@@ -158,6 +183,7 @@ public class AddEditPhotoFragment extends Fragment {
         for (Photo photo : mPhotos) {
             managePhotoChipGroup(photo);
         }
+        mAddEditPhotoViewModel.getPropertyPhotos(mPropertyId).removeObservers(getViewLifecycleOwner());
     }
 
     private void checkPermissionsToAddPhoto() {
@@ -181,7 +207,7 @@ public class AddEditPhotoFragment extends Fragment {
     }
 
     private void addPhoto() {
-        final CharSequence[] optionsMenu = {"Take Photo", "Choose from Gallery", "Exit" }; // create a menuOption Array
+        final CharSequence[] optionsMenu = {"Take Photo", "Choose from Gallery"}; // create a menuOption Array
         // create a dialog for showing the optionsMenu
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         // set the items in builder
@@ -197,9 +223,6 @@ public class AddEditPhotoFragment extends Fragment {
                     // choose from  external storage
                     Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(pickPhoto , 1);
-                }
-                else if (optionsMenu[i].equals("Exit")) {
-                    dialogInterface.dismiss();
                 }
             }
         });
@@ -227,9 +250,8 @@ public class AddEditPhotoFragment extends Fragment {
                             Cursor cursor = requireContext().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
                             if (cursor != null) {
                                 cursor.moveToFirst();
-                                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                                String picturePath = cursor.getString(columnIndex);
-                                mPhotoUriList.add(selectedImage.toString());
+                                //int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                                //String picturePath = cursor.getString(columnIndex);
                                 cursor.close();
                                 addPhotoLabel(selectedImage.toString());
                             }
@@ -241,7 +263,6 @@ public class AddEditPhotoFragment extends Fragment {
     }
 
     public Uri getImageUri(Context inContext, Bitmap inImage) {
-        Log.e("getImageUri", inImage.toString());
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
 
@@ -249,7 +270,6 @@ public class AddEditPhotoFragment extends Fragment {
         Date date = new Date(System.currentTimeMillis());
 
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title" + date, "New picture" + date);
-        Log.e("path", path);
         return Uri.parse(path);
     }
 
@@ -260,8 +280,8 @@ public class AddEditPhotoFragment extends Fragment {
                 .setSingleChoiceItems(mCharSequences, 6, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Photo newPhoto = mAddEditPhotoViewModel.createPhoto((long) mPropertyId, uriString, mCharSequences[which].toString());
-                        mPhotos.add(newPhoto);
+                        Photo newPhoto = mAddEditPhotoViewModel.createPhoto(mPropertyId, uriString, mCharSequences[which].toString());
+                        //mPhotos.add(newPhoto);
                         managePhotoChipGroup(newPhoto);
                         dialog.dismiss();
                     }
@@ -281,7 +301,8 @@ public class AddEditPhotoFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 ChipUtils.deleteAChipFromAView((Chip) view);
-                mPhotos.remove(photo);
+                mAddEditPhotoViewModel.deletePhoto(photo.getPhotoId());
+                //mPhotos.remove(photo);
             }
         });
     }

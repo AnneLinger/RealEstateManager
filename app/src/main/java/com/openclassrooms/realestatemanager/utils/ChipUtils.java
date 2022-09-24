@@ -8,7 +8,9 @@ import java.util.List;
 /**
  * Useful methods for chips
  */
+
 public class ChipUtils {
+
     //Remove a chip from a view
     public static void deleteAChipFromAView(Chip chip) {
         ChipGroup parent = (ChipGroup) chip.getParent();
