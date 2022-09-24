@@ -4,16 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_list_view"
     android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:paddingVertical="16dp">
+    android:paddingTop="@dimen/basic_margin"
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/im_photo_rv"
-        android:layout_width="128dp"
-        android:layout_height="128dp"
+        android:layout_width="156dp"
+        android:layout_height="match_parent"
         android:contentDescription="@string/property_photo"
-        app:layout_constraintBottom_toTopOf="@id/tv_photo_description"
         app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         android:src="@drawable/ic_baseline_house_24"
         app:layout_constraintTop_toTopOf="parent" />
@@ -22,7 +22,6 @@
         android:id="@+id/tv_photo_description"
         android:layout_width="150dp"
         android:layout_height="20dp"
-        android:layout_marginBottom="@dimen/basic_margin"
         android:layout_marginLeft="4dp"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"

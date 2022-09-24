@@ -12,13 +12,13 @@
         android:id="@+id/tv_type_details"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/basic_margin"
         android:textSize="24sp"
         android:textStyle="bold"
         http:layout_constraintTop_toTopOf="parent"
         http:layout_constraintStart_toStartOf="parent"
         http:layout_constraintBottom_toTopOf="@id/rv_photos"
         android:layout_marginLeft="@dimen/basic_margin"
-        android:layout_marginTop="@dimen/basic_margin"
         tools:text="@string/app_name"/>
 
     <TextView
@@ -36,27 +36,27 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_photos"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="188dp"
+        android:layout_marginTop="@dimen/basic_margin"
         android:layout_marginHorizontal="@dimen/basic_margin"
         android:orientation="horizontal"
         app:layoutManager="LinearLayoutManager"
         http:layout_constraintBottom_toTopOf="@id/tv_description_title"
         http:layout_constraintTop_toBottomOf="@id/tv_type_details"
         tools:context=".ui.details.DetailsFragment"
-        tools:layout_editor_absoluteX="-119dp"
         tools:listitem="@layout/item_photo" />
 
     <TextView
         android:id="@+id/tv_description_title"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="27dp"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:layout_marginStart="@dimen/basic_margin"
+        android:text="@string/description"
         android:textSize="20sp"
         android:textStyle="bold"
-        http:layout_constraintTop_toBottomOf="@id/rv_photos"
         http:layout_constraintStart_toStartOf="parent"
-        http:layout_constraintBottom_toTopOf="@id/tv_description_detail"
-        android:layout_marginStart="@dimen/basic_margin"
-        android:text="@string/description"/>
+        http:layout_constraintTop_toBottomOf="@id/rv_photos" />
 
     <TextView
         android:id="@+id/tv_description_detail"
@@ -66,7 +66,6 @@
         android:paddingHorizontal="@dimen/basic_margin"
         http:layout_constraintTop_toBottomOf="@id/tv_description_title"
         http:layout_constraintStart_toStartOf="parent"
-        http:layout_constraintBottom_toTopOf="@id/tv_surface_detail"
         http:layout_constraintEnd_toEndOf="parent"
         tools:text="@string/lorem_ipsum"
         android:justificationMode="inter_word"/>
