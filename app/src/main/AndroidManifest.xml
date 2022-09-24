@@ -29,6 +29,15 @@
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
             android:value=".ui.main.MainActivity" />
+        <!-- NOTIFICATION SERVICE -->
+        <receiver
+            android:name=".utils.NotificationReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

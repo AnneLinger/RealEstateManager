@@ -1,7 +1,12 @@
 package com.openclassrooms.realestatemanager.ui.listview;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +14,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
@@ -22,6 +28,7 @@ import com.openclassrooms.realestatemanager.domain.models.Photo;
 import com.openclassrooms.realestatemanager.domain.models.Property;
 import com.openclassrooms.realestatemanager.ui.addedit.AddEditGeneralFragment;
 import com.openclassrooms.realestatemanager.ui.details.DetailsFragment;
+import com.openclassrooms.realestatemanager.utils.NotificationReceiver;
 import com.openclassrooms.realestatemanager.viewmodels.ListViewModel;
 
 import java.util.List;
@@ -109,6 +116,7 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.OnItem
 
     private void addAProperty() {
         mBinding.fabAdd.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
                 if (mAddEditGeneralFragment == null) {
@@ -117,7 +125,6 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.OnItem
                 if (!mAddEditGeneralFragment.isVisible()) {
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mAddEditGeneralFragment).commit();
                 }
-                //mNavController.navigate(R.id.action_listViewFragment_to_addEditGeneralFragment);
             }
         });
     }

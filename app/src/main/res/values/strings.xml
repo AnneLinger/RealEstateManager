@@ -70,4 +70,7 @@
     <string name="bathroom">Bathroom</string>
     <string name="garden">Garden</string>
     <string name="title">Title</string>
+    <string name="notification_text">Property saved with success !</string>
+    <string name="notification_title">Real Estate Manager</string>
+    <string name="default_notification_channel_id">com.google.firebase.messaging.default_notification_channel_id</string>
 </resources>

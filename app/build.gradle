@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: 'com.google.gms.google-services'
 //apply plugin: 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 
 android {
@@ -54,4 +55,8 @@ dependencies {
     //Room
     implementation "androidx.room:room-runtime:2.4.3"
     annotationProcessor "androidx.room:room-compiler:2.4.3"
+
+    //Firebase
+    implementation platform('com.google.firebase:firebase-bom:30.4.1')
+    implementation 'com.google.firebase:firebase-analytics'
 }

@@ -4,8 +4,11 @@ import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
 import android.Manifest;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,7 +16,9 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +28,9 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -38,6 +45,7 @@ import com.openclassrooms.realestatemanager.domain.models.Photo;
 import com.openclassrooms.realestatemanager.domain.models.Property;
 import com.openclassrooms.realestatemanager.ui.main.MainActivity;
 import com.openclassrooms.realestatemanager.utils.ChipUtils;
+import com.openclassrooms.realestatemanager.utils.NotificationReceiver;
 import com.openclassrooms.realestatemanager.viewmodels.AddEditPhotoViewModel;
 
 import java.io.ByteArrayOutputStream;
@@ -51,6 +59,7 @@ import java.util.Map;
 *Fragment to add or edit property photos
 */
 
+@RequiresApi(api = Build.VERSION_CODES.M)
 public class AddEditPhotoFragment extends Fragment {
 
     //For ui
@@ -322,8 +331,18 @@ public class AddEditPhotoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 navigateToMainActivity();
+                scheduleNotification(requireContext());
             }
         });
+    }
+
+    private void scheduleNotification (Context context) {
+        Intent notificationIntent = new Intent( context, NotificationReceiver.class) ;
+        PendingIntent pendingIntent = PendingIntent. getBroadcast ( context, 0 , notificationIntent , PendingIntent. FLAG_IMMUTABLE ) ;
+        long futureInMillis = SystemClock. elapsedRealtime ();
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context. ALARM_SERVICE ) ;
+        assert alarmManager != null;
+        alarmManager.set(AlarmManager. ELAPSED_REALTIME_WAKEUP , futureInMillis , pendingIntent) ;
     }
 
     //Dialog to alert about the add/edit annulment
