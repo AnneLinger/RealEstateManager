@@ -22,6 +22,7 @@ import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailsBinding;
 import com.openclassrooms.realestatemanager.domain.models.Photo;
 import com.openclassrooms.realestatemanager.domain.models.Property;
+import com.openclassrooms.realestatemanager.domain.models.nearbysearchpojo.Result;
 import com.openclassrooms.realestatemanager.ui.addedit.AddEditGeneralFragment;
 import com.openclassrooms.realestatemanager.ui.main.MainActivity;
 import com.openclassrooms.realestatemanager.utils.GeocoderUtils;
@@ -29,6 +30,7 @@ import com.openclassrooms.realestatemanager.viewmodels.DetailsViewModel;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -49,6 +51,11 @@ public class DetailsFragment extends Fragment {
     private List<Property> mProperties;
     private AddEditGeneralFragment mAddEditGeneralFragment;
     private List<Photo> mPhotos = new ArrayList<>();
+    private double mLatitude;
+    private double mLongitude;
+    private List<String> mSchools = new ArrayList();
+    private List<String> mSupermarkets = new ArrayList();
+    private List<String> mParks = new ArrayList();
 
     public static DetailsFragment newInstance(long propertyId) {
         DetailsFragment detailsFragment = new DetailsFragment();
@@ -140,6 +147,7 @@ public class DetailsFragment extends Fragment {
             mBinding.tvSaleDetail.setText(R.string.yes);
         }
         requestToGetBitmapForMap();
+        requestPointsOfInterest();
     }
 
     private void observePropertyPhotos() {
@@ -162,11 +170,9 @@ public class DetailsFragment extends Fragment {
     }
     
     private void requestToGetBitmapForMap() {
-        double latitude = GeocoderUtils.getLatitudeFromAddress(mProperty.getAddress(), requireContext());
-        double longitude = GeocoderUtils.getLongitudeFromAddress(mProperty.getAddress(), requireContext());
-        Log.e("bitmap after observe", String.valueOf(latitude));
-        Log.e("bitmap after observe", String.valueOf(longitude));
-        mDetailsViewModel.getBitmapFromApi(latitude, longitude);
+        mLatitude = GeocoderUtils.getLatitudeFromAddress(mProperty.getAddress(), requireContext());
+        mLongitude = GeocoderUtils.getLongitudeFromAddress(mProperty.getAddress(), requireContext());
+        mDetailsViewModel.getBitmapFromApi(mLatitude, mLongitude);
         observeBitmapReturn();
     }
 
@@ -175,8 +181,63 @@ public class DetailsFragment extends Fragment {
     }
 
     private void updateMapWithBitmap(Bitmap bitmap){
-        Log.e("bitmap after observe", bitmap.toString());
         mBinding.imMapDetails.setImageBitmap(bitmap);
+    }
+
+    private void requestPointsOfInterest() {
+        String propertyLocationString = mLatitude + "," + mLongitude;
+        mDetailsViewModel.fetchNearbySearchSchools(propertyLocationString);
+        mDetailsViewModel.fetchNearbySearchSupermarkets(propertyLocationString);
+        mDetailsViewModel.fetchNearbySearchParks(propertyLocationString);
+        observeSchools();
+        observeSupermarkets();
+        observeParks();
+    }
+
+    private void observeSchools() {
+        mDetailsViewModel.getNearbySearchSchoolsResponseLiveData().observe(getViewLifecycleOwner(), this::updatePointsOfInterestWithSchools);
+    }
+
+    private void updatePointsOfInterestWithSchools(List<Result> results) {
+        for(Result result : results) {
+            mSchools.add(result.getName());
+        }
+        updateTextViewWithPointsOfInterest();
+    }
+
+    private void observeSupermarkets() {
+        mDetailsViewModel.getNearbySearchSupermarketsResponseLiveData().observe(this, this::updatePointsOfInterestWithSupermarkets);
+    }
+
+    private void updatePointsOfInterestWithSupermarkets(List<Result> results) {
+        for(Result result : results) {
+            mSupermarkets.add(result.getName());
+        }
+        updateTextViewWithPointsOfInterest();
+    }
+
+    private void observeParks() {
+        mDetailsViewModel.getNearbySearchParksResponseLiveData().observe(getViewLifecycleOwner(), this::updatePointsOfInterestWithParks);
+    }
+
+    private void updatePointsOfInterestWithParks(List<Result> results) {
+        for(Result result : results) {
+            mParks.add(result.getName());
+        }
+        updateTextViewWithPointsOfInterest();
+    }
+
+    private void updateTextViewWithPointsOfInterest() {
+        List<String> pointsOfInterestList = new ArrayList<>();
+        pointsOfInterestList.addAll(mSchools);
+        pointsOfInterestList.addAll(mSupermarkets);
+        pointsOfInterestList.addAll(mParks);
+        String schools = getString(R.string.schools) + Arrays.toString(mSchools.toArray()).replace("[", "").replace("]", "");
+        String supermarkets = getString(R.string.shops) + Arrays.toString(mSupermarkets.toArray()).replace("[", "").replace("]", "");
+        String parks = getString(R.string.parks) + Arrays.toString(mParks.toArray()).replace("[", "").replace("]", "");
+        mBinding.tvPointsInterestDetailSchools.setText(schools);
+        mBinding.tvPointsInterestDetailSupermarkets.setText(supermarkets);
+        mBinding.tvPointsInterestDetailParks.setText(parks);
     }
 
     private void editProperty() {

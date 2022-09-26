@@ -26,7 +26,7 @@ import retrofit2.Response;
 public class StaticMapRepositoryImpl {
 
     private static final String GOOGLE_PLACE_API_KEY = BuildConfig.MAPS_API_KEY;
-    private final int zoom = 13;
+    private final int zoom = 12;
     private final String size = "180x220";
     private final RetrofitBuilder mRetrofitBuilder = new RetrofitBuilder();
     final MutableLiveData<Bitmap> mBitmapMutableLiveData = new MutableLiveData<>();
@@ -40,17 +40,14 @@ public class StaticMapRepositoryImpl {
     }
 
     public void getBitmapFromApi(double latitude, double longitude) {
-        Log.e("getBitmapRepo", "getBR");
         String center = String.valueOf(latitude) + "," + String.valueOf(longitude);
-        Log.e("center in repo", center);
 
-        StaticMapApi staticMapApi = mRetrofitBuilder.buildRetrofit();
+        StaticMapApi staticMapApi = mRetrofitBuilder.buildRetrofitForStaticMap();
         Call<ResponseBody> call = staticMapApi.getBitmap(size, center, zoom, GOOGLE_PLACE_API_KEY);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 assert response.body() != null;
-                Log.e("bitmap after observe", "Response ok");
                 Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
                 mBitmapMutableLiveData.setValue(bitmap);
             }

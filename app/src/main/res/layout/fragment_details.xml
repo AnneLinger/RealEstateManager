@@ -371,8 +371,8 @@
         android:layout_marginTop="@dimen/basic_margin"/>
 
     <TextView
-        android:id="@+id/tv_points_interest_detail"
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_points_interest_detail_schools"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="16sp"
         http:layout_constraintTop_toBottomOf="@id/im_points_interest_icon"
@@ -380,7 +380,33 @@
         http:layout_constraintEnd_toEndOf="parent"
         android:justificationMode="inter_word"
         tools:text="@string/lorem_ipsum"
-        android:layout_marginLeft="@dimen/basic_margin"
+        android:layout_marginHorizontal="@dimen/basic_margin"
+        android:layout_marginTop="@dimen/basic_margin"/>
+
+    <TextView
+        android:id="@+id/tv_points_interest_detail_supermarkets"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        http:layout_constraintTop_toBottomOf="@id/tv_points_interest_detail_schools"
+        http:layout_constraintStart_toEndOf="@id/im_map_details"
+        http:layout_constraintEnd_toEndOf="parent"
+        android:justificationMode="inter_word"
+        tools:text="@string/lorem_ipsum"
+        android:layout_marginHorizontal="@dimen/basic_margin"
+        android:layout_marginTop="@dimen/basic_margin"/>
+
+    <TextView
+        android:id="@+id/tv_points_interest_detail_parks"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        http:layout_constraintTop_toBottomOf="@id/tv_points_interest_detail_supermarkets"
+        http:layout_constraintStart_toEndOf="@id/im_map_details"
+        http:layout_constraintEnd_toEndOf="parent"
+        android:justificationMode="inter_word"
+        tools:text="@string/lorem_ipsum"
+        android:layout_marginHorizontal="@dimen/basic_margin"
         android:layout_marginTop="@dimen/basic_margin"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

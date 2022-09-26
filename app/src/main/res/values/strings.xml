@@ -75,4 +75,7 @@
     <string name="default_notification_channel_id">com.google.firebase.messaging.default_notification_channel_id</string>
     <string name="my_position">My position</string>
     <string name="property_location_in_map">Property location in map</string>
+    <string name="schools">Schools :\ </string>
+    <string name="shops">Supermarkets :\ </string>
+    <string name="parks">Parks :\ </string>
 </resources>
