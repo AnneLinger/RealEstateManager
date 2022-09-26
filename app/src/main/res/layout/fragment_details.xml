@@ -337,13 +337,24 @@
         http:layout_constraintEnd_toEndOf="parent"/>
 
     <ImageView
+        android:id="@+id/im_map_details"
+        android:layout_width="180dp"
+        android:layout_height="220dp"
+        android:contentDescription="@string/property_location_in_map"
+        http:layout_constraintStart_toStartOf="parent"
+        android:layout_marginLeft="@dimen/basic_margin"
+        http:layout_constraintBottom_toBottomOf="parent"
+        http:layout_constraintTop_toBottomOf="@id/view_divider"
+        android:layout_marginTop="@dimen/basic_margin" />
+
+    <ImageView
         android:id="@+id/im_points_interest_icon"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginLeft="@dimen/basic_margin"
         android:contentDescription="@string/property_photo"
         http:layout_constraintTop_toBottomOf="@id/view_divider"
-        app:layout_constraintStart_toStartOf="parent"
+        http:layout_constraintStart_toEndOf="@id/im_map_details"
         android:layout_marginTop="@dimen/basic_margin"
         android:src="@drawable/ic_baseline_lightbulb_24"/>
 
@@ -354,18 +365,19 @@
         android:textSize="16sp"
         android:textStyle="bold"
         http:layout_constraintTop_toBottomOf="@id/view_divider"
-        http:layout_constraintStart_toEndOf="@id/im_sale_icon"
+        http:layout_constraintStart_toEndOf="@id/im_points_interest_icon"
         android:text="@string/points_of_interest"
         android:layout_marginLeft="@dimen/basic_margin"
         android:layout_marginTop="@dimen/basic_margin"/>
 
     <TextView
         android:id="@+id/tv_points_interest_detail"
-        android:layout_width="166dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
         http:layout_constraintTop_toBottomOf="@id/im_points_interest_icon"
-        http:layout_constraintStart_toStartOf="parent"
+        http:layout_constraintStart_toEndOf="@id/im_map_details"
+        http:layout_constraintEnd_toEndOf="parent"
         android:justificationMode="inter_word"
         tools:text="@string/lorem_ipsum"
         android:layout_marginLeft="@dimen/basic_margin"

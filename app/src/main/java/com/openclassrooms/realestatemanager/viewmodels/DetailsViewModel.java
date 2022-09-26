@@ -1,10 +1,14 @@
 package com.openclassrooms.realestatemanager.viewmodels;
 
+import android.graphics.Bitmap;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.openclassrooms.realestatemanager.data.repositories.PhotoRepositoryImpl;
 import com.openclassrooms.realestatemanager.data.repositories.PropertyRepositoryImpl;
+import com.openclassrooms.realestatemanager.data.repositories.StaticMapRepositoryImpl;
 import com.openclassrooms.realestatemanager.domain.models.Photo;
 import com.openclassrooms.realestatemanager.domain.models.Property;
 
@@ -25,14 +29,16 @@ public class DetailsViewModel extends ViewModel {
     //For data
     private final PropertyRepositoryImpl mPropertyRepository;
     private final PhotoRepositoryImpl mPhotoRepository;
+    private final StaticMapRepositoryImpl mStaticMapRepository;
 
     //For threads
     private final Executor mExecutor;
 
     @Inject
-    public DetailsViewModel(PropertyRepositoryImpl propertyRepository, PhotoRepositoryImpl photoRepository, Executor executor) {
+    public DetailsViewModel(PropertyRepositoryImpl propertyRepository, PhotoRepositoryImpl photoRepository, StaticMapRepositoryImpl staticMapRepository, Executor executor) {
         mPropertyRepository = propertyRepository;
         mPhotoRepository = photoRepository;
+        mStaticMapRepository = staticMapRepository;
         mExecutor = executor;
     }
 
@@ -63,5 +69,15 @@ public class DetailsViewModel extends ViewModel {
         mExecutor.execute(() -> {
             mPhotoRepository.deletePhoto(photoId);
         });
+    }
+
+    //.....................................For static map............................................
+
+    public void getBitmapFromApi(double latitude, double longitude) {
+        mStaticMapRepository.getBitmapFromApi(latitude, longitude);
+    }
+
+    public LiveData<Bitmap> getBitmapLiveData() {
+        return mStaticMapRepository.getBitmapLiveData();
     }
 }

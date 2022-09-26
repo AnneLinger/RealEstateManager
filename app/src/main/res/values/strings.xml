@@ -74,4 +74,5 @@
     <string name="notification_title">Real Estate Manager</string>
     <string name="default_notification_channel_id">com.google.firebase.messaging.default_notification_channel_id</string>
     <string name="my_position">My position</string>
+    <string name="property_location_in_map">Property location in map</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.ui.details;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import com.openclassrooms.realestatemanager.domain.models.Photo;
 import com.openclassrooms.realestatemanager.domain.models.Property;
 import com.openclassrooms.realestatemanager.ui.addedit.AddEditGeneralFragment;
 import com.openclassrooms.realestatemanager.ui.main.MainActivity;
+import com.openclassrooms.realestatemanager.utils.GeocoderUtils;
 import com.openclassrooms.realestatemanager.viewmodels.DetailsViewModel;
 
 import java.text.MessageFormat;
@@ -137,6 +139,7 @@ public class DetailsFragment extends Fragment {
         else{
             mBinding.tvSaleDetail.setText(R.string.yes);
         }
+        requestToGetBitmapForMap();
     }
 
     private void observePropertyPhotos() {
@@ -144,7 +147,6 @@ public class DetailsFragment extends Fragment {
     }
 
     private void getPropertyPhotos(List<Photo> photos) {
-        Log.e("photos after observe", photos.toString());
         if (!photos.isEmpty()) {
             mPhotos.addAll(photos);
         }
@@ -158,7 +160,24 @@ public class DetailsFragment extends Fragment {
         mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.HORIZONTAL));
         mRecyclerView.setAdapter(new PhotosAdapter(mPhotos));
     }
+    
+    private void requestToGetBitmapForMap() {
+        double latitude = GeocoderUtils.getLatitudeFromAddress(mProperty.getAddress(), requireContext());
+        double longitude = GeocoderUtils.getLongitudeFromAddress(mProperty.getAddress(), requireContext());
+        Log.e("bitmap after observe", String.valueOf(latitude));
+        Log.e("bitmap after observe", String.valueOf(longitude));
+        mDetailsViewModel.getBitmapFromApi(latitude, longitude);
+        observeBitmapReturn();
+    }
 
+    private void observeBitmapReturn() {
+        mDetailsViewModel.getBitmapLiveData().observe(this,this::updateMapWithBitmap);
+    }
+
+    private void updateMapWithBitmap(Bitmap bitmap){
+        Log.e("bitmap after observe", bitmap.toString());
+        mBinding.imMapDetails.setImageBitmap(bitmap);
+    }
 
     private void editProperty() {
         mBinding.fabEdit.setOnClickListener(new View.OnClickListener() {
