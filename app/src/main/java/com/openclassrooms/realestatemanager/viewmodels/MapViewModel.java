@@ -8,8 +8,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.openclassrooms.realestatemanager.data.repositories.LocationRepositoryImpl;
+import com.openclassrooms.realestatemanager.data.repositories.PropertyRepositoryImpl;
+import com.openclassrooms.realestatemanager.domain.models.Property;
 
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 
@@ -24,10 +27,16 @@ public class MapViewModel extends ViewModel {
 
     //For data
     private final LocationRepositoryImpl mLocationRepositoryImpl;
+    private final PropertyRepositoryImpl mPropertyRepository;
+
+    //For threads
+    private final Executor mExecutor;
 
     @Inject
-    public MapViewModel(LocationRepositoryImpl locationRepositoryImpl) {
+    public MapViewModel(LocationRepositoryImpl locationRepositoryImpl, PropertyRepositoryImpl propertyRepository, Executor executor) {
         mLocationRepositoryImpl = locationRepositoryImpl;
+        mPropertyRepository = propertyRepository;
+        mExecutor = executor;
     }
 
     //..........................For location.....................................................
@@ -43,6 +52,12 @@ public class MapViewModel extends ViewModel {
 
     public void stopLocationRequest() {
         mLocationRepositoryImpl.stopLocationRequest();
+    }
+
+    //.....................................For properties...........................................
+
+    public LiveData<List<Property>> getProperties() {
+        return mPropertyRepository.getProperties();
     }
 }
 

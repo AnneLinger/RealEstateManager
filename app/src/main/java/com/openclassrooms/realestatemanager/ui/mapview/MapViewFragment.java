@@ -10,9 +10,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,17 +30,19 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentMapViewBinding;
-import com.openclassrooms.realestatemanager.ui.addedit.AddEditDetailedFragment;
-import com.openclassrooms.realestatemanager.ui.addedit.AddEditGeneralFragment;
+import com.openclassrooms.realestatemanager.domain.models.Property;
 import com.openclassrooms.realestatemanager.ui.details.DetailsFragment;
 import com.openclassrooms.realestatemanager.ui.main.MainActivity;
+import com.openclassrooms.realestatemanager.utils.GeocoderUtils;
 import com.openclassrooms.realestatemanager.viewmodels.MapViewModel;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
 *Created by Anne Linger on 14/09/2022.
@@ -59,6 +60,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Loc
     private Location mLocation;
     private String mLocationString;
     private DetailsFragment mDetailsFragment;
+    private List<Property> mProperties;
 
     //For location permission result
     private static final String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
@@ -125,11 +127,11 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Loc
     private void getUserLocation() {
         mMapViewModel.getUserLocation(this.getContext());
         mGoogleMap.setMyLocationEnabled(true);
-        mMapViewModel.getLivedataLocation().observe(requireActivity(), this::updateMapLocation);
+        mMapViewModel.getLivedataLocation().observe(requireActivity(), this::updateMapWithUserLocation);
     }
 
     //Update map with user location
-    private void updateMapLocation(Location location) {
+    private void updateMapWithUserLocation(Location location) {
         mLocation = location;
         mLocationString = mLocation.getLatitude() + "," + mLocation.getLongitude();
         mGoogleMap.getUiSettings().setMyLocationButtonEnabled(true);
@@ -141,34 +143,42 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Loc
                     .title(requireActivity().getString(R.string.my_position)));
             mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), zoom));
         }
-        //updateMapWithData();
+        observeProperties();
     }
 
-   /** private void updateMapWithData() {
-        mGoogleMap.clear();
-        for (Result mResult : results) {
-            LatLng placeLatLng = new LatLng(mResult.getGeometry().getLocation().getLat(), mResult.getGeometry().getLocation().getLng());
-            addMarker(R.drawable.icon2073973_1920restaurant, placeLatLng, mResult);
-            for (Booking booking : mBookingList) {
-                if (booking.getPlaceId().equalsIgnoreCase(mResult.getPlaceId())) {
-                    addMarker(R.drawable.icon_restaurant_green, placeLatLng, mResult);
-                }
-            }
+    private void observeProperties(){
+        mMapViewModel.getProperties().observe(requireActivity(), this::getProperties);
+    }
+
+    private void getProperties(List<Property> propertiesList) {
+        mProperties = propertiesList;
+        updateMapWithProperties();
+    }
+
+    private void updateMapWithProperties() {
+        for(Property property : mProperties) {
+            double latitude = GeocoderUtils.getLatitudeFromAddress(property.getAddress(), requireContext());
+            double longitude = GeocoderUtils.getLongitudeFromAddress(property.getAddress(), requireContext());
+            LatLng latLng = new LatLng(latitude, longitude);
+            Log.e("Anne", property.getAddress());
+            Log.e("Anne", property.getCity());
+            Log.e("Anne", latLng.toString());
+            addMarker(R.drawable.ic_baseline_house_24, latLng, property);
         }
-        mGoogleMap.setOnInfoWindowClickListener(marker -> navigateToDetailsFragment(mProperty.getId));
+        mGoogleMap.setOnInfoWindowClickListener(marker -> navigateToDetailsFragment(mProperties, marker));
     }
 
-    private void addMarker(int drawable, LatLng placeLatLng, Result result) {
+    private void addMarker(int drawable, LatLng placeLatLng, Property property) {
         mGoogleMap.addMarker(new MarkerOptions()
                 .position(placeLatLng)
-                .title(result.getName())
+                .title(property.getType() + property.getId())
                 .icon(BitmapDescriptorFactory.fromBitmap(setUpMarkerIcon(drawable))));
     }
 
     private Bitmap setUpMarkerIcon(int drawable) {
         Bitmap markerBitmap = BitmapFactory.decodeResource(requireContext().getResources(), drawable);
         return Bitmap.createScaledBitmap(markerBitmap, 80, 120, false);
-    }*/
+    }
 
     //Dialog to alert about essential permission
     public void showDialogToDenyAccessMap() {
@@ -184,13 +194,18 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Loc
                 .show();
     }
 
-    private void navigateToDetailsFragment(long id) {
-        if (mDetailsFragment == null) {
-            mDetailsFragment = DetailsFragment.newInstance(id);
+    private void navigateToDetailsFragment(List<Property> properties, Marker marker) {
+        for (Property property : properties) {
+            if (Objects.requireNonNull(marker.getTitle()).contains(String.valueOf(property.getId()))) {
+                if (mDetailsFragment == null) {
+                    mDetailsFragment = DetailsFragment.newInstance(property.getId());
+                }
+                if (!mDetailsFragment.isVisible()) {
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mDetailsFragment).commit();
+                }
+            }
         }
-        if (!mDetailsFragment.isVisible()) {
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mDetailsFragment).commit();
-        }
+
     }
 
     private void navigateToMainActivity() {
