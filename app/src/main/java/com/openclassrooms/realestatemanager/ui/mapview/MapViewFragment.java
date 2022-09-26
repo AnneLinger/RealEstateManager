@@ -6,12 +6,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +25,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -53,12 +49,13 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Loc
     //For UI
     private FragmentMapViewBinding mBinding;
     private GoogleMap mGoogleMap;
-    private float zoom = 12;
+    private float zoom = 11;
 
     //For data
     private MapViewModel mMapViewModel;
     private Location mLocation;
     private String mLocationString;
+    private final LatLng FAKE_AGENT_LOCATION = new LatLng(40.655675, -74.210345);
     private DetailsFragment mDetailsFragment;
     private List<Property> mProperties;
 
@@ -160,24 +157,17 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Loc
             double latitude = GeocoderUtils.getLatitudeFromAddress(property.getAddress(), requireContext());
             double longitude = GeocoderUtils.getLongitudeFromAddress(property.getAddress(), requireContext());
             LatLng latLng = new LatLng(latitude, longitude);
-            Log.e("Anne", property.getAddress());
-            Log.e("Anne", property.getCity());
-            Log.e("Anne", latLng.toString());
-            addMarker(R.drawable.ic_baseline_house_24, latLng, property);
+            addMarker(latLng, property);
         }
+        //To move camera on fake agent location in New York
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(FAKE_AGENT_LOCATION, zoom));
         mGoogleMap.setOnInfoWindowClickListener(marker -> navigateToDetailsFragment(mProperties, marker));
     }
 
-    private void addMarker(int drawable, LatLng placeLatLng, Property property) {
+    private void addMarker(LatLng placeLatLng, Property property) {
         mGoogleMap.addMarker(new MarkerOptions()
                 .position(placeLatLng)
-                .title(property.getType() + property.getId())
-                .icon(BitmapDescriptorFactory.fromBitmap(setUpMarkerIcon(drawable))));
-    }
-
-    private Bitmap setUpMarkerIcon(int drawable) {
-        Bitmap markerBitmap = BitmapFactory.decodeResource(requireContext().getResources(), drawable);
-        return Bitmap.createScaledBitmap(markerBitmap, 80, 120, false);
+                .title(property.getType() + property.getId()));
     }
 
     //Dialog to alert about essential permission

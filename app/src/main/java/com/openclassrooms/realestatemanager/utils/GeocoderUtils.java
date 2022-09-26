@@ -3,7 +3,6 @@ package com.openclassrooms.realestatemanager.utils;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
-import android.util.Log;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,7 +20,6 @@ public class GeocoderUtils {
 
         try {
             address = coder.getFromLocationName(stringAddress, 5);
-            Log.e("InGeodocder", address.get(0).toString());
             Address location = address.get(0);
 
             latitude = location.getLatitude();
