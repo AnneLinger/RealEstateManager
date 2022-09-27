@@ -94,4 +94,5 @@
     <string name="sold_properties">Sold properties</string>
     <string name="sold_since">Sold since</string>
     <string name="cancel_research">Cancel the research</string>
+    <string name="text_view_main">\"Le premier bien immobilier enregistré vaut \"</string>
 </resources>
