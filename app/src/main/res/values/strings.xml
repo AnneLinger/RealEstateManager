@@ -95,4 +95,13 @@
     <string name="sold_since">Sold since</string>
     <string name="cancel_research">Cancel the research</string>
     <string name="text_view_main">\"Le premier bien immobilier enregistré vaut \"</string>
+    <string name="property_price">Property price</string>
+    <string name="contribution">Contribution</string>
+    <string name="rate">Rate</string>
+    <string name="percent">%</string>
+    <string name="duration">Duration</string>
+    <string name="simulate">Simulate</string>
+    <string name="monthly_payments">Monthly payments :</string>
+    <string name="simulate_to_get_a_result">Simulate to get a result here</string>
+    <string name="years">Years</string>
 </resources>

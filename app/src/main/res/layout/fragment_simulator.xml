@@ -5,11 +5,146 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/tv_type_details"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tf_property_price_simulator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/property_price"
+        android:layout_marginHorizontal="@dimen/basic_margin"
+        app:endIconDrawable="@drawable/ic_baseline_cancel_24"
+        app:endIconMode="clear_text"
+        app:suffixText="@string/dollars"
+        app:endIconCheckable="true"
+        app:endIconTint="@color/color_white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tf_contribution">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_property_price_simulator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:imeOptions="actionNext"
+            android:singleLine="true"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tf_contribution"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/contribution"
+        app:suffixText="@string/dollars"
+        app:endIconDrawable="@drawable/ic_baseline_cancel_24"
+        app:endIconMode="clear_text"
+        app:endIconCheckable="true"
+        app:endIconTint="@color/color_white"
+        android:layout_marginHorizontal="@dimen/basic_margin"
+        app:layout_constraintTop_toBottomOf="@id/tf_property_price_simulator"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tf_rate">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_contribution"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:imeOptions="actionNext"
+            android:singleLine="true"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tf_rate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/rate"
+        app:suffixText="@string/percent"
+        app:endIconDrawable="@drawable/ic_baseline_cancel_24"
+        app:endIconMode="clear_text"
+        app:endIconCheckable="true"
+        app:endIconTint="@color/color_white"
+        android:layout_marginHorizontal="@dimen/basic_margin"
+        app:layout_constraintTop_toBottomOf="@id/tf_contribution"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tf_duration">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_rate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:imeOptions="actionNext"
+            android:singleLine="true"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tf_duration"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/duration"
+        app:suffixText="@string/years"
+        android:layout_marginHorizontal="@dimen/basic_margin"
+        app:endIconDrawable="@drawable/ic_baseline_cancel_24"
+        app:endIconMode="clear_text"
+        app:endIconCheckable="true"
+        app:endIconTint="@color/color_white"
+        app:layout_constraintTop_toBottomOf="@id/tf_rate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bt_simulate">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_duration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionNext"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/bt_simulate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello simulator fragment !!!"
-        tools:ignore="MissingConstraints" />
+        android:text="@string/simulate"
+        android:contentDescription="@string/simulate"
+        android:textColor="@color/color_white"
+        app:layout_constraintTop_toBottomOf="@id/tf_duration"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tv_result_title"
+        />
+
+    <TextView
+        android:id="@+id/tv_result_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/monthly_payments"
+        android:contentDescription="@string/monthly_payments"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/bt_simulate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tv_result"/>
+
+    <TextView
+        android:id="@+id/tv_result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="@string/simulate_to_get_a_result"
+        android:textStyle="italic"
+        android:contentDescription="@string/simulate_to_get_a_result"
+        android:textColor="@color/color_primary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_result_title"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
