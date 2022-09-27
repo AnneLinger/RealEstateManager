@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.data.dao;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
@@ -32,4 +33,24 @@ public interface PropertyDao {
     //Update a property in the db
     @Update
     void updateProperty(Property property);
+
+    //Search properties depends on multi criteria
+    @Query("SELECT * FROM property_table " +
+            "WHERE type IS :type " +
+            "AND price BETWEEN :minPrice and :maxPrice " +
+            "AND surface BETWEEN :minSurface AND :maxSurface " +
+            "AND room_number BETWEEN :minRoomNumber AND :maxRoomNumber " +
+            "AND address LIKE :address " +
+            "AND city LIKE :address " +
+            "AND on_sale IS :onSale")
+    LiveData<List<Property>> getPropertyResearch(
+            @Nullable String type,
+            String minPrice,
+            String maxPrice,
+            String minSurface,
+            String maxSurface,
+            int minRoomNumber,
+            int maxRoomNumber,
+            String address,
+            boolean onSale);
 }

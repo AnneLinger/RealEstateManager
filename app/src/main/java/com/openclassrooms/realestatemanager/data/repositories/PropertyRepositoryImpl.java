@@ -8,6 +8,7 @@ import com.openclassrooms.realestatemanager.domain.models.Property;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 /**
@@ -43,5 +44,18 @@ public class PropertyRepositoryImpl {
     //Update a property
     public void editProperty(Property property) {
         mPropertyDao.updateProperty(property);
+    }
+
+    //Search properties
+    public LiveData<List<Property>> getSearchProperties(@Nullable String type,
+                                                        String minPrice,
+                                                        String maxPrice,
+                                                        String minSurface,
+                                                        String maxSurface,
+                                                        int minRoomNumber,
+                                                        int maxRoomNumber,
+                                                        String address,
+                                                        boolean onSale) {
+        return mPropertyDao.getPropertyResearch(type, minPrice, maxPrice, minSurface, maxSurface, minRoomNumber, maxRoomNumber, address, onSale);
     }
 }

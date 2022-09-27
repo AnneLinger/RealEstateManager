@@ -1,40 +1,31 @@
 package com.openclassrooms.realestatemanager.ui.search;
 
-import android.annotation.SuppressLint;
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.DatePicker;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentSearchBinding;
-import com.openclassrooms.realestatemanager.domain.models.Photo;
 import com.openclassrooms.realestatemanager.domain.models.Property;
+import com.openclassrooms.realestatemanager.ui.listview.ListViewFragment;
 import com.openclassrooms.realestatemanager.ui.main.MainActivity;
-import com.openclassrooms.realestatemanager.utils.DateUtils;
+import com.openclassrooms.realestatemanager.viewmodels.SearchViewModel;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -47,22 +38,16 @@ public class SearchFragment extends Fragment {
     private FragmentSearchBinding mBinding;
 
     //For data
-    private static final DateUtils mDateTimeUtils = new DateUtils();
-    private int lastSelectedYear;
-    private int lastSelectedMonth;
-    private int lastSelectedDay;
-    private Date date;
+    private SearchViewModel mSearchViewModel;
     private String type;
-    private String minPrice;
-    private String maxPrice;
-    private int minRoomNumber;
-    private int maxRoomNumber;
-    private String minSurface;
-    private String maxSurface;
-    private String entranceDate;
-    private String Location;
+    private String minPrice = "0";
+    private String maxPrice = "10000000000";
+    private int minRoomNumber = 0;
+    private int maxRoomNumber = 100;
+    private String minSurface = "0";
+    private String maxSurface = "800";
+    private String location = "";
     private boolean onSale = true;
-    private String soldDate;
     private TextInputEditText typeEditText;
     private TextInputEditText minPriceEditText;
     private TextInputEditText maxPriceEditText;
@@ -70,9 +55,8 @@ public class SearchFragment extends Fragment {
     private TextInputEditText maxSurfaceEditText;
     private TextInputEditText minRoomNumberEditText;
     private TextInputEditText maxRoomNumberEditText;
-    private TextInputEditText entranceFromEditText;
     private TextInputEditText locationEditText;
-    private TextInputEditText soldSinceEditText;
+    private final String BUNDLE_KEY = "search_properties";
 
     public static SearchFragment newInstance() {
         return new SearchFragment();
@@ -81,6 +65,14 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mBinding = FragmentSearchBinding.inflate(inflater, container, false);
+        typeEditText = mBinding.etSearchType;
+        minPriceEditText = mBinding.etSearchPriceFrom;
+        maxPriceEditText = mBinding.etSearchPriceTo;
+        minSurfaceEditText = mBinding.etSearchSurfaceFrom;
+        maxSurfaceEditText = mBinding.etSearchSurfaceTo;
+        minRoomNumberEditText = mBinding.etSearchRoomNumberFrom;
+        maxRoomNumberEditText = mBinding.etSearchRoomNumberTo;
+        locationEditText = mBinding.etSearchLocation;
         setHasOptionsMenu(true);
         return mBinding.getRoot();
     }
@@ -89,6 +81,7 @@ public class SearchFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         configureToolbar();
+        configureViewModel();
         getDataFromForm();
         launchResearch();
     }
@@ -98,11 +91,11 @@ public class SearchFragment extends Fragment {
         toolbar.setNavigationOnClickListener(view -> showDialogToConfirmCancel());
     }
 
+    private void configureViewModel() {
+        mSearchViewModel = new ViewModelProvider(requireActivity()).get(SearchViewModel.class);
+    }
+
     private void getDataFromForm() {
-        getCurrentDate();
-        selectEntryDateFromDatePicker();
-        getPropertySale();
-        selectSoldDateFromDatePicker();
         getDataFromEditText(typeEditText);
         getDataFromEditText(minPriceEditText);
         getDataFromEditText(maxPriceEditText);
@@ -110,9 +103,8 @@ public class SearchFragment extends Fragment {
         getDataFromEditText(maxSurfaceEditText);
         getDataFromEditText(minRoomNumberEditText);
         getDataFromEditText(maxRoomNumberEditText);
-        getDataFromEditText(entranceFromEditText);
         getDataFromEditText(locationEditText);
-        getDataFromEditText(soldSinceEditText);
+        getPropertySale();
     }
 
     private void getDataFromEditText(TextInputEditText textInputEditText){
@@ -142,97 +134,60 @@ public class SearchFragment extends Fragment {
                 else if(s==maxSurfaceEditText.getEditableText()) {
                     maxSurface = textInputEditText.getText().toString();
                 }
-                if(s==minRoomNumberEditText.getEditableText()){
+                else if(s==minRoomNumberEditText.getEditableText()){
                     minRoomNumber = Integer.parseInt(textInputEditText.getText().toString());
                 }
-                if(s==maxRoomNumberEditText.getEditableText()){
+                else if(s==maxRoomNumberEditText.getEditableText()){
                     maxRoomNumber = Integer.parseInt(textInputEditText.getText().toString());
                 }
-                else if(s==entranceFromEditText.getEditableText()) {
-                    entranceDate = textInputEditText.getText().toString();
-                }
-                else if(s==soldSinceEditText.getEditableText()) {
-                    soldDate = textInputEditText.getText().toString();
+                else if(s==locationEditText.getEditableText()){
+                    location = textInputEditText.getText().toString();
                 }
             }
         });
     }
 
-    private void selectEntryDateFromDatePicker() {
-        mBinding.tfSearchEntryDate.setStartIconOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                configureDatePickerDialog(mBinding.etSearchEntryDate);
-            }
-        });
-    }
-
-    private void getCurrentDate() {
-        final Calendar calendar = Calendar.getInstance();
-        this.lastSelectedYear = calendar.get(Calendar.YEAR);
-        this.lastSelectedMonth = calendar.get(Calendar.MONTH);
-        this.lastSelectedDay = calendar.get(Calendar.DAY_OF_MONTH);
-    }
-
-    //Configure the DatePickerDialog
-    private void configureDatePickerDialog(EditText editText) {
-        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
-                date = mDateTimeUtils.getDateFromDatePicker(year, monthOfYear, dayOfMonth);
-                @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-                String result = formatter.format(date);
-                try {
-                    date = formatter.parse(result);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                editText.setText(result);
-                lastSelectedYear = year;
-                lastSelectedMonth = monthOfYear;
-                lastSelectedDay = dayOfMonth;
-            }
-        };
-        DatePickerDialog datePickerDialog;
-        datePickerDialog = new DatePickerDialog(requireActivity(), dateSetListener, lastSelectedYear, lastSelectedMonth, lastSelectedDay);
-        datePickerDialog.show();
-    }
 
     private void getPropertySale() {
         mBinding.switchSearchSold.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked) {
-                    mBinding.etSearchSoldDate.setEnabled(true);
-                    mBinding.tfSearchSoldDate.setEnabled(true);
                     onSale = false;
                 }
                 else {
-                    mBinding.etSearchSoldDate.setEnabled(false);
-                    mBinding.tfSearchSoldDate.setEnabled(false);
                     onSale = true;
                 }
             }
         });
     }
 
-    private void selectSoldDateFromDatePicker() {
-        mBinding.tfSearchSoldDate.setStartIconOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                configureDatePickerDialog(mBinding.etSearchSoldDate);
-            }
-        });
+    private void checkDataValuesBeforeSearch() {
+
     }
 
     private void launchResearch() {
         mBinding.btSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<CharSequence>  propertyIdStringList = new ArrayList<>();
-                navigateToMainActivity(propertyIdStringList);
+                getSearchPropertiesFromDao();
             }
         });
+    }
+
+    private void getSearchPropertiesFromDao() {
+        Log.e("type before query", type);
+        mSearchViewModel.getSearchProperties(type, minPrice, maxPrice, minSurface, maxSurface, minRoomNumber, maxRoomNumber, location, onSale).observe(requireActivity(), this::getSearchPropertiesForListViewFragment);
+    }
+
+    private void getSearchPropertiesForListViewFragment(List<Property> properties) {
+        List<String> propertyIdStringList = new ArrayList<>();
+        for(Property property : properties) {
+            Log.e("properties", properties.toString());
+            propertyIdStringList.add(String.valueOf(property.getId()));
+        }
+        Log.e("propertiesString", propertyIdStringList.toString());
+        navigateToMainActivityWithSearchProperties(propertyIdStringList);
     }
 
     //Dialog to alert about the research annulment
@@ -249,14 +204,23 @@ public class SearchFragment extends Fragment {
                 .show();
     }
 
-    private void navigateToMainActivity() {
+    private void navigateToMainActivityWithSearchProperties(List<String> propertyIdStrings) {
+        final Bundle bundle = new Bundle();
+        bundle.putStringArrayList(BUNDLE_KEY, (ArrayList<String>) propertyIdStrings);
         Intent intent = new Intent(requireActivity(), MainActivity.class);
+        intent.putExtras(bundle);
         startActivity(intent);
+        /**if (mListViewFragment == null) {
+            mListViewFragment = ListViewFragment.newInstance();
+            mListViewFragment.setArguments(bundle);
+        }
+        if (!mListViewFragment.isVisible()) {
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mListViewFragment).commit();
+        }*/
     }
 
-    private void navigateToMainActivity(ArrayList<CharSequence> propertyIdStrings) {
+    private void navigateToMainActivity() {
         Intent intent = new Intent(requireActivity(), MainActivity.class);
-        intent.putCharSequenceArrayListExtra("propertiesId", propertyIdStrings);
         startActivity(intent);
     }
 }

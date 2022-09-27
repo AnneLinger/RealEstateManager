@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.ui.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,6 +32,9 @@ import com.openclassrooms.realestatemanager.ui.search.SearchFragment;
 import com.openclassrooms.realestatemanager.ui.simulator.SimulatorFragment;
 import com.openclassrooms.realestatemanager.utils.Utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 
@@ -50,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private SimulatorFragment mSimulatorFragment;
     private AddEditGeneralFragment mAddEditGeneralFragment;
     private AddEditDetailedFragment mAddEditDetailedFragment;
+    private final String BUNDLE_KEY = "search_properties";
 
     //For navigation
     private NavController mNavController;
@@ -65,8 +70,16 @@ public class MainActivity extends AppCompatActivity {
         initUi();
         configureDrawer();
         configureBottomNav();
-        getSupportFragmentManager().beginTransaction().add(R.id.nav_host_fragment, new ListViewFragment()).commit();
-        this.mListViewFragment = ListViewFragment.newInstance();
+        Bundle bundle = getIntent().getExtras();
+        if(bundle!=null){
+            this.mListViewFragment = ListViewFragment.newInstance();
+            mListViewFragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mListViewFragment).commit();
+        }
+        else {
+            getSupportFragmentManager().beginTransaction().add(R.id.nav_host_fragment, new ListViewFragment()).commit();
+            this.mListViewFragment = ListViewFragment.newInstance();
+        }
     }
 
     private void initUi() {

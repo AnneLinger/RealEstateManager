@@ -31,6 +31,7 @@ import com.openclassrooms.realestatemanager.ui.details.DetailsFragment;
 import com.openclassrooms.realestatemanager.utils.NotificationReceiver;
 import com.openclassrooms.realestatemanager.viewmodels.ListViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -49,6 +50,7 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.OnItem
     private Context mContext;
     private List<Property> mProperties;
     private List<Photo> mPhotos;
+    private final String BUNDLE_KEY = "search_properties";
 
     public static ListViewFragment newInstance() {
         return new ListViewFragment();
@@ -103,7 +105,31 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.OnItem
 
     private void getPhotos(List<Photo> photos) {
         mPhotos = photos;
-        initRecyclerView(mProperties, mPhotos);
+        checkIfAResearchHadTakenPlace();
+    }
+
+    private void checkIfAResearchHadTakenPlace() {
+        List<Property> searchProperties = new ArrayList<>();
+        Log.e("Anne", "check if research");
+        Bundle bundle = this.getArguments();
+        if(bundle!=null){
+            Log.e("Anne", "getArguments");
+            List<String> searchPropertiesIdString = bundle.getStringArrayList(BUNDLE_KEY);
+            Log.e("Anne", searchPropertiesIdString.toString());
+            for(String string : searchPropertiesIdString) {
+                long id = Long.parseLong(string);
+                for(Property property : mProperties) {
+                    if(property.getId()==id) {
+                        searchProperties.add(property);
+                    }
+                }
+            }
+            Log.e("Anne", searchProperties.toString());
+            initRecyclerView(searchProperties, mPhotos);
+        }
+        else {
+            initRecyclerView(mProperties, mPhotos);
+        }
     }
 
     private void initRecyclerView(List<Property> properties, List<Photo> photos) {
