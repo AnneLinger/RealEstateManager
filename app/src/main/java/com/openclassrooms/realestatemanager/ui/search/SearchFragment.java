@@ -162,10 +162,6 @@ public class SearchFragment extends Fragment {
         });
     }
 
-    private void checkDataValuesBeforeSearch() {
-
-    }
-
     private void launchResearch() {
         mBinding.btSearch.setOnClickListener(new View.OnClickListener() {
             @Override

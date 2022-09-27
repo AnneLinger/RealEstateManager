@@ -195,7 +195,7 @@ public class DetailsFragment extends Fragment {
     }
 
     private void observeSchools() {
-        mDetailsViewModel.getNearbySearchSchoolsResponseLiveData().observe(getViewLifecycleOwner(), this::updatePointsOfInterestWithSchools);
+        mDetailsViewModel.getNearbySearchSchoolsResponseLiveData().observe(this, this::updatePointsOfInterestWithSchools);
     }
 
     private void updatePointsOfInterestWithSchools(List<Result> results) {
@@ -217,7 +217,7 @@ public class DetailsFragment extends Fragment {
     }
 
     private void observeParks() {
-        mDetailsViewModel.getNearbySearchParksResponseLiveData().observe(getViewLifecycleOwner(), this::updatePointsOfInterestWithParks);
+        mDetailsViewModel.getNearbySearchParksResponseLiveData().observe(this, this::updatePointsOfInterestWithParks);
     }
 
     private void updatePointsOfInterestWithParks(List<Result> results) {
