@@ -4,13 +4,13 @@
     <string name="bottom_nav_menu_map_view">Map</string>
     <string name="bottom_nav_menu_list_view">List</string>
     <string name="settings">Simulator</string>
-    <string name="your_lunch">Search</string>
+    <string name="search_button">Search</string>
     <string name="add_icon">Add icon</string>
     <string name="search">search</string>
     <string name="add">add</string>
     <string name="edit_icon">edit</string>
     <string name="edit">edit</string>
-    <string name="search_title">Search a property</string>
+    <string name="search_title">Search in properties</string>
     <string name="add_property_title">Add a property</string>
     <string name="simulator_title">Simulate a home loan</string>
     <string name="add_edit_general_title">General information of the property</string>
@@ -81,4 +81,16 @@
     <string name="no_internet_text">You\'re not connected to the internet, map will be displayed when you are connected in again.</string>
     <string name="no_internet_title">No internet connection</string>
     <string name="ok">Ok</string>
+    <string name="min_price">Min price</string>
+    <string name="max_price">Max price</string>
+    <string name="to">to</string>
+    <string name="min_surface">Min surface</string>
+    <string name="max_surface">Max surface</string>
+    <string name="max_room_number">Max room number</string>
+    <string name="min_room_number">Min room number</string>
+    <string name="search_entry_date">Entrance from</string>
+    <string name="type">Type</string>
+    <string name="search_location">Location</string>
+    <string name="sold_properties">Sold properties</string>
+    <string name="sold_since">Sold since</string>
 </resources>
