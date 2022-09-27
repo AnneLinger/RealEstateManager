@@ -93,4 +93,5 @@
     <string name="search_location">Location</string>
     <string name="sold_properties">Sold properties</string>
     <string name="sold_since">Sold since</string>
+    <string name="cancel_research">Cancel the research</string>
 </resources>
