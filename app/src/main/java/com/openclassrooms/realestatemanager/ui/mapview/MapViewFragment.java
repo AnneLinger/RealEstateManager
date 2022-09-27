@@ -28,12 +28,15 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentMapViewBinding;
+import com.openclassrooms.realestatemanager.domain.models.Photo;
 import com.openclassrooms.realestatemanager.domain.models.Property;
 import com.openclassrooms.realestatemanager.ui.details.DetailsFragment;
 import com.openclassrooms.realestatemanager.ui.main.MainActivity;
 import com.openclassrooms.realestatemanager.utils.GeocoderUtils;
+import com.openclassrooms.realestatemanager.utils.Utils;
 import com.openclassrooms.realestatemanager.viewmodels.MapViewModel;
 
 import java.util.List;
@@ -93,16 +96,34 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Loc
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mGoogleMap = googleMap;
-        requestLocationPermission();
-    }
-
-    @Override
-    public void onLocationChanged(@NonNull Location location) {
-        //TODO updateMap ! ! !
+        checkIfUserHasInternet();
     }
 
     private void configureViewModels() {
         mMapViewModel = new ViewModelProvider(requireActivity()).get(MapViewModel.class);
+    }
+
+    //Check internet
+    private void checkIfUserHasInternet() {
+        if(Utils.isUserHasInternet(requireContext())) {
+            requestLocationPermission();
+        }
+        else {
+            mBinding.fragmentMapView.setVisibility(View.INVISIBLE);
+            showDialogToInformAboutInternetAvailability();
+        }
+    }
+
+    //Dialog to alert about no internet available
+    public void showDialogToInformAboutInternetAvailability() {
+        MaterialAlertDialogBuilder alertDialogBuilder = new MaterialAlertDialogBuilder((this.requireContext()), R.style.AlertDialogTheme);
+        alertDialogBuilder.setTitle(R.string.no_internet_title)
+                .setPositiveButton(R.string.ok, (dialog, which) -> {
+                })
+                .setMessage(R.string.no_internet_text)
+                .setCancelable(false)
+                .create()
+                .show();
     }
 
     //Check the location permission
@@ -201,6 +222,11 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Loc
     private void navigateToMainActivity() {
         Intent intent = new Intent(requireActivity(), MainActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+        getUserLocation();
     }
 
     @Override

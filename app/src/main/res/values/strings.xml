@@ -78,4 +78,7 @@
     <string name="schools">Schools :\ </string>
     <string name="shops">Supermarkets :\ </string>
     <string name="parks">Parks :\ </string>
+    <string name="no_internet_text">You\'re not connected to the internet, map will be displayed when you are connected in again.</string>
+    <string name="no_internet_title">No internet connection</string>
+    <string name="ok">Ok</string>
 </resources>
