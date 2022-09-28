@@ -10,6 +10,7 @@
         android:id="@+id/tf_type"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_top_add_edit_land"
         android:hint="@string/property_type"
         android:layout_marginHorizontal="@dimen/basic_margin"
         app:endIconDrawable="@drawable/ic_baseline_cancel_24"

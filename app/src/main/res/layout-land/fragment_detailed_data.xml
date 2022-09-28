@@ -9,6 +9,7 @@
         android:id="@+id/tf_room_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_top_add_edit_land"
         android:hint="@string/room_number"
         app:suffixText="@string/rooms"
         android:layout_marginHorizontal="@dimen/basic_margin"
