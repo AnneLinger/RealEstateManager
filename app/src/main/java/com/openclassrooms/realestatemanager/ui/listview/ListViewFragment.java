@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentListViewBinding;
@@ -38,7 +39,7 @@ import java.util.List;
 *Fragment to display the properties list
 */
 
-public class ListViewFragment extends Fragment implements ListViewAdapter.OnItemClickListener {
+public class ListViewFragment extends Fragment implements ListViewAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     //For UI
     private FragmentListViewBinding mBinding;
@@ -51,6 +52,7 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.OnItem
     private List<Property> mProperties;
     private List<Photo> mPhotos;
     private final String BUNDLE_KEY = "search_properties";
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public static ListViewFragment newInstance() {
         return new ListViewFragment();
@@ -59,6 +61,9 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.OnItem
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mBinding = FragmentListViewBinding.inflate(inflater, container, false);
+        mSwipeRefreshLayout = mBinding.swipeLayout;
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.color_primary));
+        mSwipeRefreshLayout.setOnRefreshListener(this);
         this.onAttach(requireContext());
         return mBinding.getRoot();
     }
@@ -138,6 +143,7 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.OnItem
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.VERTICAL));
         mRecyclerView.setAdapter(new ListViewAdapter(properties, photos, this));
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     private void addAProperty() {
@@ -153,5 +159,10 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.OnItem
                 }
             }
         });
+    }
+
+    @Override
+    public void onRefresh() {
+        initRecyclerView(mProperties, mPhotos);
     }
 }
