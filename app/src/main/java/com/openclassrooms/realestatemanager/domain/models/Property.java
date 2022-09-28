@@ -1,5 +1,7 @@
 package com.openclassrooms.realestatemanager.domain.models;
 
+import android.content.ContentValues;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -56,6 +58,9 @@ public class Property {
 
     @ColumnInfo(name = "photo_key")
     private String photoKey;
+
+    public Property() {
+    }
 
     public Property(String type, String price, @Nullable String surface, int roomNumber, @Nullable String description, @Nullable String address, String city, boolean onSale, String entryDate, @Nullable String soldDate, String agent, String photoKey) {
         this.type = type;
@@ -178,4 +183,37 @@ public class Property {
     public void setPhotoKey(String photoKey) {
         this.photoKey = photoKey;
     }
+
+    public static Property fromContentValues(ContentValues values) {
+
+        final Property property = new Property();
+
+        if (values.containsKey("type")) property.setType(values.getAsString("type"));
+
+        if (values.containsKey("price")) property.setPrice(values.getAsString("price"));
+
+        if (values.containsKey("surface")) property.setSurface(values.getAsString("surface"));
+
+        if (values.containsKey("room_number")) property.setRoomNumber(values.getAsInteger("room_number"));
+
+        if (values.containsKey("description")) property.setDescription(values.getAsString("description"));
+
+        if (values.containsKey("address")) property.setAddress(values.getAsString("address"));
+
+        if (values.containsKey("city")) property.setCity(values.getAsString("city"));
+
+        if (values.containsKey("on_sale")) property.setOnSale(values.getAsBoolean("on_sale"));
+
+        if (values.containsKey("entry_date")) property.setEntryDate(values.getAsString("entry_date"));
+
+        if (values.containsKey("sold_date")) property.setSoldDate(values.getAsString("sold_date"));
+
+        if (values.containsKey("agent")) property.setAgent(values.getAsString("agent"));
+
+        if (values.containsKey("photo_key")) property.setPhotoKey(values.getAsString("photo_key"));
+
+        return property;
+
+    }
+
 }

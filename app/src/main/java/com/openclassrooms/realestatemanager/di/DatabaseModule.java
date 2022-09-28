@@ -2,21 +2,10 @@ package com.openclassrooms.realestatemanager.di;
 
 import android.content.Context;
 
-import androidx.annotation.NonNull;
-import androidx.room.Database;
-import androidx.room.DatabaseConfiguration;
-import androidx.room.InvalidationTracker;
-import androidx.room.Room;
-import androidx.sqlite.db.SupportSQLiteOpenHelper;
-
 import com.openclassrooms.realestatemanager.data.dao.PhotoDao;
 import com.openclassrooms.realestatemanager.data.dao.PropertyDao;
-import com.openclassrooms.realestatemanager.data.database.Go4LunchDatabase;
-import com.openclassrooms.realestatemanager.data.repositories.PropertyRepositoryImpl;
+import com.openclassrooms.realestatemanager.data.database.RealEstateManagerDatabase;
 
-import javax.inject.Singleton;
-
-import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 import dagger.hilt.InstallIn;
@@ -31,17 +20,17 @@ import dagger.hilt.components.SingletonComponent;
 @Module
 public abstract class DatabaseModule {
     @Provides
-    public static Go4LunchDatabase provideGo4LunchDatabase(@ApplicationContext Context context) {
-        return Go4LunchDatabase.getInstance(context);
+    public static RealEstateManagerDatabase provideGo4LunchDatabase(@ApplicationContext Context context) {
+        return RealEstateManagerDatabase.getInstance(context);
     }
 
     @Provides
-    public static PropertyDao providePropertyDao(Go4LunchDatabase go4LunchDatabase) {
+    public static PropertyDao providePropertyDao(RealEstateManagerDatabase go4LunchDatabase) {
         return go4LunchDatabase.mPropertyDao();
     }
 
     @Provides
-    public static PhotoDao providePhotoDao(Go4LunchDatabase go4LunchDatabase) {
+    public static PhotoDao providePhotoDao(RealEstateManagerDatabase go4LunchDatabase) {
         return go4LunchDatabase.mPhotoDao();
     }
 }

@@ -1,5 +1,7 @@
 package com.openclassrooms.realestatemanager.data.dao;
 
+import android.database.Cursor;
+
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -23,6 +25,10 @@ public interface PropertyDao {
     //Recover all the properties
     @Query("SELECT * FROM property_table")
     LiveData<List<Property>> getProperties();
+
+    //Recover all the properties for Content Provider
+    @Query("SELECT * FROM property_table")
+    Cursor getPropertiesWithCursor();
 
     //Recover a property from the db with its id
     @Query("SELECT * FROM property_table WHERE id = :propertyId")
