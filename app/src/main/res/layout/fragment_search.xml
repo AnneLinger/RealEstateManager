@@ -162,7 +162,7 @@
         android:layout_marginLeft="@dimen/basic_margin"
         app:layout_constraintTop_toBottomOf="@id/tf_search_surface_from"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tf_search_location">
+        app:layout_constraintBottom_toTopOf="@id/switch_search_sold">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_search_room_number_from"
@@ -184,7 +184,7 @@
         app:layout_constraintTop_toBottomOf="@id/tf_search_surface_from"
         app:layout_constraintStart_toEndOf="@id/tf_search_room_number_from"
         http:layout_constraintEnd_toStartOf="@id/tf_search_room_number_to"
-        app:layout_constraintBottom_toTopOf="@id/tf_search_location"/>
+        app:layout_constraintBottom_toTopOf="@id/switch_search_sold"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tf_search_room_number_to"
@@ -198,7 +198,7 @@
         android:layout_marginRight="@dimen/basic_margin"
         app:layout_constraintTop_toBottomOf="@id/tf_search_surface_from"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tf_search_location">
+        app:layout_constraintBottom_toTopOf="@id/switch_search_sold">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_search_room_number_to"
@@ -206,28 +206,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tf_search_location"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/search_location"
-        android:layout_marginHorizontal="@dimen/basic_margin"
-        app:endIconDrawable="@drawable/ic_baseline_cancel_24"
-        app:endIconMode="clear_text"
-        app:endIconCheckable="true"
-        app:endIconTint="@color/color_white"
-        app:layout_constraintTop_toBottomOf="@id/tf_search_room_number_from"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/switch_search_sold">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_search_location"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -241,7 +219,7 @@
         app:layout_constraintBottom_toTopOf="@id/bt_search"
         app:layout_constraintStart_toStartOf="parent"
         http:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tf_search_location"/>
+        app:layout_constraintTop_toBottomOf="@id/tf_search_room_number_from"/>
 
     <Button
         android:id="@+id/bt_search"

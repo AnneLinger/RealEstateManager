@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.data.repositories;
 
 import androidx.lifecycle.LiveData;
+import androidx.sqlite.db.SupportSQLiteQuery;
 
 import com.openclassrooms.realestatemanager.data.dao.PhotoDao;
 import com.openclassrooms.realestatemanager.data.dao.PropertyDao;
@@ -47,15 +48,7 @@ public class PropertyRepositoryImpl {
     }
 
     //Search properties
-    public LiveData<List<Property>> getSearchProperties(@Nullable String type,
-                                                        String minPrice,
-                                                        String maxPrice,
-                                                        String minSurface,
-                                                        String maxSurface,
-                                                        int minRoomNumber,
-                                                        int maxRoomNumber,
-                                                        String address,
-                                                        boolean onSale) {
-        return mPropertyDao.getPropertyResearch(type, minPrice, maxPrice, minSurface, maxSurface, minRoomNumber, maxRoomNumber, address, onSale);
+    public List<Property> getSearchProperties(SupportSQLiteQuery query) {
+        return mPropertyDao.getPropertyResearch(query);
     }
 }

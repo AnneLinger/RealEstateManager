@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.sqlite.db.SimpleSQLiteQuery;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
@@ -40,13 +41,12 @@ public class SearchFragment extends Fragment {
     //For data
     private SearchViewModel mSearchViewModel;
     private String type;
-    private String minPrice = "0";
-    private String maxPrice = "10000000000";
-    private int minRoomNumber = 0;
-    private int maxRoomNumber = 100;
-    private String minSurface = "0";
-    private String maxSurface = "800";
-    private String location = "";
+    private String minPrice;
+    private String maxPrice;
+    private int minRoomNumber;
+    private int maxRoomNumber;
+    private String minSurface;
+    private String maxSurface;
     private boolean onSale = true;
     private TextInputEditText typeEditText;
     private TextInputEditText minPriceEditText;
@@ -55,8 +55,9 @@ public class SearchFragment extends Fragment {
     private TextInputEditText maxSurfaceEditText;
     private TextInputEditText minRoomNumberEditText;
     private TextInputEditText maxRoomNumberEditText;
-    private TextInputEditText locationEditText;
     private final String BUNDLE_KEY = "search_properties";
+    private String query = "SELECT * FROM property_table";
+    private List<Object> args = new ArrayList<>();
 
     public static SearchFragment newInstance() {
         return new SearchFragment();
@@ -72,7 +73,6 @@ public class SearchFragment extends Fragment {
         maxSurfaceEditText = mBinding.etSearchSurfaceTo;
         minRoomNumberEditText = mBinding.etSearchRoomNumberFrom;
         maxRoomNumberEditText = mBinding.etSearchRoomNumberTo;
-        locationEditText = mBinding.etSearchLocation;
         setHasOptionsMenu(true);
         return mBinding.getRoot();
     }
@@ -103,7 +103,6 @@ public class SearchFragment extends Fragment {
         getDataFromEditText(maxSurfaceEditText);
         getDataFromEditText(minRoomNumberEditText);
         getDataFromEditText(maxRoomNumberEditText);
-        getDataFromEditText(locationEditText);
         getPropertySale();
     }
 
@@ -140,9 +139,6 @@ public class SearchFragment extends Fragment {
                 else if(s==maxRoomNumberEditText.getEditableText()){
                     maxRoomNumber = Integer.parseInt(textInputEditText.getText().toString());
                 }
-                else if(s==locationEditText.getEditableText()){
-                    location = textInputEditText.getText().toString();
-                }
             }
         });
     }
@@ -162,6 +158,95 @@ public class SearchFragment extends Fragment {
         });
     }
 
+    private void buildQueryForSearch() {
+        Log.e("Anne", "Build query");
+        boolean isFirstConditionDone = false;
+        if(type!=null){
+            Log.e("Anne", "Add type");
+            query += " WHERE type LIKE :";
+            query += type;
+            args.add(type);
+            isFirstConditionDone = true;
+        }
+        if(minPrice!=null){
+            if(isFirstConditionDone) {
+                query += " AND price >= :";
+            }
+            else {
+                query += " WHERE price >= :";
+                isFirstConditionDone = true;
+            }
+            query += minPrice;
+            args.add(minPrice);
+        }
+        if(maxPrice!=null){
+            if(isFirstConditionDone) {
+                query += " AND price <= :";
+            }
+            else {
+                query += " WHERE price <= :";
+                isFirstConditionDone = true;
+            }
+            query += maxPrice;
+            args.add(maxPrice);
+        }
+        if(minSurface!=null){
+            if(isFirstConditionDone) {
+                query += " AND surface >= :";
+            }
+            else {
+                query += " WHERE surface >= :";
+                isFirstConditionDone = true;
+            }
+            query += minSurface;
+            args.add(minSurface);
+        }
+        if(maxSurface!=null){
+            if(isFirstConditionDone) {
+                query += " AND surface <= :";
+            }
+            else {
+                query += " WHERE surface <= :";
+                isFirstConditionDone = true;
+            }
+            query += maxSurface;
+            args.add(maxSurface);
+        }
+        if(minRoomNumber!=0){
+            if(isFirstConditionDone) {
+                query += " AND room_number >= :";
+            }
+            else {
+                query += " WHERE room_number >= :";
+                isFirstConditionDone = true;
+            }
+            query += minRoomNumber;
+            args.add(minRoomNumber);
+        }
+        if(maxRoomNumber!=0){
+            if(isFirstConditionDone) {
+                query += " AND room_number <= :";
+            }
+            else {
+                query += " WHERE room_number <= :";
+                isFirstConditionDone = true;
+            }
+            query += maxRoomNumber;
+            args.add(maxRoomNumber);
+        }
+        if(!onSale){
+            if(isFirstConditionDone) {
+                query += " AND on_sale = :";
+            }
+            else {
+                query += " WHERE on_sale = :";
+                isFirstConditionDone = true;
+            }
+            query += onSale;
+            args.add(onSale);
+        }
+    }
+
     private void launchResearch() {
         mBinding.btSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,8 +257,11 @@ public class SearchFragment extends Fragment {
     }
 
     private void getSearchPropertiesFromDao() {
-        Log.e("type before query", type);
-        mSearchViewModel.getSearchProperties(type, minPrice, maxPrice, minSurface, maxSurface, minRoomNumber, maxRoomNumber, location, onSale).observe(requireActivity(), this::getSearchPropertiesForListViewFragment);
+        buildQueryForSearch();
+        Log.e("query before query", query);
+        SimpleSQLiteQuery simpleSQLiteQuery = new SimpleSQLiteQuery(query, args.toArray());
+        List<Property> properties = mSearchViewModel.getSearchProperties(simpleSQLiteQuery);
+        getSearchPropertiesForListViewFragment(properties);
     }
 
     private void getSearchPropertiesForListViewFragment(List<Property> properties) {
@@ -206,13 +294,6 @@ public class SearchFragment extends Fragment {
         Intent intent = new Intent(requireActivity(), MainActivity.class);
         intent.putExtras(bundle);
         startActivity(intent);
-        /**if (mListViewFragment == null) {
-            mListViewFragment = ListViewFragment.newInstance();
-            mListViewFragment.setArguments(bundle);
-        }
-        if (!mListViewFragment.isVisible()) {
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mListViewFragment).commit();
-        }*/
     }
 
     private void navigateToMainActivity() {

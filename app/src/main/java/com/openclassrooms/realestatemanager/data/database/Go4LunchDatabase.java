@@ -37,6 +37,7 @@ public abstract class Go4LunchDatabase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(
                                         context.getApplicationContext(),
                                         Go4LunchDatabase.class, "Go4LunchDatabase.db")
+                                    .allowMainThreadQueries()
                                     .build();
                 }
             }

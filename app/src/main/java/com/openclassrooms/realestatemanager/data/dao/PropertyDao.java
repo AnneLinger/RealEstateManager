@@ -5,7 +5,9 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.RawQuery;
 import androidx.room.Update;
+import androidx.sqlite.db.SupportSQLiteQuery;
 
 import com.openclassrooms.realestatemanager.domain.models.Property;
 
@@ -35,22 +37,6 @@ public interface PropertyDao {
     void updateProperty(Property property);
 
     //Search properties depends on multi criteria
-    @Query("SELECT * FROM property_table " +
-            "WHERE type IS :type " +
-            "AND price BETWEEN :minPrice and :maxPrice " +
-            "AND surface BETWEEN :minSurface AND :maxSurface " +
-            "AND room_number BETWEEN :minRoomNumber AND :maxRoomNumber " +
-            "AND address LIKE :address " +
-            "AND city LIKE :address " +
-            "AND on_sale IS :onSale")
-    LiveData<List<Property>> getPropertyResearch(
-            @Nullable String type,
-            String minPrice,
-            String maxPrice,
-            String minSurface,
-            String maxSurface,
-            int minRoomNumber,
-            int maxRoomNumber,
-            String address,
-            boolean onSale);
+    @RawQuery
+    List<Property> getPropertyResearch(SupportSQLiteQuery query);
 }

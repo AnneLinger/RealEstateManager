@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.viewmodels;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.sqlite.db.SupportSQLiteQuery;
 
 import com.openclassrooms.realestatemanager.data.repositories.PhotoRepositoryImpl;
 import com.openclassrooms.realestatemanager.data.repositories.PropertyRepositoryImpl;
@@ -36,15 +37,7 @@ public class SearchViewModel extends ViewModel {
         mExecutor = executor;
     }
 
-    public LiveData<List<Property>> getSearchProperties(@Nullable String type,
-                                                        String minPrice,
-                                                        String maxPrice,
-                                                        String minSurface,
-                                                        String maxSurface,
-                                                        int minRoomNumber,
-                                                        int maxRoomNumber,
-                                                        String address,
-                                                        boolean onSale) {
-        return mPropertyRepository.getSearchProperties(type, minPrice, maxPrice, minSurface, maxSurface, minRoomNumber, maxRoomNumber, address, onSale);
+    public List<Property> getSearchProperties(SupportSQLiteQuery query) {
+        return mPropertyRepository.getSearchProperties(query);
     }
 }
