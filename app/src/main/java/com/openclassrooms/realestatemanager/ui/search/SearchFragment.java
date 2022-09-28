@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.sqlite.db.SimpleSQLiteQuery;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.openclassrooms.realestatemanager.R;
@@ -81,6 +82,7 @@ public class SearchFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         configureToolbar();
+        configureBottomNav();
         configureViewModel();
         getDataFromForm();
         launchResearch();
@@ -89,6 +91,11 @@ public class SearchFragment extends Fragment {
     private void configureToolbar() {
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(view -> showDialogToConfirmCancel());
+    }
+
+    private void configureBottomNav() {
+        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottom_nav);
+        bottomNavigationView.setVisibility(View.GONE);
     }
 
     private void configureViewModel() {

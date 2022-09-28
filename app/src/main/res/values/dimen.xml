@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="basic_margin">16dp</dimen>
+    <dimen name="basic_margin_land">16dp</dimen>
+    <dimen name="search_width">150dp</dimen>
+    <dimen name="search_width_land">300dp</dimen>
 </resources>

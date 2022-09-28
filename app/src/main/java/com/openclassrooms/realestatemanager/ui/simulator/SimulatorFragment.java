@@ -15,6 +15,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentSimulatorBinding;
@@ -61,6 +62,7 @@ public class SimulatorFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         configureToolbar();
+        configureBottomNav();
         getDataFromForm();
         simulateHomeLoan();
     }
@@ -70,7 +72,11 @@ public class SimulatorFragment extends Fragment {
         toolbar.setNavigationOnClickListener(view -> navigateToMainActivity());
     }
 
-    //TODO add text view required in xml
+    private void configureBottomNav() {
+        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottom_nav);
+        bottomNavigationView.setVisibility(View.GONE);
+    }
+
     private void getDataFromForm() {
         getDataFromEditText(propertyPriceEditText);
         getDataFromEditText(contributionEditText);
