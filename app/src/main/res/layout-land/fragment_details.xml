@@ -35,7 +35,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_photos"
-        android:layout_width="@dimen/search_width_land"
+        android:layout_width="260dp"
         android:layout_height="@dimen/height_land"
         android:layout_marginLeft="@dimen/basic_margin"
         android:orientation="horizontal"

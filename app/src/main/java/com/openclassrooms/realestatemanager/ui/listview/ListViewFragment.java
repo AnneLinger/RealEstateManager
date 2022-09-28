@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -80,7 +81,14 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.OnItem
     public void onItemClick(long id) {
         Fragment fragment = DetailsFragment.newInstance(id);
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.nav_host_fragment, fragment, "details_fragment");
+        boolean isTablet = getResources().getBoolean(R.bool.isTablet);
+        int orientation = getResources().getConfiguration().orientation;
+        if(isTablet && orientation== Configuration.ORIENTATION_LANDSCAPE) {
+            transaction.replace(R.id.nav_host_fragment_details, fragment, "details_fragment");
+        }
+        else {
+            transaction.replace(R.id.nav_host_fragment, fragment, "details_fragment");
+        }
         transaction.addToBackStack(null);
         transaction.commit();
     }

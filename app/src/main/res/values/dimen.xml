@@ -7,4 +7,5 @@
     <dimen name="basic_margin_land">16dp</dimen>
     <dimen name="search_width">150dp</dimen>
     <dimen name="search_width_land">300dp</dimen>
+    <dimen name="second_fragment_width">0dp</dimen>
 </resources>

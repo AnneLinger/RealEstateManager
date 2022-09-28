@@ -57,6 +57,10 @@ public class DetailsFragment extends Fragment {
     private List<String> mSupermarkets = new ArrayList();
     private List<String> mParks = new ArrayList();
 
+    public static DetailsFragment newInstance() {
+        return new DetailsFragment();
+    }
+
     public static DetailsFragment newInstance(long propertyId) {
         DetailsFragment detailsFragment = new DetailsFragment();
         Bundle bundle = new Bundle();
@@ -68,9 +72,7 @@ public class DetailsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(getArguments()!=null) {
-            mPropertyId = getArguments().getLong(ID);
-        }
+
     }
 
     @Override
@@ -86,7 +88,10 @@ public class DetailsFragment extends Fragment {
         configureToolbar();
         configureBottomNav();
         configureViewModel();
-        observeProperties();
+        if(getArguments()!=null) {
+            mPropertyId = getArguments().getLong(ID);
+            observeProperties();
+        }
         editProperty();
     }
 
@@ -106,7 +111,6 @@ public class DetailsFragment extends Fragment {
         mDetailsViewModel = new ViewModelProvider(requireActivity()).get(DetailsViewModel.class);
     }
 
-    //TODO attach vm to fragment
     private void observeProperties(){
         Log.e("", "observeProperties");
         mDetailsViewModel.getProperties().observe(requireActivity(), this::getProperties);

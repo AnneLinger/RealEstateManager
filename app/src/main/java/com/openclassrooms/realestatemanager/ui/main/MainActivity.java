@@ -54,15 +54,11 @@ public class MainActivity extends AppCompatActivity {
     private SimulatorFragment mSimulatorFragment;
     private AddEditGeneralFragment mAddEditGeneralFragment;
     private AddEditDetailedFragment mAddEditDetailedFragment;
-    private final String BUNDLE_KEY = "search_properties";
-
-    //For navigation
-    private NavController mNavController;
 
     //For data
-
     private TextView textViewMain;
     private TextView textViewQuantity;
+    private final String BUNDLE_KEY = "search_properties";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,16 +76,19 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().add(R.id.nav_host_fragment, new ListViewFragment()).commit();
             this.mListViewFragment = ListViewFragment.newInstance();
         }
+        /**if(mDetailsFragment == null && mBinding.navHostFragmentDetails != null) {
+            this.mDetailsFragment = DetailsFragment.newInstance();
+            getSupportFragmentManager().beginTransaction().add(R.id.nav_host_fragment_details, mDetailsFragment).commit();
+        }*/
+        /**if(mDetailsFragment.isVisible()) {
+            mBinding.navHostFragmentDetails.setMinimumWidth(10_000);
+        }*/
     }
 
     private void initUi() {
         mBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(mBinding.getRoot());
-        setSupportActionBar(mBinding.toolbar);
-        //BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
-        //NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-        //mNavController = navHostFragment.getNavController();
-        //NavigationUI.setupWithNavController(bottomNavigationView, mNavController);
+        setSupportActionBar(mBinding.toolbar);;
     }
 
     private void configureDrawer() {

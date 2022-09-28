@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -212,7 +214,17 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Loc
                     mDetailsFragment = DetailsFragment.newInstance(property.getId());
                 }
                 if (!mDetailsFragment.isVisible()) {
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mDetailsFragment).commit();
+                    //FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    boolean isTablet = getResources().getBoolean(R.bool.isTablet);
+                    int orientation = getResources().getConfiguration().orientation;
+                    if(isTablet && orientation== Configuration.ORIENTATION_LANDSCAPE) {
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_details, mDetailsFragment).commit();
+                        //transaction.replace(R.id.nav_host_fragment_details, fragment, "details_fragment");
+                    }
+                    else {
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mDetailsFragment).commit();
+                        //transaction.replace(R.id.nav_host_fragment, fragment, "details_fragment");
+                    }
                 }
             }
         }
