@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:http="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/detailsFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_type_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/basic_margin"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        http:layout_constraintBottom_toTopOf="@id/rv_photos"
+        http:layout_constraintStart_toStartOf="parent"
+        http:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/app_name" />
+
+    <TextView
+        android:id="@+id/tv_price_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:layout_marginRight="@dimen/basic_margin"
+        android:textColor="@color/color_secondary"
+        android:textSize="24sp"
+        http:layout_constraintBottom_toBottomOf="@id/tv_type_details"
+        http:layout_constraintEnd_toEndOf="parent"
+        tools:text="@string/app_name" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_photos"
+        android:layout_width="match_parent"
+        android:layout_height="188dp"
+        android:layout_marginHorizontal="@dimen/basic_margin"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:orientation="horizontal"
+        app:layoutManager="LinearLayoutManager"
+        http:layout_constraintBottom_toTopOf="@id/tv_description_title"
+        http:layout_constraintTop_toBottomOf="@id/tv_type_details"
+        tools:context=".ui.details.DetailsFragment"
+        tools:listitem="@layout/item_photo" />
+
+    <TextView
+        android:id="@+id/tv_description_title"
+        android:layout_width="wrap_content"
+        android:layout_height="27dp"
+        android:layout_marginStart="@dimen/basic_margin"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:text="@string/description"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        http:layout_constraintStart_toStartOf="parent"
+        http:layout_constraintTop_toBottomOf="@id/rv_photos" />
+
+    <TextView
+        android:id="@+id/tv_description_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:justificationMode="inter_word"
+        android:paddingHorizontal="@dimen/basic_margin"
+        android:textSize="16sp"
+        http:layout_constraintEnd_toEndOf="parent"
+        http:layout_constraintStart_toStartOf="parent"
+        http:layout_constraintTop_toBottomOf="@id/tv_description_title"
+        tools:text="@string/lorem_ipsum" />
+
+    <View
+        android:id="@+id/view_first_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="@dimen/basic_margin"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:background="@android:color/white"
+        http:layout_constraintEnd_toEndOf="parent"
+        http:layout_constraintStart_toStartOf="parent"
+        http:layout_constraintTop_toBottomOf="@id/tv_description_detail" />
+
+    <ImageView
+        android:id="@+id/im_surface_icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="@dimen/basic_margin"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:contentDescription="@string/property_photo"
+        android:src="@drawable/ic_baseline_house_24"
+        app:layout_constraintStart_toStartOf="parent"
+        http:layout_constraintTop_toBottomOf="@id/view_first_divider" />
+
+    <TextView
+        android:id="@+id/tv_surface_title_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/basic_margin"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:text="@string/surface"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        http:layout_constraintStart_toEndOf="@id/im_surface_icon"
+        http:layout_constraintTop_toBottomOf="@id/view_first_divider" />
+
+    <TextView
+        android:id="@+id/tv_surface_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/basic_margin"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:textSize="16sp"
+        http:layout_constraintStart_toEndOf="@id/tv_surface_title_detail"
+        http:layout_constraintTop_toBottomOf="@id/view_first_divider"
+        tools:text="@string/surface" />
+
+    <ImageView
+        android:id="@+id/im_location_icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:layout_marginRight="@dimen/basic_margin"
+        android:contentDescription="@string/property_photo"
+        android:src="@drawable/ic_baseline_location_on_24"
+        app:layout_constraintEnd_toStartOf="@id/tv_location_title_detail"
+        http:layout_constraintTop_toBottomOf="@id/view_first_divider" />
+
+    <TextView
+        android:id="@+id/tv_location_title_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:layout_marginRight="@dimen/basic_margin"
+        android:text="@string/location"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        http:layout_constraintEnd_toEndOf="parent"
+        http:layout_constraintTop_toBottomOf="@id/view_first_divider" />
+
+    <ImageView
+        android:id="@+id/im_room_icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="@dimen/basic_margin"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:contentDescription="@string/property_photo"
+        android:src="@drawable/ic_baseline_bedroom_parent_24"
+        app:layout_constraintStart_toStartOf="parent"
+        http:layout_constraintTop_toBottomOf="@id/im_surface_icon" />
+
+    <TextView
+        android:id="@+id/tv_room_title_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/basic_margin"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:text="@string/room_number_details"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        http:layout_constraintStart_toEndOf="@id/im_room_icon"
+        http:layout_constraintTop_toBottomOf="@id/im_surface_icon" />
+
+    <TextView
+        android:id="@+id/tv_room_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/basic_margin"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:textSize="16sp"
+        http:layout_constraintStart_toEndOf="@id/tv_room_title_detail"
+        http:layout_constraintTop_toBottomOf="@id/im_surface_icon"
+        tools:text="@string/surface" />
+
+    <TextView
+        android:id="@+id/tv_address_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:layout_marginRight="@dimen/basic_margin"
+        android:textSize="16sp"
+        http:layout_constraintEnd_toEndOf="parent"
+        http:layout_constraintTop_toBottomOf="@id/im_surface_icon"
+        tools:text="@string/address" />
+
+    <ImageView
+        android:id="@+id/im_entry_date_icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="@dimen/basic_margin"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:contentDescription="@string/property_photo"
+        android:src="@drawable/ic_baseline_calendar_month_24"
+        app:layout_constraintStart_toStartOf="parent"
+        http:layout_constraintTop_toBottomOf="@id/im_room_icon" />
+
+    <TextView
+        android:id="@+id/tv_entry_date_title_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/basic_margin"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:text="@string/entry_date_details"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        http:layout_constraintStart_toEndOf="@id/im_entry_date_icon"
+        http:layout_constraintTop_toBottomOf="@id/im_room_icon" />
+
+    <TextView
+        android:id="@+id/tv_entry_date_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/basic_margin"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:textSize="16sp"
+        http:layout_constraintStart_toEndOf="@id/tv_entry_date_title_detail"
+        http:layout_constraintTop_toBottomOf="@id/im_room_icon"
+        tools:text="@string/surface" />
+
+    <TextView
+        android:id="@+id/tv_city_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:layout_marginRight="@dimen/basic_margin"
+        android:textSize="16sp"
+        http:layout_constraintEnd_toEndOf="parent"
+        http:layout_constraintTop_toBottomOf="@id/im_room_icon"
+        tools:text="@string/address" />
+
+    <ImageView
+        android:id="@+id/im_sale_icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="@dimen/basic_margin"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:contentDescription="@string/property_photo"
+        android:src="@drawable/ic_baseline_attach_money_24"
+        app:layout_constraintStart_toStartOf="parent"
+        http:layout_constraintTop_toBottomOf="@id/im_entry_date_icon" />
+
+    <TextView
+        android:id="@+id/tv_sale_title_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/basic_margin"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:text="@string/on_sale"
+        android:textColor="@color/color_secondary"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        http:layout_constraintStart_toEndOf="@id/im_sale_icon"
+        http:layout_constraintTop_toBottomOf="@id/im_entry_date_icon" />
+
+    <TextView
+        android:id="@+id/tv_sale_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/basic_margin"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:textColor="@color/color_secondary"
+        android:textSize="16sp"
+        http:layout_constraintStart_toEndOf="@id/tv_sale_title_detail"
+        http:layout_constraintTop_toBottomOf="@id/im_entry_date_icon"
+        tools:text="@string/surface" />
+
+    <TextView
+        android:id="@+id/tv_sold_date_title_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/basic_margin"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:text="@string/otherwise_sold_date"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        http:layout_constraintStart_toEndOf="@id/tv_sale_detail"
+        http:layout_constraintTop_toBottomOf="@id/im_entry_date_icon" />
+
+    <TextView
+        android:id="@+id/tv_sold_date_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/basic_margin"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        http:layout_constraintStart_toEndOf="@id/tv_sold_date_title_detail"
+        http:layout_constraintTop_toBottomOf="@id/im_entry_date_icon"
+        tools:text="@string/surface" />
+
+    <ImageView
+        android:id="@+id/im_agent_icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="@dimen/basic_margin"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:contentDescription="@string/property_photo"
+        android:src="@drawable/ic_baseline_person_24"
+        app:layout_constraintStart_toStartOf="parent"
+        http:layout_constraintTop_toBottomOf="@id/im_sale_icon" />
+
+    <TextView
+        android:id="@+id/tv_agent_title_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/basic_margin"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:text="@string/agent_detail"
+        android:textColor="@color/color_primary"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        http:layout_constraintStart_toEndOf="@id/im_agent_icon"
+        http:layout_constraintTop_toBottomOf="@id/im_sale_icon" />
+
+    <TextView
+        android:id="@+id/tv_agent_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/basic_margin"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:textColor="@color/color_primary"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        http:layout_constraintStart_toEndOf="@id/tv_agent_title_detail"
+        http:layout_constraintTop_toBottomOf="@id/im_sale_icon"
+        tools:text="@string/surface" />
+
+    <View
+        android:id="@+id/view_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="@dimen/basic_margin"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:background="@android:color/white"
+        http:layout_constraintEnd_toEndOf="parent"
+        http:layout_constraintStart_toStartOf="parent"
+        http:layout_constraintTop_toBottomOf="@id/im_agent_icon" />
+
+    <ImageView
+        android:id="@+id/im_map_details"
+        android:layout_width="180dp"
+        android:layout_height="220dp"
+        android:layout_marginLeft="@dimen/basic_margin"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:contentDescription="@string/property_location_in_map"
+        http:layout_constraintBottom_toBottomOf="parent"
+        http:layout_constraintStart_toStartOf="parent"
+        http:layout_constraintTop_toBottomOf="@id/view_divider" />
+
+    <ImageView
+        android:id="@+id/im_points_interest_icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="@dimen/basic_margin"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:contentDescription="@string/property_photo"
+        android:src="@drawable/ic_baseline_lightbulb_24"
+        http:layout_constraintStart_toEndOf="@id/im_map_details"
+        http:layout_constraintTop_toBottomOf="@id/view_divider" />
+
+    <TextView
+        android:id="@+id/tv_points_interest_title_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/basic_margin"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:text="@string/points_of_interest"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        http:layout_constraintStart_toEndOf="@id/im_points_interest_icon"
+        http:layout_constraintTop_toBottomOf="@id/view_divider" />
+
+    <TextView
+        android:id="@+id/tv_points_interest_detail_schools"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/basic_margin"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:justificationMode="inter_word"
+        android:textSize="16sp"
+        http:layout_constraintEnd_toEndOf="parent"
+        http:layout_constraintStart_toEndOf="@id/im_map_details"
+        http:layout_constraintTop_toBottomOf="@id/im_points_interest_icon"
+        tools:text="@string/lorem_ipsum" />
+
+    <TextView
+        android:id="@+id/tv_points_interest_detail_supermarkets"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/basic_margin"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:justificationMode="inter_word"
+        android:textSize="16sp"
+        http:layout_constraintEnd_toEndOf="parent"
+        http:layout_constraintStart_toEndOf="@id/im_map_details"
+        http:layout_constraintTop_toBottomOf="@id/tv_points_interest_detail_schools"
+        tools:text="@string/lorem_ipsum" />
+
+    <TextView
+        android:id="@+id/tv_points_interest_detail_parks"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/basic_margin"
+        android:layout_marginTop="@dimen/basic_margin"
+        android:justificationMode="inter_word"
+        android:textSize="16sp"
+        http:layout_constraintEnd_toEndOf="parent"
+        http:layout_constraintStart_toEndOf="@id/im_map_details"
+        http:layout_constraintTop_toBottomOf="@id/tv_points_interest_detail_supermarkets"
+        tools:text="@string/lorem_ipsum" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/basic_margin"
+        android:layout_marginBottom="@dimen/basic_margin"
+        android:contentDescription="@string/add_a_property"
+        app:backgroundTint="@color/color_secondary_transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_baseline_edit_24" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

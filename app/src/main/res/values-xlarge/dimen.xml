@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="basic_margin">32dp</dimen>
+    <dimen name="basic_margin_land">32dp</dimen>
+    <dimen name="height_land">220dp</dimen>
+    <dimen name="margin_top_add_edit_land">32dp</dimen>
+    <dimen name="search_width">260dp</dimen>
+    <dimen name="search_width_land">440dp</dimen>
+    <dimen name="first_fragment_width">300dp</dimen>
+    <dimen name="second_fragment_width">800dp</dimen>
+</resources>
