@@ -1,154 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tf_type"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/property_type"
         android:layout_marginHorizontal="@dimen/basic_margin"
+        android:hint="@string/property_type"
+        app:endIconCheckable="true"
         app:endIconDrawable="@drawable/ic_baseline_cancel_24"
         app:endIconMode="clear_text"
-        app:endIconCheckable="true"
         app:endIconTint="@color/color_white"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tf_price"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tf_price">
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="actionNext"
-            android:singleLine="true"
-            />
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tf_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/basic_margin"
         android:hint="@string/price"
-        app:suffixText="@string/dollars"
+        app:endIconCheckable="true"
         app:endIconDrawable="@drawable/ic_baseline_cancel_24"
         app:endIconMode="clear_text"
-        app:endIconCheckable="true"
         app:endIconTint="@color/color_white"
-        android:layout_marginHorizontal="@dimen/basic_margin"
-        app:layout_constraintTop_toBottomOf="@id/tf_type"
+        app:layout_constraintBottom_toTopOf="@id/tf_surface"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tf_surface">
+        app:layout_constraintTop_toBottomOf="@id/tf_type"
+        app:suffixText="@string/dollars">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
             android:imeOptions="actionNext"
-            android:singleLine="true"
-            />
+            android:inputType="numberDecimal"
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tf_surface"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/basic_margin"
         android:hint="@string/surface"
-        app:suffixText="@string/square_meters"
+        app:endIconCheckable="true"
         app:endIconDrawable="@drawable/ic_baseline_cancel_24"
         app:endIconMode="clear_text"
-        app:endIconCheckable="true"
         app:endIconTint="@color/color_white"
-        android:layout_marginHorizontal="@dimen/basic_margin"
-        app:layout_constraintTop_toBottomOf="@id/tf_price"
+        app:layout_constraintBottom_toTopOf="@id/tf_address"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tf_address">
+        app:layout_constraintTop_toBottomOf="@id/tf_price"
+        app:suffixText="@string/square_meters">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_surface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"
             android:imeOptions="actionNext"
-            android:singleLine="true"
-            />
+            android:inputType="number"
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tf_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/address"
         android:layout_marginHorizontal="@dimen/basic_margin"
+        android:hint="@string/address"
+        app:endIconCheckable="true"
         app:endIconDrawable="@drawable/ic_baseline_cancel_24"
         app:endIconMode="clear_text"
-        app:endIconCheckable="true"
         app:endIconTint="@color/color_white"
-        app:layout_constraintTop_toBottomOf="@id/tf_surface"
+        app:layout_constraintBottom_toTopOf="@id/tf_city"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tf_city">
+        app:layout_constraintTop_toBottomOf="@id/tf_surface">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:imeOptions="actionNext"
-            />
+            android:imeOptions="actionNext" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tf_city"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/city"
         android:layout_marginHorizontal="@dimen/basic_margin"
+        android:hint="@string/city"
+        app:endIconCheckable="true"
         app:endIconDrawable="@drawable/ic_baseline_cancel_24"
         app:endIconMode="clear_text"
-        app:endIconCheckable="true"
         app:endIconTint="@color/color_white"
-        app:layout_constraintTop_toBottomOf="@id/tf_address"
+        app:layout_constraintBottom_toTopOf="@id/tv_required"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tv_required">
+        app:layout_constraintTop_toBottomOf="@id/tf_address">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_city"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            />
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/tv_required"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hint_required"
-        android:contentDescription="@string/hint_required"
         android:layout_marginLeft="@dimen/basic_margin"
-        app:layout_constraintTop_toBottomOf="@id/tf_city"
+        android:contentDescription="@string/hint_required"
+        android:text="@string/hint_required"
+        app:layout_constraintBottom_toTopOf="@id/bt_next_add_edit"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bt_next_add_edit"/>
+        app:layout_constraintTop_toBottomOf="@id/tf_city" />
 
     <Button
         android:id="@+id/bt_next_add_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/next_button"
         android:contentDescription="@string/next"
+        android:text="@string/next_button"
         android:textColor="@color/color_white"
-        app:layout_constraintTop_toBottomOf="@id/tv_required"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/tv_required" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

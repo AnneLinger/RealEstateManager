@@ -1,28 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:http="http://schemas.android.com/apk/res-auto"
     android:id="@+id/search_fragment"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tf_search_type"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/type"
         android:layout_marginHorizontal="@dimen/basic_margin"
         android:layout_marginTop="@dimen/basic_margin"
+        android:hint="@string/type"
+        app:endIconCheckable="true"
         app:endIconDrawable="@drawable/ic_baseline_cancel_24"
         app:endIconMode="clear_text"
-        app:endIconCheckable="true"
         app:endIconTint="@color/color_white"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tf_search_price_from"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tf_search_price_from">
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_search_type"
@@ -35,59 +33,57 @@
         android:id="@+id/tf_search_price_from"
         android:layout_width="@dimen/search_width"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/basic_margin"
         android:hint="@string/min_price"
+        app:endIconCheckable="true"
         app:endIconDrawable="@drawable/ic_baseline_cancel_24"
         app:endIconMode="clear_text"
-        app:endIconCheckable="true"
         app:endIconTint="@color/color_white"
-        android:layout_marginLeft="@dimen/basic_margin"
-        app:layout_constraintTop_toBottomOf="@id/tf_search_type"
+        app:layout_constraintBottom_toTopOf="@id/tf_search_surface_from"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tf_search_surface_from">
+        app:layout_constraintTop_toBottomOf="@id/tf_search_type">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_search_price_from"
-            android:inputType="numberDecimal"
             android:layout_width="match_parent"
-            android:singleLine="true"
             android:layout_height="wrap_content"
             android:imeOptions="actionNext"
-            />
+            android:inputType="numberDecimal"
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/tv_search_to_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/to"
         android:text="@string/to"
         android:textSize="16sp"
-        android:contentDescription="@string/to"
-        app:layout_constraintTop_toBottomOf="@id/tf_search_type"
+        app:layout_constraintBottom_toTopOf="@id/tf_search_surface_from"
         app:layout_constraintStart_toEndOf="@id/tf_search_price_from"
-        http:layout_constraintEnd_toStartOf="@id/tf_search_price_to"
-        app:layout_constraintBottom_toTopOf="@id/tf_search_surface_from"/>
+        app:layout_constraintTop_toBottomOf="@id/tf_search_type"
+        http:layout_constraintEnd_toStartOf="@id/tf_search_price_to" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tf_search_price_to"
         android:layout_width="@dimen/search_width"
         android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/basic_margin"
         android:hint="@string/max_price"
+        app:endIconCheckable="true"
         app:endIconDrawable="@drawable/ic_baseline_cancel_24"
         app:endIconMode="clear_text"
-        app:endIconCheckable="true"
         app:endIconTint="@color/color_white"
-        android:layout_marginRight="@dimen/basic_margin"
-        app:layout_constraintTop_toBottomOf="@id/tf_search_type"
+        app:layout_constraintBottom_toTopOf="@id/tf_search_surface_from"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tf_search_surface_from">
+        app:layout_constraintTop_toBottomOf="@id/tf_search_type">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_search_price_to"
-            android:inputType="numberDecimal"
             android:layout_width="match_parent"
-            android:singleLine="true"
             android:layout_height="wrap_content"
-            />
+            android:inputType="numberDecimal"
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -95,142 +91,138 @@
         android:id="@+id/tf_search_surface_from"
         android:layout_width="@dimen/search_width"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/basic_margin"
         android:hint="@string/min_surface"
+        app:endIconCheckable="true"
         app:endIconDrawable="@drawable/ic_baseline_cancel_24"
         app:endIconMode="clear_text"
-        app:endIconCheckable="true"
         app:endIconTint="@color/color_white"
-        android:layout_marginLeft="@dimen/basic_margin"
-        app:layout_constraintTop_toBottomOf="@id/tf_search_price_from"
+        app:layout_constraintBottom_toTopOf="@id/tf_search_room_number_from"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tf_search_room_number_from">
+        app:layout_constraintTop_toBottomOf="@id/tf_search_price_from">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_search_surface_from"
-            android:inputType="number"
             android:layout_width="match_parent"
-            android:singleLine="true"
             android:layout_height="wrap_content"
             android:imeOptions="actionNext"
-            />
+            android:inputType="number"
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/tv_search_to_surface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/to"
         android:text="@string/to"
         android:textSize="16sp"
-        android:contentDescription="@string/to"
+        app:layout_constraintStart_toEndOf="@id/tf_search_surface_from"
         app:layout_constraintTop_toTopOf="@id/tf_search_surface_from"
         http:layout_constraintBottom_toBottomOf="@id/tf_search_surface_from"
-        app:layout_constraintStart_toEndOf="@id/tf_search_surface_from"
-        http:layout_constraintEnd_toStartOf="@id/tf_search_surface_to"/>
+        http:layout_constraintEnd_toStartOf="@id/tf_search_surface_to" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tf_search_surface_to"
         android:layout_width="@dimen/search_width"
         android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/basic_margin"
         android:hint="@string/max_surface"
+        app:endIconCheckable="true"
         app:endIconDrawable="@drawable/ic_baseline_cancel_24"
         app:endIconMode="clear_text"
-        app:endIconCheckable="true"
         app:endIconTint="@color/color_white"
-        android:layout_marginRight="@dimen/basic_margin"
-        app:layout_constraintTop_toBottomOf="@id/tf_search_price_from"
+        app:layout_constraintBottom_toTopOf="@id/tf_search_room_number_from"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tf_search_room_number_from">
+        app:layout_constraintTop_toBottomOf="@id/tf_search_price_from">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_search_surface_to"
-            android:inputType="numberDecimal"
-            android:singleLine="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            android:inputType="numberDecimal"
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tf_search_room_number_from"
         android:layout_width="@dimen/search_width"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/basic_margin"
         android:hint="@string/min_room_number"
+        app:endIconCheckable="true"
         app:endIconDrawable="@drawable/ic_baseline_cancel_24"
         app:endIconMode="clear_text"
-        app:endIconCheckable="true"
         app:endIconTint="@color/color_white"
-        android:layout_marginLeft="@dimen/basic_margin"
-        app:layout_constraintTop_toBottomOf="@id/tf_search_surface_from"
+        app:layout_constraintBottom_toTopOf="@id/switch_search_sold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/switch_search_sold">
+        app:layout_constraintTop_toBottomOf="@id/tf_search_surface_from">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_search_room_number_from"
-            android:inputType="number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:singleLine="true"
             android:imeOptions="actionNext"
-            />
+            android:inputType="number"
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/tv_search_to_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/to"
         android:text="@string/to"
         android:textSize="16sp"
-        android:contentDescription="@string/to"
-        app:layout_constraintTop_toBottomOf="@id/tf_search_surface_from"
+        app:layout_constraintBottom_toTopOf="@id/switch_search_sold"
         app:layout_constraintStart_toEndOf="@id/tf_search_room_number_from"
-        http:layout_constraintEnd_toStartOf="@id/tf_search_room_number_to"
-        app:layout_constraintBottom_toTopOf="@id/switch_search_sold"/>
+        app:layout_constraintTop_toBottomOf="@id/tf_search_surface_from"
+        http:layout_constraintEnd_toStartOf="@id/tf_search_room_number_to" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tf_search_room_number_to"
         android:layout_width="@dimen/search_width"
         android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/basic_margin"
         android:hint="@string/max_room_number"
+        app:endIconCheckable="true"
         app:endIconDrawable="@drawable/ic_baseline_cancel_24"
         app:endIconMode="clear_text"
-        app:endIconCheckable="true"
         app:endIconTint="@color/color_white"
-        android:layout_marginRight="@dimen/basic_margin"
-        app:layout_constraintTop_toBottomOf="@id/tf_search_surface_from"
+        app:layout_constraintBottom_toTopOf="@id/switch_search_sold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/switch_search_sold">
+        app:layout_constraintTop_toBottomOf="@id/tf_search_surface_from">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_search_room_number_to"
-            android:inputType="numberDecimal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            />
+            android:inputType="numberDecimal"
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/switch_search_sold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:checked="false"
         android:layout_marginStart="@dimen/basic_margin"
+        android:checked="false"
         android:text="@string/sold_properties"
         app:layout_constraintBottom_toTopOf="@id/bt_search"
         app:layout_constraintStart_toStartOf="parent"
-        http:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tf_search_room_number_from"/>
+        app:layout_constraintTop_toBottomOf="@id/tf_search_room_number_from"
+        http:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/bt_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/search_button"
         android:contentDescription="@string/search"
+        android:text="@string/search_button"
         android:textColor="@color/color_white"
-        app:layout_constraintTop_toBottomOf="@id/switch_search_sold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/switch_search_sold" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,6 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * Pojo model for the place description
  */
 
+@SuppressWarnings("unused")
 public class Geometry {
 
     @SerializedName("location")

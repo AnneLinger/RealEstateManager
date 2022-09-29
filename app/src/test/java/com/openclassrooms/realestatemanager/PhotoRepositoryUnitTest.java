@@ -9,11 +9,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.openclassrooms.realestatemanager.data.dao.PhotoDao;
-import com.openclassrooms.realestatemanager.data.dao.PropertyDao;
 import com.openclassrooms.realestatemanager.data.repositories.PhotoRepositoryImpl;
-import com.openclassrooms.realestatemanager.data.repositories.PropertyRepositoryImpl;
 import com.openclassrooms.realestatemanager.domain.models.Photo;
-import com.openclassrooms.realestatemanager.domain.models.Property;
 
 import org.junit.Before;
 import org.junit.Test;

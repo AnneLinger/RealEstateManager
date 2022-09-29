@@ -1,7 +1,7 @@
 package com.openclassrooms.realestatemanager.ui.addedit;
 
 import android.content.Intent;
-import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -20,19 +21,19 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentGeneralDataBinding;
-import com.openclassrooms.realestatemanager.domain.models.Photo;
 import com.openclassrooms.realestatemanager.domain.models.Property;
 import com.openclassrooms.realestatemanager.ui.main.MainActivity;
 import com.openclassrooms.realestatemanager.viewmodels.AddEditGeneralViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 /**
-*Fragment to add or edit general information about property
-*/
+ * Fragment to add or edit general information about property
+ */
 
+@RequiresApi(api = Build.VERSION_CODES.M)
+@SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
 public class AddEditGeneralFragment extends Fragment {
 
     //For ui
@@ -60,14 +61,6 @@ public class AddEditGeneralFragment extends Fragment {
     private long mPropertyId = 0;
     private Property mProperty;
     private List<Property> mProperties;
-    private List<String> mPhotoUriList = new ArrayList<>();
-    private int mPhotoNumber = 0;
-    private final String PHOTO_NUMBER = "photo_number";
-    private int photoKeyForBundle = 1;
-    private List<String> mPhotosLabels = new ArrayList<>();
-    private final CharSequence[] mCharSequences = new CharSequence[] {"Exterior", "Kitchen", "Living Room", "Bedroom", "Bathroom", "Garden", "Else"};
-    private List<Photo> mPhotos = new ArrayList<>();
-    private Uri outputFileUri;
 
     public static AddEditGeneralFragment newInstance() {
         return new AddEditGeneralFragment();
@@ -101,30 +94,29 @@ public class AddEditGeneralFragment extends Fragment {
     }
 
     private void configureToolbar() {
-        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
+        Toolbar toolbar = requireActivity().findViewById(R.id.toolbar);
         toolbar.setTitle(this.getString(R.string.add_edit_general_title));
         toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
         toolbar.setNavigationOnClickListener(view -> showDialogToConfirmCancel());
     }
 
     private void configureBottomNav() {
-        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottom_nav);
+        BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.bottom_nav);
         bottomNavigationView.setVisibility(View.GONE);
     }
 
-    //TODO attacher le VM au fragment
     private void configureViewModel() {
         mAddEditGeneralViewModel = new ViewModelProvider(requireActivity()).get(AddEditGeneralViewModel.class);
     }
 
     private void checkIfPropertyAlreadyExists() {
-        if(getArguments()!=null) {
+        if (getArguments() != null) {
             mPropertyId = getArguments().getLong(ID);
             observeProperties();
         }
     }
 
-    private void observeProperties(){
+    private void observeProperties() {
         mAddEditGeneralViewModel.getProperties().observe(requireActivity(), this::getProperties);
     }
 
@@ -134,8 +126,8 @@ public class AddEditGeneralFragment extends Fragment {
     }
 
     private void getProperty() {
-        for(Property property : mProperties) {
-            if(property.getId()==mPropertyId){
+        for (Property property : mProperties) {
+            if (property.getId() == mPropertyId) {
                 mProperty = property;
             }
         }
@@ -152,19 +144,19 @@ public class AddEditGeneralFragment extends Fragment {
     }
 
     private void fillFormWithPropertyData() {
-        if(type!=null){
+        if (type != null) {
             typeEditText.setText(type);
         }
-        if(price!=null){
+        if (price != null) {
             priceEditText.setText(price);
         }
-        if(surface!=null){
+        if (surface != null) {
             surfaceEditText.setText(surface);
         }
-        if(address!=null){
+        if (address != null) {
             addressEditText.setText(address);
         }
-        if(city!=null){
+        if (city != null) {
             cityEditText.setText(city);
         }
     }
@@ -177,7 +169,7 @@ public class AddEditGeneralFragment extends Fragment {
         getDataFromEditText(cityEditText);
     }
 
-    private void getDataFromEditText(TextInputEditText textInputEditText){
+    private void getDataFromEditText(TextInputEditText textInputEditText) {
         textInputEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -189,20 +181,16 @@ public class AddEditGeneralFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(s==typeEditText.getEditableText()){
-                    type = textInputEditText.getText().toString();
-                }
-                else if(s==priceEditText.getEditableText()){
-                    price = textInputEditText.getText().toString();
-                }
-                else if(s==surfaceEditText.getEditableText()) {
-                    surface = textInputEditText.getText().toString();
-                }
-                else if(s==addressEditText.getEditableText()) {
-                    address = textInputEditText.getText().toString();
-                }
-                else if(s==cityEditText.getEditableText()) {
-                    city = textInputEditText.getText().toString();
+                if (s == typeEditText.getEditableText()) {
+                    type = Objects.requireNonNull(textInputEditText.getText()).toString();
+                } else if (s == priceEditText.getEditableText()) {
+                    price = Objects.requireNonNull(textInputEditText.getText()).toString();
+                } else if (s == surfaceEditText.getEditableText()) {
+                    surface = Objects.requireNonNull(textInputEditText.getText()).toString();
+                } else if (s == addressEditText.getEditableText()) {
+                    address = Objects.requireNonNull(textInputEditText.getText()).toString();
+                } else if (s == cityEditText.getEditableText()) {
+                    city = Objects.requireNonNull(textInputEditText.getText()).toString();
                 }
                 enableButtonNext();
             }
@@ -211,13 +199,9 @@ public class AddEditGeneralFragment extends Fragment {
 
     //The button next is enabled only when all fields required are filled
     private void enableButtonNext() {
-        if (Objects.requireNonNull(mBinding.etType.getText()).toString().isEmpty() ||
-                Objects.requireNonNull(mBinding.etPrice.getText()).toString().isEmpty() ||
-                Objects.requireNonNull(mBinding.etCity.getText()).toString().isEmpty()) {
-            mBinding.btNextAddEdit.setEnabled(false);
-        } else {
-            mBinding.btNextAddEdit.setEnabled(true);
-        }
+        mBinding.btNextAddEdit.setEnabled(!Objects.requireNonNull(mBinding.etType.getText()).toString().isEmpty() &&
+                !Objects.requireNonNull(mBinding.etPrice.getText()).toString().isEmpty() &&
+                !Objects.requireNonNull(mBinding.etCity.getText()).toString().isEmpty());
     }
 
     //Dialog to alert about the add/edit annulment
@@ -226,36 +210,28 @@ public class AddEditGeneralFragment extends Fragment {
         alertDialogBuilder.setTitle(R.string.cancel_add_edit_title)
                 .setMessage(R.string.confirm_cancel_message)
                 .setCancelable(false)
-                .setPositiveButton(R.string.cancel_button, (dialog, which) -> {
-                    for(Photo photo : mPhotos){
-                        mAddEditGeneralViewModel.deletePhoto(photo.getPhotoId());
-                    }
-                    navigateToMainActivity();
-                })
+                .setPositiveButton(R.string.cancel_button, (dialog, which) -> navigateToMainActivity())
                 .setNegativeButton(R.string.continue_button, (dialog, which) -> dialog.dismiss())
                 .create()
                 .show();
     }
 
     private void navigateToNextFragmentAddEdit() {
-        mBinding.btNextAddEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Bundle bundle = new Bundle();
-                bundle.putLong(ID, mPropertyId);
-                bundle.putString(TYPE, type);
-                bundle.putString(PRICE, price);
-                bundle.putString(SURFACE, surface);
-                bundle.putString(ADDRESS, address);
-                bundle.putString(CITY, city);
+        mBinding.btNextAddEdit.setOnClickListener(v -> {
+            final Bundle bundle = new Bundle();
+            bundle.putLong(ID, mPropertyId);
+            bundle.putString(TYPE, type);
+            bundle.putString(PRICE, price);
+            bundle.putString(SURFACE, surface);
+            bundle.putString(ADDRESS, address);
+            bundle.putString(CITY, city);
 
-                if (mAddEditDetailedFragment == null) {
-                    mAddEditDetailedFragment = AddEditDetailedFragment.newInstance();
-                    mAddEditDetailedFragment.setArguments(bundle);
-                }
-                if (!mAddEditDetailedFragment.isVisible()) {
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mAddEditDetailedFragment).commit();
-                }
+            if (mAddEditDetailedFragment == null) {
+                mAddEditDetailedFragment = AddEditDetailedFragment.newInstance();
+                mAddEditDetailedFragment.setArguments(bundle);
+            }
+            if (!mAddEditDetailedFragment.isVisible()) {
+                requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mAddEditDetailedFragment).commit();
             }
         });
     }

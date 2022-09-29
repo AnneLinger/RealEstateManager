@@ -1,14 +1,9 @@
 package com.openclassrooms.realestatemanager.ui.listview;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,21 +25,20 @@ import com.openclassrooms.realestatemanager.domain.models.Photo;
 import com.openclassrooms.realestatemanager.domain.models.Property;
 import com.openclassrooms.realestatemanager.ui.addedit.AddEditGeneralFragment;
 import com.openclassrooms.realestatemanager.ui.details.DetailsFragment;
-import com.openclassrooms.realestatemanager.utils.NotificationReceiver;
 import com.openclassrooms.realestatemanager.viewmodels.ListViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
-*Fragment to display the properties list
-*/
+ * Fragment to display the properties list
+ */
 
+@RequiresApi(api = Build.VERSION_CODES.M)
 public class ListViewFragment extends Fragment implements ListViewAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     //For UI
     private FragmentListViewBinding mBinding;
-    private RecyclerView mRecyclerView;
 
     //For data
     private ListViewModel mListViewModel;
@@ -52,7 +46,6 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.OnItem
     private Context mContext;
     private List<Property> mProperties;
     private List<Photo> mPhotos;
-    private final String BUNDLE_KEY = "search_properties";
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public static ListViewFragment newInstance() {
@@ -80,13 +73,12 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.OnItem
     @Override
     public void onItemClick(long id) {
         Fragment fragment = DetailsFragment.newInstance(id);
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
         boolean isTablet = getResources().getBoolean(R.bool.isTablet);
         int orientation = getResources().getConfiguration().orientation;
-        if(isTablet && orientation== Configuration.ORIENTATION_LANDSCAPE) {
+        if (isTablet && orientation == Configuration.ORIENTATION_LANDSCAPE) {
             transaction.replace(R.id.nav_host_fragment_details, fragment, "details_fragment");
-        }
-        else {
+        } else {
             transaction.replace(R.id.nav_host_fragment, fragment, "details_fragment");
         }
         transaction.addToBackStack(null);
@@ -103,7 +95,7 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.OnItem
         mListViewModel = new ViewModelProvider(requireActivity()).get(ListViewModel.class);
     }
 
-    private void observeProperties(){
+    private void observeProperties() {
         mListViewModel.getProperties().observe(requireActivity(), this::getProperties);
     }
 
@@ -123,48 +115,40 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.OnItem
 
     private void checkIfAResearchHadTakenPlace() {
         List<Property> searchProperties = new ArrayList<>();
-        Log.e("Anne", "check if research");
         Bundle bundle = this.getArguments();
-        if(bundle!=null){
-            Log.e("Anne", "getArguments");
+        if (bundle != null) {
+            String BUNDLE_KEY = "search_properties";
             List<String> searchPropertiesIdString = bundle.getStringArrayList(BUNDLE_KEY);
-            Log.e("Anne", searchPropertiesIdString.toString());
-            for(String string : searchPropertiesIdString) {
+            for (String string : searchPropertiesIdString) {
                 long id = Long.parseLong(string);
-                for(Property property : mProperties) {
-                    if(property.getId()==id) {
+                for (Property property : mProperties) {
+                    if (property.getId() == id) {
                         searchProperties.add(property);
                     }
                 }
             }
-            Log.e("Anne", searchProperties.toString());
             initRecyclerView(searchProperties, mPhotos);
-        }
-        else {
+        } else {
             initRecyclerView(mProperties, mPhotos);
         }
     }
 
     private void initRecyclerView(List<Property> properties, List<Photo> photos) {
-        mRecyclerView = mBinding.rvListView;
+        RecyclerView recyclerView = mBinding.rvListView;
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.VERTICAL));
-        mRecyclerView.setAdapter(new ListViewAdapter(properties, photos, this));
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
+        recyclerView.setAdapter(new ListViewAdapter(properties, photos, this));
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
     private void addAProperty() {
-        mBinding.fabAdd.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
-            @Override
-            public void onClick(View v) {
-                if (mAddEditGeneralFragment == null) {
-                    mAddEditGeneralFragment = AddEditGeneralFragment.newInstance();
-                }
-                if (!mAddEditGeneralFragment.isVisible()) {
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mAddEditGeneralFragment).commit();
-                }
+        mBinding.fabAdd.setOnClickListener(v -> {
+            if (mAddEditGeneralFragment == null) {
+                mAddEditGeneralFragment = AddEditGeneralFragment.newInstance();
+            }
+            if (!mAddEditGeneralFragment.isVisible()) {
+                requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mAddEditGeneralFragment).commit();
             }
         });
     }

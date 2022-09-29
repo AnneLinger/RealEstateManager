@@ -5,9 +5,10 @@ import android.app.Application;
 import dagger.hilt.android.HiltAndroidApp;
 
 /**
-*di.MainApplication for Hilt
-*/
+ * Injection of Hilt for app
+ */
 
+@SuppressWarnings("EmptyMethod")
 @HiltAndroidApp
 public class MainApplication extends Application {
     @Override

@@ -21,7 +21,7 @@ import java.util.List;
 
 public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder> {
 
-    private List<Photo> mPhotos;
+    private final List<Photo> mPhotos;
 
     public PhotosAdapter(List<Photo> photos) {
         mPhotos = photos;

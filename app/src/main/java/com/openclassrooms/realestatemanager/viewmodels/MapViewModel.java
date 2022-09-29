@@ -12,14 +12,13 @@ import com.openclassrooms.realestatemanager.data.repositories.PropertyRepository
 import com.openclassrooms.realestatemanager.domain.models.Property;
 
 import java.util.List;
-import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 /**
- * ViewModel for users
+ * ViewModel for map fragment
  */
 
 @HiltViewModel
@@ -29,14 +28,10 @@ public class MapViewModel extends ViewModel {
     private final LocationRepositoryImpl mLocationRepositoryImpl;
     private final PropertyRepositoryImpl mPropertyRepository;
 
-    //For threads
-    private final Executor mExecutor;
-
     @Inject
-    public MapViewModel(LocationRepositoryImpl locationRepositoryImpl, PropertyRepositoryImpl propertyRepository, Executor executor) {
+    public MapViewModel(LocationRepositoryImpl locationRepositoryImpl, PropertyRepositoryImpl propertyRepository) {
         mLocationRepositoryImpl = locationRepositoryImpl;
         mPropertyRepository = propertyRepository;
-        mExecutor = executor;
     }
 
     //..........................For location.....................................................

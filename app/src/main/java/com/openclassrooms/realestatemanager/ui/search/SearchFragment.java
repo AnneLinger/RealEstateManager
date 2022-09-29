@@ -1,17 +1,17 @@
 package com.openclassrooms.realestatemanager.ui.search;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -23,17 +23,18 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentSearchBinding;
 import com.openclassrooms.realestatemanager.domain.models.Property;
-import com.openclassrooms.realestatemanager.ui.listview.ListViewFragment;
 import com.openclassrooms.realestatemanager.ui.main.MainActivity;
 import com.openclassrooms.realestatemanager.viewmodels.SearchViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
-*Activity to make researches on properties
-*/
+ * Activity to make researches on properties
+ */
 
+@RequiresApi(api = Build.VERSION_CODES.M)
 public class SearchFragment extends Fragment {
 
     //For ui
@@ -56,14 +57,14 @@ public class SearchFragment extends Fragment {
     private TextInputEditText maxSurfaceEditText;
     private TextInputEditText minRoomNumberEditText;
     private TextInputEditText maxRoomNumberEditText;
-    private final String BUNDLE_KEY = "search_properties";
     private String query = "SELECT * FROM property_table";
-    private List<Object> args = new ArrayList<>();
+    private final List<Object> args = new ArrayList<>();
 
     public static SearchFragment newInstance() {
         return new SearchFragment();
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mBinding = FragmentSearchBinding.inflate(inflater, container, false);
@@ -89,12 +90,12 @@ public class SearchFragment extends Fragment {
     }
 
     private void configureToolbar() {
-        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
+        Toolbar toolbar = requireActivity().findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(view -> showDialogToConfirmCancel());
     }
 
     private void configureBottomNav() {
-        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottom_nav);
+        BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.bottom_nav);
         bottomNavigationView.setVisibility(View.GONE);
     }
 
@@ -113,7 +114,7 @@ public class SearchFragment extends Fragment {
         getPropertySale();
     }
 
-    private void getDataFromEditText(TextInputEditText textInputEditText){
+    private void getDataFromEditText(TextInputEditText textInputEditText) {
         textInputEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -125,26 +126,20 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(s==typeEditText.getEditableText()){
-                    type = textInputEditText.getText().toString();
-                }
-                else if(s==minPriceEditText.getEditableText()){
-                    minPrice = textInputEditText.getText().toString();
-                }
-                else if(s==maxPriceEditText.getEditableText()){
-                    maxPrice = textInputEditText.getText().toString();
-                }
-                else if(s==minSurfaceEditText.getEditableText()){
-                    minSurface = textInputEditText.getText().toString();
-                }
-                else if(s==maxSurfaceEditText.getEditableText()) {
-                    maxSurface = textInputEditText.getText().toString();
-                }
-                else if(s==minRoomNumberEditText.getEditableText()){
-                    minRoomNumber = Integer.parseInt(textInputEditText.getText().toString());
-                }
-                else if(s==maxRoomNumberEditText.getEditableText()){
-                    maxRoomNumber = Integer.parseInt(textInputEditText.getText().toString());
+                if (s == typeEditText.getEditableText()) {
+                    type = Objects.requireNonNull(textInputEditText.getText()).toString();
+                } else if (s == minPriceEditText.getEditableText()) {
+                    minPrice = Objects.requireNonNull(textInputEditText.getText()).toString();
+                } else if (s == maxPriceEditText.getEditableText()) {
+                    maxPrice = Objects.requireNonNull(textInputEditText.getText()).toString();
+                } else if (s == minSurfaceEditText.getEditableText()) {
+                    minSurface = Objects.requireNonNull(textInputEditText.getText()).toString();
+                } else if (s == maxSurfaceEditText.getEditableText()) {
+                    maxSurface = Objects.requireNonNull(textInputEditText.getText()).toString();
+                } else if (s == minRoomNumberEditText.getEditableText()) {
+                    minRoomNumber = Integer.parseInt(Objects.requireNonNull(textInputEditText.getText()).toString());
+                } else if (s == maxRoomNumberEditText.getEditableText()) {
+                    maxRoomNumber = Integer.parseInt(Objects.requireNonNull(textInputEditText.getText()).toString());
                 }
             }
         });
@@ -152,120 +147,94 @@ public class SearchFragment extends Fragment {
 
 
     private void getPropertySale() {
-        mBinding.switchSearchSold.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
-                    onSale = false;
-                }
-                else {
-                    onSale = true;
-                }
-            }
-        });
+        mBinding.switchSearchSold.setOnCheckedChangeListener((buttonView, isChecked) -> onSale = !isChecked);
     }
 
     private void buildQueryForSearch() {
-        Log.e("Anne", "Build query");
         boolean isFirstConditionDone = false;
-        if(type!=null){
-            Log.e("Anne", "Add type");
+        if (type != null) {
             query += " WHERE type LIKE :";
             query += type;
             args.add(type);
             isFirstConditionDone = true;
         }
-        if(minPrice!=null){
-            if(isFirstConditionDone) {
+        if (minPrice != null) {
+            if (isFirstConditionDone) {
                 query += " AND price >= :";
-            }
-            else {
+            } else {
                 query += " WHERE price >= :";
                 isFirstConditionDone = true;
             }
             query += minPrice;
             args.add(minPrice);
         }
-        if(maxPrice!=null){
-            if(isFirstConditionDone) {
+        if (maxPrice != null) {
+            if (isFirstConditionDone) {
                 query += " AND price <= :";
-            }
-            else {
+            } else {
                 query += " WHERE price <= :";
                 isFirstConditionDone = true;
             }
             query += maxPrice;
             args.add(maxPrice);
         }
-        if(minSurface!=null){
-            if(isFirstConditionDone) {
+        if (minSurface != null) {
+            if (isFirstConditionDone) {
                 query += " AND surface >= :";
-            }
-            else {
+            } else {
                 query += " WHERE surface >= :";
                 isFirstConditionDone = true;
             }
             query += minSurface;
             args.add(minSurface);
         }
-        if(maxSurface!=null){
-            if(isFirstConditionDone) {
+        if (maxSurface != null) {
+            if (isFirstConditionDone) {
                 query += " AND surface <= :";
-            }
-            else {
+            } else {
                 query += " WHERE surface <= :";
                 isFirstConditionDone = true;
             }
             query += maxSurface;
             args.add(maxSurface);
         }
-        if(minRoomNumber!=0){
-            if(isFirstConditionDone) {
+        if (minRoomNumber != 0) {
+            if (isFirstConditionDone) {
                 query += " AND room_number >= :";
-            }
-            else {
+            } else {
                 query += " WHERE room_number >= :";
                 isFirstConditionDone = true;
             }
             query += minRoomNumber;
             args.add(minRoomNumber);
         }
-        if(maxRoomNumber!=0){
-            if(isFirstConditionDone) {
+        if (maxRoomNumber != 0) {
+            if (isFirstConditionDone) {
                 query += " AND room_number <= :";
-            }
-            else {
+            } else {
                 query += " WHERE room_number <= :";
                 isFirstConditionDone = true;
             }
             query += maxRoomNumber;
             args.add(maxRoomNumber);
         }
-        if(!onSale){
-            if(isFirstConditionDone) {
+        if (!onSale) {
+            if (isFirstConditionDone) {
                 query += " AND on_sale = :";
-            }
-            else {
+            } else {
                 query += " WHERE on_sale = :";
-                isFirstConditionDone = true;
             }
-            query += onSale;
-            args.add(onSale);
+            query += false;
+            args.add(false);
         }
     }
 
     private void launchResearch() {
-        mBinding.btSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getSearchPropertiesFromDao();
-            }
-        });
+        mBinding.btSearch.setOnClickListener(v -> getSearchPropertiesFromDao());
     }
 
     private void getSearchPropertiesFromDao() {
         buildQueryForSearch();
-        Log.e("query before query", query);
         SimpleSQLiteQuery simpleSQLiteQuery = new SimpleSQLiteQuery(query, args.toArray());
         List<Property> properties = mSearchViewModel.getSearchProperties(simpleSQLiteQuery);
         getSearchPropertiesForListViewFragment(properties);
@@ -273,11 +242,9 @@ public class SearchFragment extends Fragment {
 
     private void getSearchPropertiesForListViewFragment(List<Property> properties) {
         List<String> propertyIdStringList = new ArrayList<>();
-        for(Property property : properties) {
-            Log.e("properties", properties.toString());
+        for (Property property : properties) {
             propertyIdStringList.add(String.valueOf(property.getId()));
         }
-        Log.e("propertiesString", propertyIdStringList.toString());
         navigateToMainActivityWithSearchProperties(propertyIdStringList);
     }
 
@@ -287,9 +254,7 @@ public class SearchFragment extends Fragment {
         alertDialogBuilder.setTitle(R.string.cancel_research)
                 .setMessage(R.string.confirm_cancel_message)
                 .setCancelable(false)
-                .setPositiveButton(R.string.cancel_button, (dialog, which) -> {
-                    navigateToMainActivity();
-                })
+                .setPositiveButton(R.string.cancel_button, (dialog, which) -> navigateToMainActivity())
                 .setNegativeButton(R.string.continue_button, (dialog, which) -> dialog.dismiss())
                 .create()
                 .show();
@@ -297,6 +262,7 @@ public class SearchFragment extends Fragment {
 
     private void navigateToMainActivityWithSearchProperties(List<String> propertyIdStrings) {
         final Bundle bundle = new Bundle();
+        String BUNDLE_KEY = "search_properties";
         bundle.putStringArrayList(BUNDLE_KEY, (ArrayList<String>) propertyIdStrings);
         Intent intent = new Intent(requireActivity(), MainActivity.class);
         intent.putExtras(bundle);

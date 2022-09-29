@@ -32,7 +32,7 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/nav_host_fragment"
-            android:layout_width="300dp"
+            android:layout_width="@dimen/first_fragment_width"
             android:layout_height="0dp"
             android:backgroundTint="@color/color_primary_variant"
             http:layout_constraintBottom_toTopOf="@id/bottom_nav"

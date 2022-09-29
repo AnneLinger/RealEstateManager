@@ -2,14 +2,15 @@ package com.openclassrooms.realestatemanager.ui.details;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -34,14 +35,15 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
-*Fragment to display a property details
-*/
+ * Fragment to display a property details
+ */
 
+@RequiresApi(api = Build.VERSION_CODES.M)
+@SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public class DetailsFragment extends Fragment {
 
     //For ui
     private FragmentDetailsBinding mBinding;
-    private RecyclerView mRecyclerView;
 
     //For data
     private long mPropertyId;
@@ -50,13 +52,14 @@ public class DetailsFragment extends Fragment {
     private DetailsViewModel mDetailsViewModel;
     private List<Property> mProperties;
     private AddEditGeneralFragment mAddEditGeneralFragment;
-    private List<Photo> mPhotos = new ArrayList<>();
+    private final List<Photo> mPhotos = new ArrayList<>();
     private double mLatitude;
     private double mLongitude;
-    private List<String> mSchools = new ArrayList();
-    private List<String> mSupermarkets = new ArrayList();
-    private List<String> mParks = new ArrayList();
+    private final List<String> mSchools = new ArrayList();
+    private final List<String> mSupermarkets = new ArrayList();
+    private final List<String> mParks = new ArrayList();
 
+    //Empty new instance for display on tablet in landscape mode if none property is selected
     public static DetailsFragment newInstance() {
         return new DetailsFragment();
     }
@@ -72,12 +75,12 @@ public class DetailsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mBinding = FragmentDetailsBinding.inflate(inflater, container, false);
+        //noinspection deprecation
         setHasOptionsMenu(true);
         return mBinding.getRoot();
     }
@@ -88,7 +91,7 @@ public class DetailsFragment extends Fragment {
         configureToolbar();
         configureBottomNav();
         configureViewModel();
-        if(getArguments()!=null) {
+        if (getArguments() != null) {
             mPropertyId = getArguments().getLong(ID);
             observeProperties();
         }
@@ -96,14 +99,14 @@ public class DetailsFragment extends Fragment {
     }
 
     private void configureToolbar() {
-        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
+        Toolbar toolbar = requireActivity().findViewById(R.id.toolbar);
         toolbar.setTitle(this.getString(R.string.property_details_title));
         toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
         toolbar.setNavigationOnClickListener(view -> navigateToMainActivity());
     }
 
     private void configureBottomNav() {
-        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottom_nav);
+        BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.bottom_nav);
         bottomNavigationView.setVisibility(View.GONE);
     }
 
@@ -111,20 +114,18 @@ public class DetailsFragment extends Fragment {
         mDetailsViewModel = new ViewModelProvider(requireActivity()).get(DetailsViewModel.class);
     }
 
-    private void observeProperties(){
-        Log.e("", "observeProperties");
+    private void observeProperties() {
         mDetailsViewModel.getProperties().observe(requireActivity(), this::getProperties);
     }
 
     private void getProperties(List<Property> propertiesList) {
-        Log.e("", propertiesList.toString());
         mProperties = propertiesList;
         getProperty();
     }
 
     private void getProperty() {
-        for(Property property : mProperties) {
-            if(property.getId()==mPropertyId){
+        for (Property property : mProperties) {
+            if (property.getId() == mPropertyId) {
                 mProperty = property;
             }
         }
@@ -143,11 +144,10 @@ public class DetailsFragment extends Fragment {
         mBinding.tvEntryDateDetail.setText(mProperty.getEntryDate());
         mBinding.tvAgentDetail.setText(mProperty.getAgent());
         boolean isOnSale = mProperty.isOnSale();
-        if(!isOnSale) {
+        if (!isOnSale) {
             mBinding.tvSaleDetail.setText(R.string.no);
             mBinding.tvSoldDateDetail.setText(mProperty.getSoldDate());
-        }
-        else{
+        } else {
             mBinding.tvSaleDetail.setText(R.string.yes);
         }
         requestToGetBitmapForMap();
@@ -155,7 +155,7 @@ public class DetailsFragment extends Fragment {
     }
 
     private void observePropertyPhotos() {
-        mDetailsViewModel.getPropertyPhotos((long)mPropertyId).observe(requireActivity(), this::getPropertyPhotos);
+        mDetailsViewModel.getPropertyPhotos(mPropertyId).observe(requireActivity(), this::getPropertyPhotos);
     }
 
     private void getPropertyPhotos(List<Photo> photos) {
@@ -166,13 +166,13 @@ public class DetailsFragment extends Fragment {
     }
 
     private void initRecyclerView() {
-        mRecyclerView = mBinding.rvPhotos;
+        RecyclerView recyclerView = mBinding.rvPhotos;
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.HORIZONTAL));
-        mRecyclerView.setAdapter(new PhotosAdapter(mPhotos));
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.HORIZONTAL));
+        recyclerView.setAdapter(new PhotosAdapter(mPhotos));
     }
-    
+
     private void requestToGetBitmapForMap() {
         mLatitude = GeocoderUtils.getLatitudeFromAddress(mProperty.getAddress(), requireContext());
         mLongitude = GeocoderUtils.getLongitudeFromAddress(mProperty.getAddress(), requireContext());
@@ -181,10 +181,10 @@ public class DetailsFragment extends Fragment {
     }
 
     private void observeBitmapReturn() {
-        mDetailsViewModel.getBitmapLiveData().observe(this,this::updateMapWithBitmap);
+        mDetailsViewModel.getBitmapLiveData().observe(this, this::updateMapWithBitmap);
     }
 
-    private void updateMapWithBitmap(Bitmap bitmap){
+    private void updateMapWithBitmap(Bitmap bitmap) {
         mBinding.imMapDetails.setImageBitmap(bitmap);
     }
 
@@ -203,7 +203,7 @@ public class DetailsFragment extends Fragment {
     }
 
     private void updatePointsOfInterestWithSchools(List<Result> results) {
-        for(Result result : results) {
+        for (Result result : results) {
             mSchools.add(result.getName());
         }
         updateTextViewWithPointsOfInterest();
@@ -214,7 +214,7 @@ public class DetailsFragment extends Fragment {
     }
 
     private void updatePointsOfInterestWithSupermarkets(List<Result> results) {
-        for(Result result : results) {
+        for (Result result : results) {
             mSupermarkets.add(result.getName());
         }
         updateTextViewWithPointsOfInterest();
@@ -225,12 +225,13 @@ public class DetailsFragment extends Fragment {
     }
 
     private void updatePointsOfInterestWithParks(List<Result> results) {
-        for(Result result : results) {
+        for (Result result : results) {
             mParks.add(result.getName());
         }
         updateTextViewWithPointsOfInterest();
     }
 
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     private void updateTextViewWithPointsOfInterest() {
         List<String> pointsOfInterestList = new ArrayList<>();
         pointsOfInterestList.addAll(mSchools);
@@ -245,18 +246,15 @@ public class DetailsFragment extends Fragment {
     }
 
     private void editProperty() {
-        mBinding.fabEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Bundle bundle = new Bundle();
-                bundle.putLong(ID, mProperty.getId());
-                if (mAddEditGeneralFragment == null) {
-                    mAddEditGeneralFragment = AddEditGeneralFragment.newInstance();
-                    mAddEditGeneralFragment.setArguments(bundle);
-                }
-                if (!mAddEditGeneralFragment.isVisible()) {
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mAddEditGeneralFragment).commit();
-                }
+        mBinding.fabEdit.setOnClickListener(v -> {
+            final Bundle bundle = new Bundle();
+            bundle.putLong(ID, mProperty.getId());
+            if (mAddEditGeneralFragment == null) {
+                mAddEditGeneralFragment = AddEditGeneralFragment.newInstance();
+                mAddEditGeneralFragment.setArguments(bundle);
+            }
+            if (!mAddEditGeneralFragment.isVisible()) {
+                requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mAddEditGeneralFragment).commit();
             }
         });
     }

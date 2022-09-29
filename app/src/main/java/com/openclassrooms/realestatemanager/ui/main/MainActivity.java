@@ -1,10 +1,10 @@
 package com.openclassrooms.realestatemanager.ui.main;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,28 +12,17 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.NavigationUI;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.ActivityMainBinding;
-import com.openclassrooms.realestatemanager.ui.addedit.AddEditDetailedFragment;
-import com.openclassrooms.realestatemanager.ui.addedit.AddEditGeneralFragment;
-import com.openclassrooms.realestatemanager.ui.details.DetailsFragment;
 import com.openclassrooms.realestatemanager.ui.listview.ListViewFragment;
 import com.openclassrooms.realestatemanager.ui.mapview.MapViewFragment;
 import com.openclassrooms.realestatemanager.ui.search.SearchFragment;
 import com.openclassrooms.realestatemanager.ui.simulator.SimulatorFragment;
 import com.openclassrooms.realestatemanager.utils.Utils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -42,6 +31,8 @@ import dagger.hilt.android.AndroidEntryPoint;
  * Main activity of the app
  */
 
+@SuppressWarnings("unused")
+@RequiresApi(api = Build.VERSION_CODES.M)
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
 
@@ -49,16 +40,12 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding mBinding;
     private ListViewFragment mListViewFragment;
     private MapViewFragment mMapViewFragment;
-    private DetailsFragment mDetailsFragment;
     private SearchFragment mSearchFragment;
     private SimulatorFragment mSimulatorFragment;
-    private AddEditGeneralFragment mAddEditGeneralFragment;
-    private AddEditDetailedFragment mAddEditDetailedFragment;
 
     //For data
     private TextView textViewMain;
     private TextView textViewQuantity;
-    private final String BUNDLE_KEY = "search_properties";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,30 +54,23 @@ public class MainActivity extends AppCompatActivity {
         configureDrawer();
         configureBottomNav();
         Bundle bundle = getIntent().getExtras();
-        if(bundle!=null){
+        if (bundle != null) {
             this.mListViewFragment = ListViewFragment.newInstance();
             mListViewFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mListViewFragment).commit();
-        }
-        else {
+        } else {
             getSupportFragmentManager().beginTransaction().add(R.id.nav_host_fragment, new ListViewFragment()).commit();
             this.mListViewFragment = ListViewFragment.newInstance();
         }
-        /**if(mDetailsFragment == null && mBinding.navHostFragmentDetails != null) {
-            this.mDetailsFragment = DetailsFragment.newInstance();
-            getSupportFragmentManager().beginTransaction().add(R.id.nav_host_fragment_details, mDetailsFragment).commit();
-        }*/
-        /**if(mDetailsFragment.isVisible()) {
-            mBinding.navHostFragmentDetails.setMinimumWidth(10_000);
-        }*/
     }
 
     private void initUi() {
         mBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(mBinding.getRoot());
-        setSupportActionBar(mBinding.toolbar);;
+        setSupportActionBar(mBinding.toolbar);
     }
 
+    @SuppressLint("NonConstantResourceId")
     private void configureDrawer() {
         //To open drawer
         mBinding.toolbar.setNavigationOnClickListener(view -> mBinding.mainActivityLayout.open());
@@ -138,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
         mBinding.bottomNav.setOnItemSelectedListener(this::selectBottomNavItem);
     }
 
+    @SuppressLint("NonConstantResourceId")
     public boolean selectBottomNavItem(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.item_list_view:
@@ -170,12 +151,12 @@ public class MainActivity extends AppCompatActivity {
         mBinding.toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
     }
 
-    private void configureTextViewMain(){
+    private void configureTextViewMain() {
         this.textViewMain.setTextSize(15);
         this.textViewMain.setText(R.string.text_view_main);
     }
 
-    private void configureTextViewQuantity(){
+    private void configureTextViewQuantity() {
         int quantity = Utils.convertDollarToEuro(100);
         this.textViewQuantity.setTextSize(20);
         this.textViewQuantity.setText(String.valueOf(quantity));

@@ -7,6 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * Pojo model for the Southwest place location
  */
 
+@SuppressWarnings("unused")
 public class Southwest {
 
     @SerializedName("lat")

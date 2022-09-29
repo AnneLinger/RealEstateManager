@@ -2,7 +2,6 @@ package com.openclassrooms.realestatemanager.data.dao;
 
 import android.database.Cursor;
 
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
@@ -42,7 +41,7 @@ public interface PropertyDao {
     @Update
     void updateProperty(Property property);
 
-    //Search properties depends on multi criteria
+    //Search properties depends on multi criteria with a dynamical query
     @RawQuery
     List<Property> getPropertyResearch(SupportSQLiteQuery query);
 }

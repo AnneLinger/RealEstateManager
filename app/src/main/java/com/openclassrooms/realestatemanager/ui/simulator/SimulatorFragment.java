@@ -1,16 +1,17 @@
 package com.openclassrooms.realestatemanager.ui.simulator;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -24,9 +25,10 @@ import com.openclassrooms.realestatemanager.ui.main.MainActivity;
 import java.util.Objects;
 
 /**
-*Activity for home loan simulator
-*/
+ * Activity for home loan simulator
+ */
 
+@RequiresApi(api = Build.VERSION_CODES.M)
 public class SimulatorFragment extends Fragment {
 
     //For ui
@@ -54,6 +56,7 @@ public class SimulatorFragment extends Fragment {
         rateEditText = mBinding.etRate;
         durationEditText = mBinding.etDuration;
         mBinding.btSimulate.setEnabled(false);
+        //noinspection deprecation
         setHasOptionsMenu(true);
         return mBinding.getRoot();
     }
@@ -68,12 +71,12 @@ public class SimulatorFragment extends Fragment {
     }
 
     private void configureToolbar() {
-        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
+        Toolbar toolbar = requireActivity().findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(view -> navigateToMainActivity());
     }
 
     private void configureBottomNav() {
-        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottom_nav);
+        BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.bottom_nav);
         bottomNavigationView.setVisibility(View.GONE);
     }
 
@@ -84,7 +87,7 @@ public class SimulatorFragment extends Fragment {
         getDataFromEditText(durationEditText);
     }
 
-    private void getDataFromEditText(TextInputEditText textInputEditText){
+    private void getDataFromEditText(TextInputEditText textInputEditText) {
         textInputEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -96,21 +99,18 @@ public class SimulatorFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(s==propertyPriceEditText.getEditableText()){
-                    propertyPrice = Integer.parseInt(textInputEditText.getText().toString());
+                if (s == propertyPriceEditText.getEditableText()) {
+                    propertyPrice = Integer.parseInt(Objects.requireNonNull(textInputEditText.getText()).toString());
                     enableButtonSimulate();
-                }
-                else if(s==contributionEditText.getEditableText()){
-                    contribution = Integer.parseInt(textInputEditText.getText().toString());
+                } else if (s == contributionEditText.getEditableText()) {
+                    contribution = Integer.parseInt(Objects.requireNonNull(textInputEditText.getText()).toString());
                     enableButtonSimulate();
-                }
-                else if(s==rateEditText.getEditableText()){
-                    rate = Integer.parseInt(textInputEditText.getText().toString());
+                } else if (s == rateEditText.getEditableText()) {
+                    rate = Integer.parseInt(Objects.requireNonNull(textInputEditText.getText()).toString());
                     enableButtonSimulate();
                     convertPercentValue();
-                }
-                else if(s==durationEditText.getEditableText()){
-                    duration = Integer.parseInt(textInputEditText.getText().toString());
+                } else if (s == durationEditText.getEditableText()) {
+                    duration = Integer.parseInt(Objects.requireNonNull(textInputEditText.getText()).toString());
                     enableButtonSimulate();
                     convertYearsInMonths();
                 }
@@ -119,7 +119,7 @@ public class SimulatorFragment extends Fragment {
     }
 
     private void convertPercentValue() {
-        rate = 1 + (rate/100);
+        rate = 1 + (rate / 100);
     }
 
     private void convertYearsInMonths() {
@@ -128,23 +128,14 @@ public class SimulatorFragment extends Fragment {
 
     //The button simulate is enabled only when all fields required are filled
     private void enableButtonSimulate() {
-        if (Objects.requireNonNull(mBinding.etPropertyPriceSimulator.getText()).toString().isEmpty() ||
-                Objects.requireNonNull(mBinding.etContribution.getText()).toString().isEmpty() ||
-                Objects.requireNonNull(mBinding.etDuration.getText()).toString().isEmpty() ||
-                Objects.requireNonNull(mBinding.etRate.getText()).toString().isEmpty()) {
-            mBinding.btSimulate.setEnabled(false);
-        } else {
-            mBinding.btSimulate.setEnabled(true);
-        }
+        mBinding.btSimulate.setEnabled(!Objects.requireNonNull(mBinding.etPropertyPriceSimulator.getText()).toString().isEmpty() &&
+                !Objects.requireNonNull(mBinding.etContribution.getText()).toString().isEmpty() &&
+                !Objects.requireNonNull(mBinding.etDuration.getText()).toString().isEmpty() &&
+                !Objects.requireNonNull(mBinding.etRate.getText()).toString().isEmpty());
     }
 
     private void simulateHomeLoan() {
-        mBinding.btSimulate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                calculateMonthlyPayments();
-            }
-        });
+        mBinding.btSimulate.setOnClickListener(v -> calculateMonthlyPayments());
     }
 
     private void calculateMonthlyPayments() {

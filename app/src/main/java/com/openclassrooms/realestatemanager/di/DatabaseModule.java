@@ -13,8 +13,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext;
 import dagger.hilt.components.SingletonComponent;
 
 /**
-*Created by Anne Linger on 15/09/2022.
-*/
+ * Database injection with Hilt
+ */
 
 @InstallIn(SingletonComponent.class)
 @Module

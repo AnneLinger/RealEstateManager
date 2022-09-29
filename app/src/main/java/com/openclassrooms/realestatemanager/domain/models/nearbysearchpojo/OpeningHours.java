@@ -7,6 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * Pojo class for the opening hours of the place
  */
 
+@SuppressWarnings("unused")
 public class OpeningHours {
 
     @SerializedName("open_now")

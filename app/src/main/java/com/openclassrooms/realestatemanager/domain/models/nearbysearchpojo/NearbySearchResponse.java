@@ -11,6 +11,7 @@ import java.util.List;
  * Pojo model for the places result
  */
 
+@SuppressWarnings("unused")
 public class NearbySearchResponse {
 
     @SerializedName("html_attributions")

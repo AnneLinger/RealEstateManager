@@ -6,11 +6,8 @@ import static android.app.Activity.RESULT_OK;
 import android.Manifest;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.DownloadManager;
-import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -30,10 +27,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -42,7 +37,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentPhotoDataBinding;
 import com.openclassrooms.realestatemanager.domain.models.Photo;
-import com.openclassrooms.realestatemanager.domain.models.Property;
 import com.openclassrooms.realestatemanager.ui.main.MainActivity;
 import com.openclassrooms.realestatemanager.utils.ChipUtils;
 import com.openclassrooms.realestatemanager.utils.NotificationReceiver;
@@ -56,9 +50,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
-*Fragment to add or edit property photos
-*/
+ * Fragment to add or edit property photos
+ */
 
+@SuppressWarnings("deprecation")
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class AddEditPhotoFragment extends Fragment {
 
@@ -68,12 +63,8 @@ public class AddEditPhotoFragment extends Fragment {
     //For data
     private AddEditPhotoViewModel mAddEditPhotoViewModel;
     private long mPropertyId;
-    private Property mProperty;
-    private List<Property> mProperties;
-    private List<String> mPhotoUriList = new ArrayList<>();
-    private final CharSequence[] mCharSequences = new CharSequence[] {"Exterior", "Kitchen", "Living Room", "Bedroom", "Bathroom", "Garden", "Else"};
-    private List<Photo> mPhotos = new ArrayList<>();
-    private final String ID = "id";
+    private final CharSequence[] mCharSequences = new CharSequence[]{"Exterior", "Kitchen", "Living Room", "Bedroom", "Bathroom", "Garden", "Else"};
+    private final List<Photo> mPhotos = new ArrayList<>();
 
     public static AddEditPhotoFragment newInstance() {
         return new AddEditPhotoFragment();
@@ -102,7 +93,6 @@ public class AddEditPhotoFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         initUi();
         configureViewModel();
-        //observeProperties();
         observePropertyPhotos();
         checkPermissionsToAddPhoto();
         finishAddEdit();
@@ -115,69 +105,27 @@ public class AddEditPhotoFragment extends Fragment {
     }
 
     private void configureToolbar() {
-        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
+        Toolbar toolbar = requireActivity().findViewById(R.id.toolbar);
         toolbar.setTitle(this.getString(R.string.add_edit_general_title));
         toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
         toolbar.setNavigationOnClickListener(view -> showDialogToConfirmCancel());
     }
 
     private void configureBottomNav() {
-        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottom_nav);
+        BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.bottom_nav);
         bottomNavigationView.setVisibility(View.GONE);
     }
 
-    //TODO attacher le VM au fragment
     private void configureViewModel() {
         mAddEditPhotoViewModel = new ViewModelProvider(requireActivity()).get(AddEditPhotoViewModel.class);
     }
 
-    private void observeProperties(){
-        mAddEditPhotoViewModel.getProperties().observe(requireActivity(), this::getProperties);
-    }
-
-    private void getProperties(List<Property> propertiesList) {
-        mProperties = propertiesList;
-        if(mProperties.size()>0) {
-            getProperty();
-        }
-    }
-
-    private void getProperty() {
-        assert getArguments() != null;
-        mPropertyId = getArguments().getLong(ID);
-        for(Property property : mProperties) {
-            if(property.getId()==mPropertyId){
-                mProperty = property;
-            }
-        }
-        //observePropertyPhotos();
-    }
-
     private void observePropertyPhotos() {
         assert getArguments() != null;
+        String ID = "id";
         mPropertyId = getArguments().getLong(ID);
-        //mAddEditPhotoViewModel.getPropertyPhotos(mPropertyId).observe((getViewLifecycleOwner()), observer);
         mAddEditPhotoViewModel.getPropertyPhotos(mPropertyId).observe(getViewLifecycleOwner(), this::getPropertyPhotos);
     }
-
-    Observer<List<Photo>> observer = new Observer<List<Photo>>() {
-        @Override
-        public void onChanged(@Nullable List<Photo> photos) {
-            /**if (!photos.isEmpty() && mPhotos.isEmpty()) {
-                mPhotos.addAll(photos);
-                fillFormWithPropertyPhotos();
-            }
-            if(!mPhotos.isEmpty()){
-                mPhotos.removeAll(photos);
-                mAddEditPhotoViewModel.getPropertyPhotos(mPropertyId).removeObservers(getViewLifecycleOwner());
-            }*/
-            mPhotos.clear();
-            assert photos != null;
-            mPhotos.addAll(photos);
-            mAddEditPhotoViewModel.getPropertyPhotos(mPropertyId).removeObservers(getViewLifecycleOwner());
-            fillFormWithPropertyPhotos();
-        }
-    };
 
     private void getPropertyPhotos(List<Photo> photos) {
         if (!photos.isEmpty()) {
@@ -196,21 +144,18 @@ public class AddEditPhotoFragment extends Fragment {
     }
 
     private void checkPermissionsToAddPhoto() {
-        mBinding.btPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(requireContext(),
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
-                        ContextCompat.checkSelfPermission(requireContext(),
-                                Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
-                        ContextCompat.checkSelfPermission(requireContext(),
-                                Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                    //Permission ok => get a photo
-                    addPhoto();
-                } else {
-                    //Permission not ok => ask permission to the user for location
-                    mActivityResultLauncher.launch(perms);
-                }
+        mBinding.btPhoto.setOnClickListener(v -> {
+            if (ContextCompat.checkSelfPermission(requireContext(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission(requireContext(),
+                            Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission(requireContext(),
+                            Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                //Permission ok => get a photo
+                addPhoto();
+            } else {
+                //Permission not ok => ask permission to the user for location
+                mActivityResultLauncher.launch(perms);
             }
         });
     }
@@ -220,19 +165,15 @@ public class AddEditPhotoFragment extends Fragment {
         // create a dialog for showing the optionsMenu
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         // set the items in builder
-        builder.setItems(optionsMenu, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if(optionsMenu[i].equals("Take Photo")){
-                    // Open the camera and get the photo
-                    Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(takePicture, 0);
-                }
-                else if(optionsMenu[i].equals("Choose from Gallery")){
-                    // choose from  external storage
-                    Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(pickPhoto , 1);
-                }
+        builder.setItems(optionsMenu, (dialogInterface, i) -> {
+            if (optionsMenu[i].equals("Take Photo")) {
+                // Open the camera and get the photo
+                Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(takePicture, 0);
+            } else if (optionsMenu[i].equals("Choose from Gallery")) {
+                // choose from  external storage
+                Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(pickPhoto, 1);
             }
         });
         builder.show();
@@ -248,7 +189,6 @@ public class AddEditPhotoFragment extends Fragment {
                         Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
                         Uri tempUri = getImageUri(requireContext().getApplicationContext(), selectedImage);
                         addPhotoLabel(tempUri.toString());
-
                     }
                     break;
                 case 1:
@@ -259,8 +199,6 @@ public class AddEditPhotoFragment extends Fragment {
                             Cursor cursor = requireContext().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
                             if (cursor != null) {
                                 cursor.moveToFirst();
-                                //int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                                //String picturePath = cursor.getString(columnIndex);
                                 cursor.close();
                                 addPhotoLabel(selectedImage.toString());
                             }
@@ -282,18 +220,14 @@ public class AddEditPhotoFragment extends Fragment {
         return Uri.parse(path);
     }
 
-    private void addPhotoLabel(String uriString){
+    private void addPhotoLabel(String uriString) {
         MaterialAlertDialogBuilder alertDialogBuilder = new MaterialAlertDialogBuilder((this.requireContext()), R.style.AlertDialogTheme);
         alertDialogBuilder.setTitle("Choose a label for your photo")
                 .setCancelable(false)
-                .setSingleChoiceItems(mCharSequences, 6, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Photo newPhoto = mAddEditPhotoViewModel.createPhoto(mPropertyId, uriString, mCharSequences[which].toString());
-                        //mPhotos.add(newPhoto);
-                        managePhotoChipGroup(newPhoto);
-                        dialog.dismiss();
-                    }
+                .setSingleChoiceItems(mCharSequences, 6, (dialog, which) -> {
+                    Photo newPhoto = mAddEditPhotoViewModel.createPhoto(mPropertyId, uriString, mCharSequences[which].toString());
+                    managePhotoChipGroup(newPhoto);
+                    dialog.dismiss();
                 })
                 .create()
                 .show();
@@ -306,43 +240,31 @@ public class AddEditPhotoFragment extends Fragment {
         chip.setCloseIconVisible(true);
         mBinding.chipGroup.addView(chip);
         enableButtonSave();
-        chip.setOnCloseIconClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ChipUtils.deleteAChipFromAView((Chip) view);
-                mAddEditPhotoViewModel.deletePhoto(photo.getPhotoId());
-                //mPhotos.remove(photo);
-            }
+        chip.setOnCloseIconClickListener(view -> {
+            ChipUtils.deleteAChipFromAView((Chip) view);
+            mAddEditPhotoViewModel.deletePhoto(photo.getPhotoId());
         });
     }
 
-    //The button next is enabled only when all fields required are filled
+    //The button next is enabled only when at last one photo is added
     private void enableButtonSave() {
-        if (mPhotos.isEmpty()){
-            mBinding.btSavePhotos.setEnabled(false);
-        } else {
-            mBinding.btSavePhotos.setEnabled(true);
-
-        }
+        mBinding.btSavePhotos.setEnabled(!mPhotos.isEmpty());
     }
 
     private void finishAddEdit() {
-        mBinding.btSavePhotos.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigateToMainActivity();
-                scheduleNotification(requireContext());
-            }
+        mBinding.btSavePhotos.setOnClickListener(v -> {
+            navigateToMainActivity();
+            scheduleNotification(requireContext());
         });
     }
 
-    private void scheduleNotification (Context context) {
-        Intent notificationIntent = new Intent( context, NotificationReceiver.class) ;
-        PendingIntent pendingIntent = PendingIntent. getBroadcast ( context, 0 , notificationIntent , PendingIntent. FLAG_IMMUTABLE ) ;
-        long futureInMillis = SystemClock. elapsedRealtime ();
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context. ALARM_SERVICE ) ;
+    private void scheduleNotification(Context context) {
+        Intent notificationIntent = new Intent(context, NotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
+        long futureInMillis = SystemClock.elapsedRealtime();
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         assert alarmManager != null;
-        alarmManager.set(AlarmManager. ELAPSED_REALTIME_WAKEUP , futureInMillis , pendingIntent) ;
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
     }
 
     //Dialog to alert about the add/edit annulment
@@ -352,7 +274,7 @@ public class AddEditPhotoFragment extends Fragment {
                 .setMessage(R.string.confirm_cancel_message)
                 .setCancelable(false)
                 .setPositiveButton(R.string.cancel_button, (dialog, which) -> {
-                    for(Photo photo : mPhotos){
+                    for (Photo photo : mPhotos) {
                         mAddEditPhotoViewModel.deletePhoto(photo.getPhotoId());
                     }
                     navigateToMainActivity();
@@ -368,9 +290,7 @@ public class AddEditPhotoFragment extends Fragment {
         alertDialogBuilder.setTitle(R.string.permissions_required)
                 .setMessage(R.string.photo_permission_text)
                 .setCancelable(false)
-                .setPositiveButton(R.string.cancel_add_edit_title, (dialog, which) -> {
-                    navigateToMainActivity();
-                })
+                .setPositiveButton(R.string.cancel_add_edit_title, (dialog, which) -> navigateToMainActivity())
                 .setCancelable(false)
                 .create()
                 .show();

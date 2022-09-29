@@ -19,14 +19,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
-*Created by Anne Linger on 14/09/2022.
-*/
+ * Adapter and ViewHolder to display the list of the properties
+ */
 
 public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHolder> {
 
-    private List<Property> mProperties;
-    private List<Photo> mPhotos;
-    private OnItemClickListener mListener;
+    private final List<Property> mProperties;
+    private final List<Photo> mPhotos;
+    private final OnItemClickListener mListener;
 
     public ListViewAdapter(List<Property> properties, List<Photo> photos, OnItemClickListener listener) {
         mProperties = properties;
@@ -44,12 +44,7 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ListViewAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.displayProperty(mProperties.get(position), mPhotos);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onItemClick(mProperties.get(position).getId());
-            }
-        });
+        holder.itemView.setOnClickListener(v -> mListener.onItemClick(mProperties.get(position).getId()));
     }
 
     @Override
@@ -75,12 +70,12 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
 
         private void displayProperty(Property property, List<Photo> photos) {
             List<Photo> propertyPhotos = new ArrayList<>();
-            for(Photo photo : photos) {
-                if(photo.getPropertyId()==property.getId()) {
+            for (Photo photo : photos) {
+                if (photo.getPropertyId() == property.getId()) {
                     propertyPhotos.add(photo);
                 }
             }
-            if(propertyPhotos.size()>0) {
+            if (propertyPhotos.size() > 0) {
                 photo.setImageURI(Uri.parse(propertyPhotos.get(0).getPhotoUri()));
             }
             type.setText(property.getType());

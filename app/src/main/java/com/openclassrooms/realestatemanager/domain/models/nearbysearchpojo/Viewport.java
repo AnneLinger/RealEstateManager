@@ -7,6 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * Pojo model for place viewport
  */
 
+@SuppressWarnings("unused")
 public class Viewport {
 
     @SerializedName("northeast")

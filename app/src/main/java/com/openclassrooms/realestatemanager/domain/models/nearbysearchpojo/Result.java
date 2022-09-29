@@ -9,6 +9,7 @@ import java.util.List;
  * Pojo model for the place result
  */
 
+@SuppressWarnings("unused")
 public class Result {
 
     @SerializedName("business_status")

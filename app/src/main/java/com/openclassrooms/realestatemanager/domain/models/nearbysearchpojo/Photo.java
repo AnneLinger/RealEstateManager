@@ -9,6 +9,7 @@ import java.util.List;
  * Pojo model for the place photo
  */
 
+@SuppressWarnings("unused")
 public class Photo {
 
     @SerializedName("height")

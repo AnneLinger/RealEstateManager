@@ -16,9 +16,10 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 /**
-*Created by Anne Linger on 23/09/2022.
-*/
+ * Viewmodel to add/edit photos of a property
+ */
 
+@SuppressWarnings("unused")
 @HiltViewModel
 public class AddEditPhotoViewModel extends ViewModel {
 
@@ -49,19 +50,16 @@ public class AddEditPhotoViewModel extends ViewModel {
     }
 
     private void addPhotoToRoomDatabase(Photo photo) {
-        mExecutor.execute(() -> {
-            mPhotoRepository.addPhoto(photo);
-        });    }
+        mExecutor.execute(() -> mPhotoRepository.addPhoto(photo));
+    }
 
-    public Photo createPhoto(Long propertyId, String photoUri, String photoLabel){
+    public Photo createPhoto(Long propertyId, String photoUri, String photoLabel) {
         Photo photo = new Photo(propertyId, photoUri, photoLabel);
         addPhotoToRoomDatabase(photo);
         return photo;
     }
 
     public void deletePhoto(int photoId) {
-        mExecutor.execute(() -> {
-            mPhotoRepository.deletePhoto(photoId);
-        });
+        mExecutor.execute(() -> mPhotoRepository.deletePhoto(photoId));
     }
 }

@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.location.Location;
 import android.location.LocationListener;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +19,9 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -33,7 +34,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentMapViewBinding;
-import com.openclassrooms.realestatemanager.domain.models.Photo;
 import com.openclassrooms.realestatemanager.domain.models.Property;
 import com.openclassrooms.realestatemanager.ui.details.DetailsFragment;
 import com.openclassrooms.realestatemanager.ui.main.MainActivity;
@@ -46,20 +46,19 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
-*Created by Anne Linger on 14/09/2022.
-*/
+ * Fragment to display map
+ */
 
+@RequiresApi(api = Build.VERSION_CODES.M)
 public class MapViewFragment extends Fragment implements OnMapReadyCallback, LocationListener {
 
     //For UI
     private FragmentMapViewBinding mBinding;
     private GoogleMap mGoogleMap;
-    private float zoom = 11;
+    private final float zoom = 11;
 
     //For data
     private MapViewModel mMapViewModel;
-    private Location mLocation;
-    private String mLocationString;
     private final LatLng FAKE_AGENT_LOCATION = new LatLng(40.655675, -74.210345);
     private DetailsFragment mDetailsFragment;
     private List<Property> mProperties;
@@ -107,10 +106,9 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Loc
 
     //Check internet
     private void checkIfUserHasInternet() {
-        if(Utils.isUserHasInternet(requireContext())) {
+        if (Utils.isUserHasInternet(requireContext())) {
             requestLocationPermission();
-        }
-        else {
+        } else {
             mBinding.fragmentMapView.setVisibility(View.INVISIBLE);
             showDialogToInformAboutInternetAvailability();
         }
@@ -152,8 +150,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Loc
 
     //Update map with user location
     private void updateMapWithUserLocation(Location location) {
-        mLocation = location;
-        mLocationString = mLocation.getLatitude() + "," + mLocation.getLongitude();
         mGoogleMap.getUiSettings().setMyLocationButtonEnabled(true);
         mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         Activity activity = getActivity();
@@ -166,7 +162,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Loc
         observeProperties();
     }
 
-    private void observeProperties(){
+    private void observeProperties() {
         mMapViewModel.getProperties().observe(requireActivity(), this::getProperties);
     }
 
@@ -176,7 +172,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Loc
     }
 
     private void updateMapWithProperties() {
-        for(Property property : mProperties) {
+        for (Property property : mProperties) {
             double latitude = GeocoderUtils.getLatitudeFromAddress(property.getAddress(), requireContext());
             double longitude = GeocoderUtils.getLongitudeFromAddress(property.getAddress(), requireContext());
             LatLng latLng = new LatLng(latitude, longitude);
@@ -199,9 +195,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Loc
         alertDialogBuilder.setTitle(R.string.permissions_required)
                 .setMessage(R.string.photo_permission_text)
                 .setCancelable(false)
-                .setPositiveButton(R.string.cancel_add_edit_title, (dialog, which) -> {
-                    navigateToMainActivity();
-                })
+                .setPositiveButton(R.string.cancel_add_edit_title, (dialog, which) -> navigateToMainActivity())
                 .setCancelable(false)
                 .create()
                 .show();
@@ -214,16 +208,12 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback, Loc
                     mDetailsFragment = DetailsFragment.newInstance(property.getId());
                 }
                 if (!mDetailsFragment.isVisible()) {
-                    //FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                     boolean isTablet = getResources().getBoolean(R.bool.isTablet);
                     int orientation = getResources().getConfiguration().orientation;
-                    if(isTablet && orientation== Configuration.ORIENTATION_LANDSCAPE) {
-                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_details, mDetailsFragment).commit();
-                        //transaction.replace(R.id.nav_host_fragment_details, fragment, "details_fragment");
-                    }
-                    else {
-                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mDetailsFragment).commit();
-                        //transaction.replace(R.id.nav_host_fragment, fragment, "details_fragment");
+                    if (isTablet && orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                        requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_details, mDetailsFragment).commit();
+                    } else {
+                        requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, mDetailsFragment).commit();
                     }
                 }
             }

@@ -16,9 +16,10 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 /**
-* ViewModel to add a property
-*/
+ * ViewModel to add/edit detailed information about property
+ */
 
+@SuppressWarnings("unused")
 @HiltViewModel
 public class AddEditDetailedViewModel extends ViewModel {
 
@@ -39,9 +40,8 @@ public class AddEditDetailedViewModel extends ViewModel {
     //.....................................For properties...........................................
 
     private void addPropertyToRoomDatabase(Property property) {
-        mExecutor.execute(() -> {
-            mPropertyRepository.addProperty(property);
-        });    }
+        mExecutor.execute(() -> mPropertyRepository.addProperty(property));
+    }
 
     public void createProperty(Property property) {
         addPropertyToRoomDatabase(property);
@@ -52,22 +52,16 @@ public class AddEditDetailedViewModel extends ViewModel {
     }
 
     public void editProperty(Property property) {
-        mExecutor.execute(() -> {
-            mPropertyRepository.editProperty(property);
-        });
+        mExecutor.execute(() -> mPropertyRepository.editProperty(property));
     }
 
     //.....................................For photos...............................................
 
     public void editPhoto(Photo photo) {
-        mExecutor.execute(() -> {
-            mPhotoRepository.editPhoto(photo);
-        });
+        mExecutor.execute(() -> mPhotoRepository.editPhoto(photo));
     }
 
     public void deletePhoto(int photoId) {
-        mExecutor.execute(() -> {
-            mPhotoRepository.deletePhoto(photoId);
-        });
+        mExecutor.execute(() -> mPhotoRepository.deletePhoto(photoId));
     }
 }

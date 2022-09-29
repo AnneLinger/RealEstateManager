@@ -1,7 +1,6 @@
 package com.openclassrooms.realestatemanager.utils;
 
 import android.annotation.SuppressLint;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -32,7 +31,6 @@ public class NotificationReceiver extends BroadcastReceiver {
     private static final int NOTIFICATION_ID = 7;
     private static final String NOTIFICATION_TAG = "Real Estate Manager";
     private Context context;
-    private String notificationText;
 
     @Inject
     public NotificationReceiver() {
@@ -41,11 +39,7 @@ public class NotificationReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         this.context = context;
-        updateNotificationText();
         sendVisualNotification();
-    }
-
-    private void updateNotificationText() {
     }
 
     private void sendVisualNotification() {

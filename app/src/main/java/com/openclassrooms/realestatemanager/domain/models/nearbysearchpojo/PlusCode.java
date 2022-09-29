@@ -7,6 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * Pojo model for compound and global code of the place
  */
 
+@SuppressWarnings("unused")
 public class PlusCode {
 
     @SerializedName("compound_code")

@@ -21,7 +21,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * Implementation of NearbySearchRepository interface
+ * Repository for NearbySearch queries
  */
 
 public class NearbySearchRepositoryImpl {
@@ -62,6 +62,7 @@ public class NearbySearchRepositoryImpl {
                     mCache.put("nearbySearchSchools", response.body());
                     mNearbySearchSchoolResponseLiveData.setValue(response.body().getResults());
                 }
+
                 @Override
                 public void onFailure(@NonNull Call<NearbySearchResponse> call, @NonNull Throwable t) {
                     t.printStackTrace();
@@ -93,6 +94,7 @@ public class NearbySearchRepositoryImpl {
                     mCache.put("nearbySearchSupermarket", response.body());
                     mNearbySearchSupermarketResponseLiveData.setValue(response.body().getResults());
                 }
+
                 @Override
                 public void onFailure(@NonNull Call<NearbySearchResponse> call, @NonNull Throwable t) {
                     t.printStackTrace();
@@ -101,7 +103,7 @@ public class NearbySearchRepositoryImpl {
         }
     }
 
-    //.....................................For parks............................................
+    //.....................................For parks................................................
 
     public LiveData<List<Result>> getNearbySearchParksResponseLiveData() {
         return mNearbySearchParkResponseLiveData;
@@ -124,6 +126,7 @@ public class NearbySearchRepositoryImpl {
                     mCache.put("nearbySearchParks", response.body());
                     mNearbySearchParkResponseLiveData.setValue(response.body().getResults());
                 }
+
                 @Override
                 public void onFailure(@NonNull Call<NearbySearchResponse> call, @NonNull Throwable t) {
                     t.printStackTrace();

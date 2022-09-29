@@ -12,17 +12,15 @@ import com.openclassrooms.realestatemanager.data.database.RealEstateManagerDatab
 import com.openclassrooms.realestatemanager.domain.models.Property;
 
 /**
-*Created by Anne Linger on 28/09/2022.
-*/
+ * Content provider for property table
+ */
 
+@SuppressWarnings("unused")
 public class PropertyContentProvider extends ContentProvider {
 
     public static final String AUTHORITY = "com.openclassrooms.realestatemanager.domain.provider";
 
     public static final String TABLE_NAME = Property.class.getSimpleName();
-
-    public static final Uri URI_ITEM = Uri.parse("content://" + AUTHORITY + "/" + TABLE_NAME);
-
 
     @Override
     public boolean onCreate() {

@@ -9,16 +9,16 @@ import com.openclassrooms.realestatemanager.domain.models.Photo;
 import com.openclassrooms.realestatemanager.domain.models.Property;
 
 import java.util.List;
-import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 /**
-*Created by Anne Linger on 15/09/2022.
-*/
+ * ViewModel for list view fragment
+ */
 
+@SuppressWarnings("unused")
 @HiltViewModel
 public class ListViewModel extends ViewModel {
 
@@ -26,14 +26,10 @@ public class ListViewModel extends ViewModel {
     private final PropertyRepositoryImpl mPropertyRepository;
     private final PhotoRepositoryImpl mPhotoRepository;
 
-    //For threads
-    private final Executor mExecutor;
-
     @Inject
-    public ListViewModel(PropertyRepositoryImpl propertyRepository, PhotoRepositoryImpl photoRepository, Executor executor) {
+    public ListViewModel(PropertyRepositoryImpl propertyRepository, PhotoRepositoryImpl photoRepository) {
         mPropertyRepository = propertyRepository;
         mPhotoRepository = photoRepository;
-        mExecutor = executor;
     }
 
     //.....................................For properties...........................................

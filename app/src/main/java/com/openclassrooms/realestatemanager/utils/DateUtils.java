@@ -1,7 +1,5 @@
 package com.openclassrooms.realestatemanager.utils;
 
-import android.widget.TimePicker;
-
 import java.util.Calendar;
 
 /**

@@ -3,16 +3,16 @@ package com.openclassrooms.realestatemanager.domain.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 /**
-*Model class for properties photos
-*/
+ * Model class for properties photos
+ */
 
+@SuppressWarnings("unused")
 @Entity(tableName = "photo_table",
         foreignKeys = @ForeignKey(entity = Property.class, parentColumns = "id", childColumns = "property_id", onDelete = ForeignKey.CASCADE))
 public class Photo implements Parcelable {

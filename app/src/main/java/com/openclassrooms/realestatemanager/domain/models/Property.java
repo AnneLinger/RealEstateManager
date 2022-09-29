@@ -9,8 +9,8 @@ import androidx.room.PrimaryKey;
 import javax.annotation.Nullable;
 
 /**
-*Model class for properties
-*/
+ * Model class for properties
+ */
 
 @Entity(tableName = "property_table")
 public class Property {
@@ -74,7 +74,8 @@ public class Property {
         this.entryDate = entryDate;
         this.soldDate = soldDate;
         this.agent = agent;
-        this.photoKey = photoKey;}
+        this.photoKey = photoKey;
+    }
 
     public long getId() {
         return id;
@@ -184,6 +185,7 @@ public class Property {
         this.photoKey = photoKey;
     }
 
+    @SuppressWarnings("unused")
     public static Property fromContentValues(ContentValues values) {
 
         final Property property = new Property();
@@ -194,9 +196,11 @@ public class Property {
 
         if (values.containsKey("surface")) property.setSurface(values.getAsString("surface"));
 
-        if (values.containsKey("room_number")) property.setRoomNumber(values.getAsInteger("room_number"));
+        if (values.containsKey("room_number"))
+            property.setRoomNumber(values.getAsInteger("room_number"));
 
-        if (values.containsKey("description")) property.setDescription(values.getAsString("description"));
+        if (values.containsKey("description"))
+            property.setDescription(values.getAsString("description"));
 
         if (values.containsKey("address")) property.setAddress(values.getAsString("address"));
 
@@ -204,7 +208,8 @@ public class Property {
 
         if (values.containsKey("on_sale")) property.setOnSale(values.getAsBoolean("on_sale"));
 
-        if (values.containsKey("entry_date")) property.setEntryDate(values.getAsString("entry_date"));
+        if (values.containsKey("entry_date"))
+            property.setEntryDate(values.getAsString("entry_date"));
 
         if (values.containsKey("sold_date")) property.setSoldDate(values.getAsString("sold_date"));
 

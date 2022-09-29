@@ -8,12 +8,12 @@ import java.io.IOException;
 import java.util.List;
 
 /**
-*Created by Anne Linger on 26/09/2022.
-*/
+ * Useful methods to get a property location from its address
+ */
 
 public class GeocoderUtils {
 
-    public static double getLatitudeFromAddress(String stringAddress, Context context){
+    public static double getLatitudeFromAddress(String stringAddress, Context context) {
         Geocoder coder = new Geocoder(context);
         List<Address> address;
         double latitude = 0;
@@ -30,7 +30,7 @@ public class GeocoderUtils {
     }
 
 
-    public static double getLongitudeFromAddress(String stringAddress, Context context){
+    public static double getLongitudeFromAddress(String stringAddress, Context context) {
         Geocoder coder = new Geocoder(context);
         List<Address> address;
         double longitude = 0;

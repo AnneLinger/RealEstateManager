@@ -4,15 +4,14 @@ import androidx.lifecycle.LiveData;
 
 import com.openclassrooms.realestatemanager.data.dao.PhotoDao;
 import com.openclassrooms.realestatemanager.domain.models.Photo;
-import com.openclassrooms.realestatemanager.domain.models.Property;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
 /**
-* Repository for photos
-*/
+ * Repository for photos
+ */
 
 public class PhotoRepositoryImpl {
 
@@ -24,12 +23,12 @@ public class PhotoRepositoryImpl {
         mPhotoDao = photoDao;
     }
 
-    //Get the list of the photos
+    //Get all the photos
     public LiveData<List<Photo>> getAllPhotos() {
         return mPhotoDao.getAllPhotos();
     }
 
-    //Get property photos
+    //Get photos of a property
     public LiveData<List<Photo>> getPropertyPhotos(Long propertyId) {
         return mPhotoDao.getPhotos(propertyId);
     }

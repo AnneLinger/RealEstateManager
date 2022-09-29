@@ -2,7 +2,6 @@ package com.openclassrooms.realestatemanager.data.retrofit;
 
 import com.openclassrooms.realestatemanager.domain.models.nearbysearchpojo.NearbySearchResponse;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;

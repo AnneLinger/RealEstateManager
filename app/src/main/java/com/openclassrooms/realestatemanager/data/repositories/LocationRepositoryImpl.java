@@ -37,6 +37,7 @@ public class LocationRepositoryImpl {
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
     }
 
+    @SuppressWarnings("deprecation")
     @RequiresPermission(anyOf = {"android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"})
     public void startLocationRequest(Context context) {
         instantiateFusedLocationProviderClient(context);

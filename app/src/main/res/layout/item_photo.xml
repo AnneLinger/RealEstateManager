@@ -4,18 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_list_view"
     android:layout_width="wrap_content"
-    android:paddingTop="@dimen/basic_margin"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/basic_margin">
 
     <ImageView
         android:id="@+id/im_photo_rv"
         android:layout_width="156dp"
         android:layout_height="match_parent"
-        android:contentDescription="@string/property_photo"
-        app:layout_constraintStart_toStartOf="parent"
         android:layout_marginBottom="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/property_photo"
         android:src="@drawable/ic_baseline_house_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView

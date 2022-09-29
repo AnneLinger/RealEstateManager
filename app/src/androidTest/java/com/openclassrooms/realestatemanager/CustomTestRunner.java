@@ -8,9 +8,10 @@ import androidx.test.runner.AndroidJUnitRunner;
 import dagger.hilt.android.testing.HiltTestApplication;
 
 /**
-*Created by Anne Linger on 27/09/2022.
-*/
+ * Custom test for run instrumentation tests with hilt
+ */
 
+@SuppressWarnings("unused")
 public class CustomTestRunner extends AndroidJUnitRunner {
 
     @Override
