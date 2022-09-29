@@ -55,9 +55,7 @@ To deploy this project run
 
 ## Screenshots
 
-<img src="https://github.com/AnneLinger/Go4Lunch/blob/b44d7da059ad5e595bbd76b75cae64fc010f2804/Screenshot_20220908-100639_Go4Lunch.jpg" alt="Authentication activity" width="300"/>&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://github.com/AnneLinger/Go4Lunch/blob/b44d7da059ad5e595bbd76b75cae64fc010f2804/Screenshot_20220908-100721_Go4Lunch.jpg" alt="Places activity with map fragment" width="300"/>
-
-<img src="https://github.com/AnneLinger/Go4Lunch/blob/b44d7da059ad5e595bbd76b75cae64fc010f2804/Screenshot_20220908-100729_Go4Lunch.jpg" alt="Drawer menu" width="300"/>&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://github.com/AnneLinger/Go4Lunch/blob/b44d7da059ad5e595bbd76b75cae64fc010f2804/Screenshot_20220908-100739_Go4Lunch.jpg" alt="Workmates fragment" width="300"/>
+Coming soon...
 
 
 ## Feedback
