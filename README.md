@@ -55,8 +55,9 @@ To deploy this project run
 
 ## Screenshots
 
-Coming soon...
+<img src="https://github.com/AnneLinger/RealEstateManager/blob/f39a3e9f09d6e16463cde642b3cca89343e6c2d0/Screenshot_20220928-174355_Real%20Estate%20Manager.jpg" alt="List view" width="300"/>&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://github.com/AnneLinger/RealEstateManager/blob/f39a3e9f09d6e16463cde642b3cca89343e6c2d0/Screenshot_20220928-174315_Real%20Estate%20Manager.jpg" alt="Property details" width="300"/> &nbsp;&nbsp;&nbsp;&nbsp;<img src="https://github.com/AnneLinger/RealEstateManager/blob/f39a3e9f09d6e16463cde642b3cca89343e6c2d0/Screenshot_20220928-174304_Real%20Estate%20Manager.jpg" alt="Simulator of home loan" width="300"/>
 
+<img src="https://github.com/AnneLinger/RealEstateManager/blob/f39a3e9f09d6e16463cde642b3cca89343e6c2d0/Screenshot_20220928-180728_Real%20Estate%20Manager.jpg" alt="Landscape with of list and details on tablet" width="600"/>&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://github.com/AnneLinger/RealEstateManager/blob/f39a3e9f09d6e16463cde642b3cca89343e6c2d0/Screenshot_20220928-181729_Real%20Estate%20Manager.jpg" alt="Landscape with of map and details on tablet" width="600"/>
 
 ## Feedback
 
